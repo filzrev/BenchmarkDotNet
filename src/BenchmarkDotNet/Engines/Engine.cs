@@ -212,8 +212,6 @@ namespace BenchmarkDotNet.Engines
             return clock.GetElapsed();
         }
 
-        // Make sure tier0 jit doesn't cause any unexpected allocations in this method.
-        [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         private (GcStats, ThreadingStats, double) GetExtraStats(IterationData data)
         {
             // Warm up the GetAllocatedBytes function before starting the actual measurement.
@@ -224,21 +222,31 @@ namespace BenchmarkDotNet.Engines
             var initialThreadingStats = ThreadingStats.ReadInitial(); // this method might allocate
             var exceptionsStats = new ExceptionsStats(); // allocates
             exceptionsStats.StartListening(); // this method might allocate
-            var initialGcStats = GcStats.ReadInitial();
 
-            WorkloadAction(data.InvokeCount / data.UnrollFactor);
+            // GC collect before measuring allocations, as we do not collect during the measurement.
+            ForceGcCollect();
+            var gcStats = MeasureWithGc(data.InvokeCount / data.UnrollFactor);
 
-            var finalGcStats = GcStats.ReadFinal();
             exceptionsStats.Stop(); // this method might (de)allocate
             var finalThreadingStats = ThreadingStats.ReadFinal();
 
             IterationCleanupAction(); // we run iteration cleanup after collecting GC stats
 
             var totalOperationsCount = data.InvokeCount * OperationsPerInvoke;
-            GcStats gcStats = (finalGcStats - initialGcStats).WithTotalOperations(totalOperationsCount);
+            gcStats = gcStats.WithTotalOperations(totalOperationsCount);
             ThreadingStats threadingStats = (finalThreadingStats - initialThreadingStats).WithTotalOperations(data.InvokeCount * OperationsPerInvoke);
 
             return (gcStats, threadingStats, exceptionsStats.ExceptionsCount / (double)totalOperationsCount);
+        }
+
+        // Isolate the allocation measurement and skip tier0 jit to make sure we don't get any unexpected allocations.
+        [MethodImpl(MethodImplOptions.NoInlining | CodeGenHelper.AggressiveOptimizationOption)]
+        private GcStats MeasureWithGc(long invokeCount)
+        {
+            var initialGcStats = GcStats.ReadInitial();
+            WorkloadAction(invokeCount);
+            var finalGcStats = GcStats.ReadFinal();
+            return finalGcStats - initialGcStats;
         }
 
         private void RandomizeManagedHeapMemory()
@@ -267,8 +275,6 @@ namespace BenchmarkDotNet.Engines
             ForceGcCollect();
         }
 
-        // Make sure tier0 jit doesn't cause any unexpected allocations in this method.
-        [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         internal static void ForceGcCollect()
         {
             GC.Collect();

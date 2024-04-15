@@ -111,7 +111,6 @@ namespace BenchmarkDotNet.Engines
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         public static GcStats ReadInitial()
         {
-            // this will force GC.Collect, so we want to do this before collecting collections counts
             long? allocatedBytes = GetAllocatedBytes();
 
             return new GcStats(
@@ -130,9 +129,6 @@ namespace BenchmarkDotNet.Engines
                 GC.CollectionCount(0),
                 GC.CollectionCount(1),
                 GC.CollectionCount(2),
-
-                // this will force GC.Collect, so we want to do this after collecting collections counts
-                // to exclude this single full forced collection from results
                 GetAllocatedBytes(),
                 0);
         }
@@ -149,11 +145,8 @@ namespace BenchmarkDotNet.Engines
             if (RuntimeInformation.IsWasm)
                 return null;
 
-            // "This instance Int64 property returns the number of bytes that have been allocated by a specific
-            // AppDomain. The number is accurate as of the last garbage collection." - CLR via C#
-            // so we enforce GC.Collect here just to make sure we get accurate results
-            Engine.ForceGcCollect();
-
+            // Calling GC.Collect() before calling GC.GetTotalAllocatedBytes appears to interfere with the results for some reason,
+            // so we just call the API without forcing a collection.
 #if NET6_0_OR_GREATER
             return GC.GetTotalAllocatedBytes(precise: true);
 #else
