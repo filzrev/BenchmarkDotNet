@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Portability;
@@ -106,6 +107,8 @@ namespace BenchmarkDotNet.Engines
             return AllocatedBytes <= AllocationQuantum ? 0L : AllocatedBytes;
         }
 
+        // Make sure tier0 jit doesn't cause any unexpected allocations in this method.
+        [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         public static GcStats ReadInitial()
         {
             // this will force GC.Collect, so we want to do this before collecting collections counts
@@ -119,6 +122,8 @@ namespace BenchmarkDotNet.Engines
                 0);
         }
 
+        // Make sure tier0 jit doesn't cause any unexpected allocations in this method.
+        [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         public static GcStats ReadFinal()
         {
             return new GcStats(
@@ -136,6 +141,8 @@ namespace BenchmarkDotNet.Engines
         public static GcStats FromForced(int forcedFullGarbageCollections)
             => new GcStats(forcedFullGarbageCollections, forcedFullGarbageCollections, forcedFullGarbageCollections, 0, 0);
 
+        // Make sure tier0 jit doesn't cause any unexpected allocations in this method.
+        [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         private static long? GetAllocatedBytes()
         {
             // we have no tests for WASM and don't want to risk introducing a new bug (https://github.com/dotnet/BenchmarkDotNet/issues/2226)
@@ -145,7 +152,7 @@ namespace BenchmarkDotNet.Engines
             // "This instance Int64 property returns the number of bytes that have been allocated by a specific
             // AppDomain. The number is accurate as of the last garbage collection." - CLR via C#
             // so we enforce GC.Collect here just to make sure we get accurate results
-            GC.Collect();
+            Engine.ForceGcCollect();
 
 #if NET6_0_OR_GREATER
             return GC.GetTotalAllocatedBytes(precise: true);
@@ -218,9 +225,7 @@ namespace BenchmarkDotNet.Engines
                     break;
                 }
 
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
+                Engine.ForceGcCollect();
 
                 result = GC.GetTotalMemory(false);
                 var tmp = new object();

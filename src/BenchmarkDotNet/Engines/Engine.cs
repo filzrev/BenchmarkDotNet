@@ -212,12 +212,12 @@ namespace BenchmarkDotNet.Engines
             return clock.GetElapsed();
         }
 
+        // Make sure tier0 jit doesn't cause any unexpected allocations in this method.
+        [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         private (GcStats, ThreadingStats, double) GetExtraStats(IterationData data)
         {
-            // we enable monitoring after main target run, for this single iteration which is executed at the end
-            // so even if we enable AppDomain monitoring in separate process
-            // it does not matter, because we have already obtained the results!
-            EnableMonitoring();
+            // Warm up the GetAllocatedBytes function before starting the actual measurement.
+            DeadCodeEliminationHelper.KeepAliveWithoutBoxing(GcStats.ReadInitial());
 
             IterationSetupAction(); // we run iteration setup first, so even if it allocates, it is not included in the results
 
@@ -228,8 +228,8 @@ namespace BenchmarkDotNet.Engines
 
             WorkloadAction(data.InvokeCount / data.UnrollFactor);
 
-            exceptionsStats.Stop();
             var finalGcStats = GcStats.ReadFinal();
+            exceptionsStats.Stop(); // this method might (de)allocate
             var finalThreadingStats = ThreadingStats.ReadFinal();
 
             IterationCleanupAction(); // we run iteration cleanup after collecting GC stats
@@ -267,7 +267,9 @@ namespace BenchmarkDotNet.Engines
             ForceGcCollect();
         }
 
-        private static void ForceGcCollect()
+        // Make sure tier0 jit doesn't cause any unexpected allocations in this method.
+        [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
+        internal static void ForceGcCollect()
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -277,15 +279,6 @@ namespace BenchmarkDotNet.Engines
         public void WriteLine(string text) => Host.WriteLine(text);
 
         public void WriteLine() => Host.WriteLine();
-
-        private static void EnableMonitoring()
-        {
-            if (RuntimeInformation.IsOldMono) // Monitoring is not available in Mono, see http://stackoverflow.com/questions/40234948/how-to-get-the-number-of-allocated-bytes-in-mono
-                return;
-
-            if (RuntimeInformation.IsFullFramework)
-                AppDomain.MonitoringIsEnabled = true;
-        }
 
         [UsedImplicitly]
         public static class Signals
