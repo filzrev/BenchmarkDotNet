@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using BenchmarkDotNet.Characteristics;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Portability;
@@ -214,14 +215,25 @@ namespace BenchmarkDotNet.Engines
 
         private (GcStats, ThreadingStats, double) GetExtraStats(IterationData data)
         {
-            // Warm up the GetAllocatedBytes function before starting the actual measurement.
+            // Warm up the measurement functions before starting the actual measurement.
             DeadCodeEliminationHelper.KeepAliveWithoutBoxing(GcStats.ReadInitial());
+            DeadCodeEliminationHelper.KeepAliveWithoutBoxing(GcStats.ReadFinal());
 
             IterationSetupAction(); // we run iteration setup first, so even if it allocates, it is not included in the results
 
             var initialThreadingStats = ThreadingStats.ReadInitial(); // this method might allocate
             var exceptionsStats = new ExceptionsStats(); // allocates
             exceptionsStats.StartListening(); // this method might allocate
+
+            if (RuntimeInformation.IsNetCore && Environment.Version.Major is >= 3 and <= 6 && Environment.GetEnvironmentVariable("COMPlus_TieredCompilation") != "0")
+            {
+                // #1542
+                // We put the current thread to sleep so tiered jit can kick in, compile it's stuff
+                // and NOT allocate anything on the background thread when we are measuring allocations.
+                // This is only an issue on netcoreapp3.0 to net6.0. Tiered jit allocations were fixed in net7.0,
+                // and netcoreapp2.X uses only GetAllocatedBytesForCurrentThread which doesn't capture the tiered jit allocations.
+                Thread.Sleep(TimeSpan.FromMilliseconds(500));
+            }
 
             // GC collect before measuring allocations, as we do not collect during the measurement.
             ForceGcCollect();
