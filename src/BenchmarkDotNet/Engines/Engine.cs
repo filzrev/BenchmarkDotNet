@@ -228,7 +228,7 @@ namespace BenchmarkDotNet.Engines
             if (RuntimeInformation.IsNetCore && Environment.Version.Major is >= 3 and <= 6 && Environment.GetEnvironmentVariable("COMPlus_TieredCompilation") != "0")
             {
                 // #1542
-                // We put the current thread to sleep so tiered jit can kick in, compile it's stuff
+                // We put the current thread to sleep so tiered jit can kick in, compile its stuff,
                 // and NOT allocate anything on the background thread when we are measuring allocations.
                 // This is only an issue on netcoreapp3.0 to net6.0. Tiered jit allocations were fixed in net7.0,
                 // and netcoreapp2.X uses only GetAllocatedBytesForCurrentThread which doesn't capture the tiered jit allocations.
@@ -245,10 +245,9 @@ namespace BenchmarkDotNet.Engines
             IterationCleanupAction(); // we run iteration cleanup after collecting GC stats
 
             var totalOperationsCount = data.InvokeCount * OperationsPerInvoke;
-            gcStats = gcStats.WithTotalOperations(totalOperationsCount);
-            ThreadingStats threadingStats = (finalThreadingStats - initialThreadingStats).WithTotalOperations(data.InvokeCount * OperationsPerInvoke);
-
-            return (gcStats, threadingStats, exceptionsStats.ExceptionsCount / (double)totalOperationsCount);
+            return (gcStats.WithTotalOperations(totalOperationsCount),
+                (finalThreadingStats - initialThreadingStats).WithTotalOperations(totalOperationsCount),
+                exceptionsStats.ExceptionsCount / (double)totalOperationsCount);
         }
 
         // Isolate the allocation measurement and skip tier0 jit to make sure we don't get any unexpected allocations.
