@@ -107,7 +107,7 @@ namespace BenchmarkDotNet.Engines
             return AllocatedBytes <= AllocationQuantum ? 0L : AllocatedBytes;
         }
 
-        // Make sure tier0 jit doesn't cause any unexpected allocations in this method.
+        // Skip tier0 jit to make sure we don't get any unexpected allocations in this method.
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         public static GcStats ReadInitial()
         {
@@ -121,7 +121,7 @@ namespace BenchmarkDotNet.Engines
                 0);
         }
 
-        // Make sure tier0 jit doesn't cause any unexpected allocations in this method.
+        // Skip tier0 jit to make sure we don't get any unexpected allocations in this method.
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         public static GcStats ReadFinal()
         {
@@ -137,7 +137,7 @@ namespace BenchmarkDotNet.Engines
         public static GcStats FromForced(int forcedFullGarbageCollections)
             => new GcStats(forcedFullGarbageCollections, forcedFullGarbageCollections, forcedFullGarbageCollections, 0, 0);
 
-        // Make sure tier0 jit doesn't cause any unexpected allocations in this method.
+        // Skip tier0 jit to make sure we don't get any unexpected allocations in this method.
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         private static long? GetAllocatedBytes()
         {

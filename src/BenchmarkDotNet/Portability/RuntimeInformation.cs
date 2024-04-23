@@ -85,6 +85,18 @@ namespace BenchmarkDotNet.Portability
         public static readonly bool IsAot = !System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled;
 #endif
 
+        public static readonly bool IsTieredJitEnabled =
+            IsNetCore
+            && (Environment.Version.Major < 3
+                // Disabled by default in netcoreapp2.X, check if it's enabled.
+                ? Environment.GetEnvironmentVariable("COMPlus_TieredCompilation") == "1"
+                || Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") == "1"
+                || (AppContext.TryGetSwitch("System.Runtime.TieredCompilation", out bool isEnabled) && isEnabled)
+                // Enabled by default in netcoreapp3.0+, check if it's disabled.
+                : Environment.GetEnvironmentVariable("COMPlus_TieredCompilation") != "0"
+                && Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
+                && (!AppContext.TryGetSwitch("System.Runtime.TieredCompilation", out isEnabled) || isEnabled));
+
         public static bool IsRunningInContainer => string.Equals(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"), "true");
 
         internal static string ExecutableExtension => IsWindows() ? ".exe" : string.Empty;

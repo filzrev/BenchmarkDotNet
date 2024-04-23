@@ -225,7 +225,7 @@ namespace BenchmarkDotNet.Engines
             var exceptionsStats = new ExceptionsStats(); // allocates
             exceptionsStats.StartListening(); // this method might allocate
 
-            if (RuntimeInformation.IsNetCore && Environment.Version.Major is >= 3 and <= 6 && Environment.GetEnvironmentVariable("COMPlus_TieredCompilation") != "0")
+            if (RuntimeInformation.IsNetCore && Environment.Version.Major is >= 3 and <= 6 && RuntimeInformation.IsTieredJitEnabled)
             {
                 // #1542
                 // We put the current thread to sleep so tiered jit can kick in, compile its stuff,
