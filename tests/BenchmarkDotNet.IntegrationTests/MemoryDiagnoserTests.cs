@@ -186,11 +186,6 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AwaitingTasksShouldNotInterfereAllocationResults(IToolchain toolchain)
         {
-            if (toolchain.IsInProcess)
-            {
-                return; // it's flaky: https://github.com/dotnet/BenchmarkDotNet/issues/1925
-            }
-
             AssertAllocations(toolchain, typeof(NonAllocatingAsynchronousBenchmarks), new Dictionary<string, long>
             {
                 { nameof(NonAllocatingAsynchronousBenchmarks.CompletedTask), 0 },
