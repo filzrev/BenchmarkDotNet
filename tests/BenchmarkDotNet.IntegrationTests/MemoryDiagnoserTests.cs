@@ -253,31 +253,57 @@ namespace BenchmarkDotNet.IntegrationTests
 
         public class MultiThreadedAllocation
         {
-            public const int Size = 1_000_000;
+            public const int Size = 1024;
             public const int ThreadsCount = 10;
 
+            // We cache the threads in GlobalSetup and reuse them for each benchmark invocation
+            // to avoid measuring the cost of thread start and join, which varies across different runtimes.
             private Thread[] threads;
+            private volatile bool keepRunning = true;
+            private readonly Barrier barrier = new (ThreadsCount + 1);
+            private readonly CountdownEvent countdownEvent = new (ThreadsCount);
 
-            [IterationSetup]
-            public void SetupIteration()
+            [GlobalSetup]
+            public void Setup()
             {
                 threads = Enumerable.Range(0, ThreadsCount)
-                    .Select(_ => new Thread(() => GC.KeepAlive(new byte[Size])))
+                    .Select(_ => new Thread(() =>
+                    {
+                        while (keepRunning)
+                        {
+                            barrier.SignalAndWait();
+                            GC.KeepAlive(new byte[Size]);
+                            countdownEvent.Signal();
+                        }
+                    }))
                     .ToArray();
+                foreach (var thread in threads)
+                {
+                    thread.Start();
+                }
+            }
+
+            [GlobalCleanup]
+            public void Cleanup()
+            {
+                keepRunning = false;
+                barrier.SignalAndWait();
+                foreach (var thread in threads)
+                {
+                    thread.Join();
+                }
             }
 
             [Benchmark]
             public void Allocate()
             {
-                foreach (var thread in threads)
-                {
-                    thread.Start();
-                    thread.Join();
-                }
+                countdownEvent.Reset(ThreadsCount);
+                barrier.SignalAndWait();
+                countdownEvent.Wait();
             }
         }
 
-        [Theory(Skip = "Test is currently failing on all toolchains.")]
+        [TheoryEnvSpecific("Full Framework cannot measure precisely enough", EnvRequirement.DotNetCoreOnly)]
         [MemberData(nameof(GetToolchains))]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserIsAccurateForMultiThreadedBenchmarks(IToolchain toolchain)
@@ -285,12 +311,10 @@ namespace BenchmarkDotNet.IntegrationTests
             long objectAllocationOverhead = IntPtr.Size * 2; // pointer to method table + object header word
             long arraySizeOverhead = IntPtr.Size; // array length
             long memoryAllocatedPerArray = (MultiThreadedAllocation.Size + objectAllocationOverhead + arraySizeOverhead);
-            long threadStartAndJoinOverhead = 112; // this is more or less a magic number taken from memory profiler
-            long allocatedMemoryPerThread = memoryAllocatedPerArray + threadStartAndJoinOverhead;
 
             AssertAllocations(toolchain, typeof(MultiThreadedAllocation), new Dictionary<string, long>
             {
-                { nameof(MultiThreadedAllocation.Allocate), allocatedMemoryPerThread * MultiThreadedAllocation.ThreadsCount }
+                { nameof(MultiThreadedAllocation.Allocate), memoryAllocatedPerArray * MultiThreadedAllocation.ThreadsCount }
             });
         }
 
