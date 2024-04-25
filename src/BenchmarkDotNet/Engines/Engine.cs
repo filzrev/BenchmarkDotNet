@@ -235,7 +235,7 @@ namespace BenchmarkDotNet.Engines
                 Thread.Sleep(TimeSpan.FromMilliseconds(500));
             }
 
-            // GC collect before measuring allocations, as we do not collect during the measurement.
+            // GC collect before measuring allocations.
             ForceGcCollect();
             var gcStats = MeasureWithGc(data.InvokeCount / data.UnrollFactor);
 

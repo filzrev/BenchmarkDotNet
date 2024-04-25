@@ -97,11 +97,11 @@ namespace BenchmarkDotNet.Portability
                 && Environment.GetEnvironmentVariable("DOTNET_TieredCompilation") != "0"
                 && (!AppContext.TryGetSwitch("System.Runtime.TieredCompilation", out isEnabled) || isEnabled));
 
-        public static bool IsRunningInContainer => string.Equals(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"), "true");
+        public static readonly bool IsRunningInContainer = string.Equals(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"), "true");
 
-        internal static string ExecutableExtension => IsWindows() ? ".exe" : string.Empty;
+        internal static readonly string ExecutableExtension = IsWindows() ? ".exe" : string.Empty;
 
-        internal static string ScriptFileExtension => IsWindows() ? ".bat" : ".sh";
+        internal static readonly string ScriptFileExtension = IsWindows() ? ".bat" : ".sh";
 
         internal static string GetArchitecture() => GetCurrentPlatform().ToString();
 

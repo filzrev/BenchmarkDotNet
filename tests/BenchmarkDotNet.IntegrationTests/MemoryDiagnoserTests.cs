@@ -28,6 +28,9 @@ namespace BenchmarkDotNet.IntegrationTests
 {
     public class MemoryDiagnoserTests
     {
+        // TODO: re-enable allocating tests after https://github.com/dotnet/runtime/issues/101536 is fixed.
+        private const string AllocatingSkipReason = "System.Runtime.InteropServices.RuntimeInformation allocates during GC collect";
+
         private readonly ITestOutputHelper output;
 
         public MemoryDiagnoserTests(ITestOutputHelper outputHelper) => output = outputHelper;
@@ -50,7 +53,7 @@ namespace BenchmarkDotNet.IntegrationTests
             [Benchmark] public Task<int> AllocateTask() => Task.FromResult<int>(-12345);
         }
 
-        [Theory, MemberData(nameof(GetToolchains))]
+        [Theory(Skip = AllocatingSkipReason), MemberData(nameof(GetToolchains))]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserIsAccurate(IToolchain toolchain)
         {
@@ -70,7 +73,7 @@ namespace BenchmarkDotNet.IntegrationTests
             });
         }
 
-        [FactEnvSpecific("We don't want to test NativeAOT twice (for .NET Framework 4.6.2 and .NET 7.0)", EnvRequirement.DotNetCoreOnly)]
+        [FactEnvSpecific("We don't want to test NativeAOT twice (for .NET Framework 4.6.2 and .NET 8.0)", EnvRequirement.DotNetCoreOnly, Skip = AllocatingSkipReason)]
         public void MemoryDiagnoserSupportsNativeAOT()
         {
             if (RuntimeInformation.IsMacOS())
@@ -79,7 +82,7 @@ namespace BenchmarkDotNet.IntegrationTests
             MemoryDiagnoserIsAccurate(NativeAotToolchain.Net80);
         }
 
-        [FactEnvSpecific("We don't want to test MonoVM twice (for .NET Framework 4.6.2 and .NET 8.0)", EnvRequirement.DotNetCoreOnly)]
+        [FactEnvSpecific("We don't want to test MonoVM twice (for .NET Framework 4.6.2 and .NET 8.0)", EnvRequirement.DotNetCoreOnly, Skip = AllocatingSkipReason)]
         public void MemoryDiagnoserSupportsModernMono()
         {
             MemoryDiagnoserIsAccurate(MonoToolchain.Mono80);
@@ -207,7 +210,7 @@ namespace BenchmarkDotNet.IntegrationTests
             private void DoNotInline(object left, object right) { }
         }
 
-        [Theory, MemberData(nameof(GetToolchains))]
+        [Theory(Skip = AllocatingSkipReason), MemberData(nameof(GetToolchains))]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AllocatedMemoryShouldBeScaledForOperationsPerInvoke(IToolchain toolchain)
         {
@@ -233,7 +236,7 @@ namespace BenchmarkDotNet.IntegrationTests
             }
         }
 
-        [TheoryEnvSpecific("Full Framework cannot measure precisely enough for low invocation counts.", EnvRequirement.DotNetCoreOnly), MemberData(nameof(GetToolchains))]
+        [TheoryEnvSpecific("Full Framework cannot measure precisely enough for low invocation counts.", EnvRequirement.DotNetCoreOnly), MemberData(nameof(GetToolchains), Skip = AllocatingSkipReason)]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AllocationQuantumIsNotAnIssueForNetCore21Plus(IToolchain toolchain)
         {
@@ -298,7 +301,7 @@ namespace BenchmarkDotNet.IntegrationTests
             }
         }
 
-        [TheoryEnvSpecific("Full Framework cannot measure precisely enough", EnvRequirement.DotNetCoreOnly)]
+        [TheoryEnvSpecific("Full Framework cannot measure precisely enough", EnvRequirement.DotNetCoreOnly, Skip = AllocatingSkipReason)]
         [MemberData(nameof(GetToolchains))]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserIsAccurateForMultiThreadedBenchmarks(IToolchain toolchain)

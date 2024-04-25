@@ -145,8 +145,6 @@ namespace BenchmarkDotNet.Engines
             if (RuntimeInformation.IsWasm)
                 return null;
 
-            // Calling GC.Collect() before calling GC.GetTotalAllocatedBytes appears to interfere with the results for some reason,
-            // so we just call the API without forcing a collection.
 #if NET6_0_OR_GREATER
             return GC.GetTotalAllocatedBytes(precise: true);
 #else
