@@ -240,7 +240,11 @@ namespace BenchmarkDotNet.Engines
 
             // GC collect before measuring allocations.
             ForceGcCollect();
-            var gcStats = MeasureWithGc(data.InvokeCount / data.UnrollFactor);
+            GcStats gcStats;
+            using (FinalizerBlocker.MaybeStart())
+            {
+                gcStats = MeasureWithGc(data.InvokeCount / data.UnrollFactor);
+            }
 
             exceptionsStats.Stop(); // this method might (de)allocate
             var finalThreadingStats = ThreadingStats.ReadFinal();
@@ -321,6 +325,57 @@ namespace BenchmarkDotNet.Engines
 
             public static bool TryGetSignal(string message, out HostSignal signal)
                 => MessagesToSignals.TryGetValue(message, out signal);
+        }
+
+        // Very long key and value so this shouldn't be used outside of unit tests.
+        internal const string UnitTestBlockFinalizerEnvKey = "BENCHMARKDOTNET_UNITTEST_BLOCK_FINALIZER_FOR_MEMORYDIAGNOSER";
+        internal const string UnitTestBlockFinalizerEnvValue = UnitTestBlockFinalizerEnvKey + "_ACTIVE";
+
+        // To prevent finalizers interfering with allocation measurements for unit tests,
+        // we block the finalizer thread until we've completed the measurement.
+        // https://github.com/dotnet/runtime/issues/101536#issuecomment-2077647417
+        private readonly struct FinalizerBlocker : IDisposable
+        {
+            private readonly ManualResetEventSlim hangEvent;
+
+            private FinalizerBlocker(ManualResetEventSlim hangEvent) => this.hangEvent = hangEvent;
+
+            private sealed class Impl
+            {
+                private readonly ManualResetEventSlim hangEvent = new (false);
+                private readonly ManualResetEventSlim enteredFinalizerEvent = new (false);
+
+                ~Impl()
+                {
+                    enteredFinalizerEvent.Set();
+                    hangEvent.Wait();
+                }
+
+                [MethodImpl(MethodImplOptions.NoInlining)]
+                internal static (ManualResetEventSlim hangEvent, ManualResetEventSlim enteredFinalizerEvent) CreateWeakly()
+                {
+                    var impl = new Impl();
+                    return (impl.hangEvent, impl.enteredFinalizerEvent);
+                }
+            }
+
+            internal static FinalizerBlocker MaybeStart()
+            {
+                if (Environment.GetEnvironmentVariable(UnitTestBlockFinalizerEnvKey) != UnitTestBlockFinalizerEnvValue)
+                {
+                    return default;
+                }
+                var (hangEvent, enteredFinalizerEvent) = Impl.CreateWeakly();
+                do
+                {
+                    GC.Collect();
+                    // Do NOT call GC.WaitForPendingFinalizers.
+                }
+                while (!enteredFinalizerEvent.IsSet);
+                return new FinalizerBlocker(hangEvent);
+            }
+
+            public void Dispose() => hangEvent?.Set();
         }
     }
 }

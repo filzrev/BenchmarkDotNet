@@ -28,9 +28,6 @@ namespace BenchmarkDotNet.IntegrationTests
 {
     public class MemoryDiagnoserTests
     {
-        // TODO: re-enable allocating tests after https://github.com/dotnet/runtime/issues/101536 is fixed.
-        private const string AllocatingSkipReason = "GC collect causes allocations on finalizer thread";
-
         private readonly ITestOutputHelper output;
 
         public MemoryDiagnoserTests(ITestOutputHelper outputHelper) => output = outputHelper;
@@ -53,7 +50,7 @@ namespace BenchmarkDotNet.IntegrationTests
             [Benchmark] public Task<int> AllocateTask() => Task.FromResult<int>(-12345);
         }
 
-        [Theory(Skip = AllocatingSkipReason), MemberData(nameof(GetToolchains))]
+        [Theory, MemberData(nameof(GetToolchains))]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserIsAccurate(IToolchain toolchain)
         {
@@ -73,7 +70,7 @@ namespace BenchmarkDotNet.IntegrationTests
             });
         }
 
-        [FactEnvSpecific("We don't want to test NativeAOT twice (for .NET Framework 4.6.2 and .NET 8.0)", EnvRequirement.DotNetCoreOnly, Skip = AllocatingSkipReason)]
+        [FactEnvSpecific("We don't want to test NativeAOT twice (for .NET Framework 4.6.2 and .NET 8.0)", EnvRequirement.DotNetCoreOnly)]
         public void MemoryDiagnoserSupportsNativeAOT()
         {
             if (RuntimeInformation.IsMacOS())
@@ -82,7 +79,7 @@ namespace BenchmarkDotNet.IntegrationTests
             MemoryDiagnoserIsAccurate(NativeAotToolchain.Net80);
         }
 
-        [FactEnvSpecific("We don't want to test MonoVM twice (for .NET Framework 4.6.2 and .NET 8.0)", EnvRequirement.DotNetCoreOnly, Skip = AllocatingSkipReason)]
+        [FactEnvSpecific("We don't want to test MonoVM twice (for .NET Framework 4.6.2 and .NET 8.0)", EnvRequirement.DotNetCoreOnly)]
         public void MemoryDiagnoserSupportsModernMono()
         {
             MemoryDiagnoserIsAccurate(MonoToolchain.Mono80);
@@ -156,7 +153,7 @@ namespace BenchmarkDotNet.IntegrationTests
             {
                 { nameof(NoAllocationsAtAll.TimeConsuming), 0 }
             },
-            iterationCount: 10); // 1 iteration is not enough to repro the problem
+            disableTieredJit: false, iterationCount: 10); // 1 iteration is not enough to repro the problem
         }
 
         public class NoBoxing
@@ -210,7 +207,7 @@ namespace BenchmarkDotNet.IntegrationTests
             private void DoNotInline(object left, object right) { }
         }
 
-        [Theory(Skip = AllocatingSkipReason), MemberData(nameof(GetToolchains))]
+        [Theory, MemberData(nameof(GetToolchains))]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AllocatedMemoryShouldBeScaledForOperationsPerInvoke(IToolchain toolchain)
         {
@@ -236,7 +233,7 @@ namespace BenchmarkDotNet.IntegrationTests
             }
         }
 
-        [TheoryEnvSpecific("Full Framework cannot measure precisely enough for low invocation counts.", EnvRequirement.DotNetCoreOnly), MemberData(nameof(GetToolchains), Skip = AllocatingSkipReason)]
+        [TheoryEnvSpecific("Full Framework cannot measure precisely enough for low invocation counts.", EnvRequirement.DotNetCoreOnly), MemberData(nameof(GetToolchains))]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AllocationQuantumIsNotAnIssueForNetCore21Plus(IToolchain toolchain)
         {
@@ -301,7 +298,7 @@ namespace BenchmarkDotNet.IntegrationTests
             }
         }
 
-        [TheoryEnvSpecific("Full Framework cannot measure precisely enough", EnvRequirement.DotNetCoreOnly, Skip = AllocatingSkipReason)]
+        [TheoryEnvSpecific("Full Framework cannot measure precisely enough", EnvRequirement.DotNetCoreOnly)]
         [MemberData(nameof(GetToolchains))]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserIsAccurateForMultiThreadedBenchmarks(IToolchain toolchain)
@@ -316,9 +313,9 @@ namespace BenchmarkDotNet.IntegrationTests
             });
         }
 
-        private void AssertAllocations(IToolchain toolchain, Type benchmarkType, Dictionary<string, long> benchmarksAllocationsValidators, int iterationCount = 1)
+        private void AssertAllocations(IToolchain toolchain, Type benchmarkType, Dictionary<string, long> benchmarksAllocationsValidators, bool disableTieredJit = true, int iterationCount = 1)
         {
-            var config = CreateConfig(toolchain, iterationCount);
+            var config = CreateConfig(toolchain, disableTieredJit, iterationCount);
             var benchmarks = BenchmarkConverter.TypeToBenchmarks(benchmarkType, config);
 
             var summary = BenchmarkRunner.Run(benchmarks);
@@ -354,19 +351,32 @@ namespace BenchmarkDotNet.IntegrationTests
             }
         }
 
-        private IConfig CreateConfig(IToolchain toolchain, int iterationCount = 1) // Single iteration is enough for most of the tests.
-            => ManualConfig.CreateEmpty()
-                .AddJob(Job.ShortRun
-                    .WithEvaluateOverhead(false) // no need to run idle for this test
-                    .WithWarmupCount(0) // don't run warmup to save some time for our CI runs
-                    .WithIterationCount(iterationCount)
-                    .WithGcForce(false)
-                    .WithGcServer(false)
-                    .WithGcConcurrent(false)
-                    .WithToolchain(toolchain))
+        private IConfig CreateConfig(IToolchain toolchain,
+            // Tiered JIT can allocate some memory on a background thread, let's disable it by default to make our tests less flaky (#1542).
+            // This was mostly fixed in net7.0, but tiered jit thread is not guaranteed to not allocate, so we disable it just in case.
+            bool disableTieredJit = true,
+            // Single iteration is enough for most of the tests.
+            int iterationCount = 1)
+        {
+            var job = Job.ShortRun
+                .WithEvaluateOverhead(false) // no need to run idle for this test
+                .WithWarmupCount(0) // don't run warmup to save some time for our CI runs
+                .WithIterationCount(iterationCount)
+                .WithGcForce(false)
+                .WithGcServer(false)
+                .WithGcConcurrent(false)
+                // To prevent finalizers allocating out of our control, we hang the finalizer thread.
+                // https://github.com/dotnet/runtime/issues/101536#issuecomment-2077647417
+                .WithEnvironmentVariable(Engines.Engine.UnitTestBlockFinalizerEnvKey, Engines.Engine.UnitTestBlockFinalizerEnvValue)
+                .WithToolchain(toolchain);
+            return ManualConfig.CreateEmpty()
+                .AddJob(disableTieredJit
+                    ? job.WithEnvironmentVariable("COMPlus_TieredCompilation", "0")
+                    : job)
                 .AddColumnProvider(DefaultColumnProviders.Instance)
                 .AddDiagnoser(MemoryDiagnoser.Default)
                 .AddLogger(toolchain.IsInProcess ? ConsoleLogger.Default : new OutputLogger(output)); // we can't use OutputLogger for the InProcess toolchains because it allocates memory on the same thread
+        }
 
         // note: don't copy, never use in production systems (it should work but I am not 100% sure)
         private int CalculateRequiredSpace<T>()
