@@ -225,15 +225,18 @@ namespace BenchmarkDotNet.Engines
             var exceptionsStats = new ExceptionsStats(); // allocates
             exceptionsStats.StartListening(); // this method might allocate
 
+#if !NET7_0_OR_GREATER
             if (RuntimeInformation.IsNetCore && Environment.Version.Major is >= 3 and <= 6 && RuntimeInformation.IsTieredJitEnabled)
             {
                 // #1542
                 // We put the current thread to sleep so tiered jit can kick in, compile its stuff,
                 // and NOT allocate anything on the background thread when we are measuring allocations.
-                // This is only an issue on netcoreapp3.0 to net6.0. Tiered jit allocations were fixed in net7.0,
+                // This is only an issue on netcoreapp3.0 to net6.0. Tiered jit allocations were "fixed" in net7.0
+                // (maybe not completely eliminated forever, but at least reduced to a point where measurements are much more stable),
                 // and netcoreapp2.X uses only GetAllocatedBytesForCurrentThread which doesn't capture the tiered jit allocations.
                 Thread.Sleep(TimeSpan.FromMilliseconds(500));
             }
+#endif
 
             // GC collect before measuring allocations.
             ForceGcCollect();

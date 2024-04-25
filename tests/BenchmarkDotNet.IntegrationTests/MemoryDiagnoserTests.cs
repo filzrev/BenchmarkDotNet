@@ -29,7 +29,7 @@ namespace BenchmarkDotNet.IntegrationTests
     public class MemoryDiagnoserTests
     {
         // TODO: re-enable allocating tests after https://github.com/dotnet/runtime/issues/101536 is fixed.
-        private const string AllocatingSkipReason = "System.Runtime.InteropServices.RuntimeInformation allocates during GC collect";
+        private const string AllocatingSkipReason = "GC collect causes allocations on finalizer thread";
 
         private readonly ITestOutputHelper output;
 
