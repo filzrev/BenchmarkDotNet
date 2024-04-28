@@ -24,11 +24,8 @@ using Xunit;
 using Xunit.Abstractions;
 using BenchmarkDotNet.Toolchains.Mono;
 
-namespace BenchmarkDotNet.IntegrationTests.ManualRunning
+namespace BenchmarkDotNet.IntegrationTests
 {
-    // #1925
-    // These tests were moved to ManualRunning to stabilize the CI.
-    // Even after disabling tiered jit and blocking the finalizer thread, the tests are still flaky on CI.
     public class MemoryDiagnoserTests
     {
         private readonly ITestOutputHelper output;
@@ -54,6 +51,7 @@ namespace BenchmarkDotNet.IntegrationTests.ManualRunning
         }
 
         [Theory, MemberData(nameof(GetToolchains))]
+        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserIsAccurate(IToolchain toolchain)
         {
             long objectAllocationOverhead = IntPtr.Size * 2; // pointer to method table + object header word
@@ -111,6 +109,7 @@ namespace BenchmarkDotNet.IntegrationTests.ManualRunning
         }
 
         [Theory, MemberData(nameof(GetToolchains))]
+        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserDoesNotIncludeAllocationsFromSetupAndCleanup(IToolchain toolchain)
         {
             AssertAllocations(toolchain, typeof(AllocatingGlobalSetupAndCleanup), new Dictionary<string, long>
@@ -136,6 +135,7 @@ namespace BenchmarkDotNet.IntegrationTests.ManualRunning
         }
 
         [Theory, MemberData(nameof(GetToolchains))]
+        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void EngineShouldNotInterfereAllocationResults(IToolchain toolchain)
         {
             AssertAllocations(toolchain, typeof(NoAllocationsAtAll), new Dictionary<string, long>
@@ -146,6 +146,7 @@ namespace BenchmarkDotNet.IntegrationTests.ManualRunning
 
         // #1542
         [Theory, MemberData(nameof(GetToolchains))]
+        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void TieredJitShouldNotInterfereAllocationResults(IToolchain toolchain)
         {
             AssertAllocations(toolchain, typeof(NoAllocationsAtAll), new Dictionary<string, long>
@@ -161,6 +162,7 @@ namespace BenchmarkDotNet.IntegrationTests.ManualRunning
         }
 
         [Theory, MemberData(nameof(GetToolchains))]
+        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void EngineShouldNotIntroduceBoxing(IToolchain toolchain)
         {
             AssertAllocations(toolchain, typeof(NoBoxing), new Dictionary<string, long>
@@ -181,6 +183,7 @@ namespace BenchmarkDotNet.IntegrationTests.ManualRunning
         }
 
         [Theory, MemberData(nameof(GetToolchains))]
+        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AwaitingTasksShouldNotInterfereAllocationResults(IToolchain toolchain)
         {
             AssertAllocations(toolchain, typeof(NonAllocatingAsynchronousBenchmarks), new Dictionary<string, long>
@@ -205,6 +208,7 @@ namespace BenchmarkDotNet.IntegrationTests.ManualRunning
         }
 
         [Theory, MemberData(nameof(GetToolchains))]
+        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AllocatedMemoryShouldBeScaledForOperationsPerInvoke(IToolchain toolchain)
         {
             long objectAllocationOverhead = IntPtr.Size * 2; // pointer to method table + object header word
@@ -230,6 +234,7 @@ namespace BenchmarkDotNet.IntegrationTests.ManualRunning
         }
 
         [TheoryEnvSpecific("Full Framework cannot measure precisely enough for low invocation counts.", EnvRequirement.DotNetCoreOnly), MemberData(nameof(GetToolchains))]
+        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AllocationQuantumIsNotAnIssueForNetCore21Plus(IToolchain toolchain)
         {
             long objectAllocationOverhead = IntPtr.Size * 2; // pointer to method table + object header word
@@ -295,6 +300,7 @@ namespace BenchmarkDotNet.IntegrationTests.ManualRunning
 
         [TheoryEnvSpecific("Full Framework cannot measure precisely enough", EnvRequirement.DotNetCoreOnly)]
         [MemberData(nameof(GetToolchains))]
+        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserIsAccurateForMultiThreadedBenchmarks(IToolchain toolchain)
         {
             long objectAllocationOverhead = IntPtr.Size * 2; // pointer to method table + object header word
@@ -319,8 +325,12 @@ namespace BenchmarkDotNet.IntegrationTests.ManualRunning
             }
             catch (MisconfiguredEnvironmentException e)
             {
-                output.WriteLine(e.SkipMessage);
-                return;
+                if (ContinuousIntegration.IsLocalRun())
+                {
+                    output.WriteLine(e.SkipMessage);
+                    return;
+                }
+                throw;
             }
 
             foreach (var benchmarkAllocationsValidator in benchmarksAllocationsValidators)
