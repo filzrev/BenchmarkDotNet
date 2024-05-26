@@ -145,6 +145,8 @@ namespace BenchmarkDotNet.Engines
             if (RuntimeInformation.IsWasm)
                 return null;
 
+            // Do NOT call GC.Collect() here, as it causes finalizers to run and possibly allocate. https://github.com/dotnet/runtime/issues/101536#issuecomment-2077533242
+            // Instead, we call it before we start the measurement in the Engine.
 #if NET6_0_OR_GREATER
             return GC.GetTotalAllocatedBytes(precise: true);
 #else
