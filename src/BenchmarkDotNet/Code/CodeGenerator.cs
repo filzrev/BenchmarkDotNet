@@ -33,6 +33,10 @@ namespace BenchmarkDotNet.Code
             {
                 var benchmark = buildInfo.BenchmarkCase;
 
+                var filters = benchmark.Config.GetFilters();
+                if (filters.Any(x => !x.Predicate(benchmark)))
+                    continue;
+
                 var provider = GetDeclarationsProvider(benchmark.Descriptor);
 
                 string passArguments = GetPassArguments(benchmark);
