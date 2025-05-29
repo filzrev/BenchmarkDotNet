@@ -16,6 +16,11 @@
     <DebugSymbols>true</DebugSymbols>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
+  <!-- Suppress warning NU1510 PackageReference Microsoft.NETCore.App will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary. -->
+  <!-- It's occurred when build project with .NET 10 SDK. See: https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/10.0/nu1510-pruned-references -->
+  <PropertyGroup>
+    <NoWarn >$(NoWarn);NU1510</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\BenchmarkDotNet.IntegrationTests\BenchmarkTestExecutor.cs" Link="BenchmarkTestExecutor.cs" />
     <Compile Include="..\BenchmarkDotNet.IntegrationTests\Xunit\MisconfiguredEnvironmentException.cs" Link="MisconfiguredEnvironmentException.cs" />
@@ -25,7 +30,7 @@
     <Compile Include="..\BenchmarkDotNet.Tests\XUnit\SmartAssert.cs" Link="SmartAssert.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="7.0.4" />
     <PackageReference Include="System.Memory" Version="4.5.5" />
   </ItemGroup>
   <ItemGroup>
@@ -40,9 +45,9 @@
   <ItemGroup>
     <!-- Microsoft.NET.Test.Sdk breaks netcoreapp2.0 -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" Condition=" '$(TargetFramework)' != 'netcoreapp2.0' " />
-    <PackageReference Include="xunit" Version="2.6.2" />
+    <PackageReference Include="xunit" Version="2.9.3" />
     <!-- We use older version 2.4.1 for combatibility with netcoreapp2.0. -->
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+    <PackageReference Include="xunit.runner.visualstudio" Version="[2.4.1]">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
