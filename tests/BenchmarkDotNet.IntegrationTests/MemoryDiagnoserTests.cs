@@ -47,7 +47,7 @@ namespace BenchmarkDotNet.IntegrationTests
             [Benchmark] public Task<int> AllocateTask() => Task.FromResult<int>(-12345);
         }
 
-        [Theory, MemberData(nameof(GetToolchains))]
+        [Theory, MemberData(nameof(GetToolchains), DisableDiscoveryEnumeration = true)]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserIsAccurate(IToolchain toolchain)
         {
@@ -105,7 +105,7 @@ namespace BenchmarkDotNet.IntegrationTests
             }
         }
 
-        [Theory(Skip = "#1542 Tiered JIT Thread allocates memory in the background"), MemberData(nameof(GetToolchains))]
+        [Theory(Skip = "#1542 Tiered JIT Thread allocates memory in the background"), MemberData(nameof(GetToolchains), DisableDiscoveryEnumeration = true)]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserDoesNotIncludeAllocationsFromSetupAndCleanup(IToolchain toolchain)
         {
@@ -120,7 +120,7 @@ namespace BenchmarkDotNet.IntegrationTests
             [Benchmark] public void EmptyMethod() { }
         }
 
-        [Theory, MemberData(nameof(GetToolchains))]
+        [Theory, MemberData(nameof(GetToolchains), DisableDiscoveryEnumeration = true)]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void EngineShouldNotInterfereAllocationResults(IToolchain toolchain)
         {
@@ -140,7 +140,7 @@ namespace BenchmarkDotNet.IntegrationTests
             [Benchmark] public ValueTuple<int> ReturnsValueType() => new ValueTuple<int>(0);
         }
 
-        [Theory, MemberData(nameof(GetToolchains))]
+        [Theory, MemberData(nameof(GetToolchains), DisableDiscoveryEnumeration = true)]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void EngineShouldNotIntroduceBoxing(IToolchain toolchain)
         {
@@ -161,7 +161,7 @@ namespace BenchmarkDotNet.IntegrationTests
             [Benchmark] public ValueTask<int> CompletedValueTaskOfT() => new ValueTask<int>(default(int));
         }
 
-        [Theory, MemberData(nameof(GetToolchains))]
+        [Theory, MemberData(nameof(GetToolchains), DisableDiscoveryEnumeration = true)]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AwaitingTasksShouldNotInterfereAllocationResults(IToolchain toolchain)
         {
@@ -191,7 +191,7 @@ namespace BenchmarkDotNet.IntegrationTests
             private void DoNotInline(object left, object right) { }
         }
 
-        [Theory, MemberData(nameof(GetToolchains))]
+        [Theory, MemberData(nameof(GetToolchains), DisableDiscoveryEnumeration = true)]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AllocatedMemoryShouldBeScaledForOperationsPerInvoke(IToolchain toolchain)
         {
@@ -217,7 +217,7 @@ namespace BenchmarkDotNet.IntegrationTests
             }
         }
 
-        [Theory(Skip = "#1542 Tiered JIT Thread allocates memory in the background"), MemberData(nameof(GetToolchains))]
+        [Theory(Skip = "#1542 Tiered JIT Thread allocates memory in the background"), MemberData(nameof(GetToolchains), DisableDiscoveryEnumeration = true)]
         //[TheoryNetCoreOnly("Only .NET Core 2.0+ API is bug free for this case"), MemberData(nameof(GetToolchains))]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void AllocationQuantumIsNotAnIssueForNetCore21Plus(IToolchain toolchain)
@@ -258,7 +258,7 @@ namespace BenchmarkDotNet.IntegrationTests
         }
 
         [Theory(Skip = "Test is flaky even in latest .Net")]
-        [MemberData(nameof(GetToolchains))]
+        [MemberData(nameof(GetToolchains), DisableDiscoveryEnumeration = true)]
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void MemoryDiagnoserIsAccurateForMultiThreadedBenchmarks(IToolchain toolchain)
         {
