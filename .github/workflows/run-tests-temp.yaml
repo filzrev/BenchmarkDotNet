@@ -1,0 +1,66 @@
+name: run-tests-temp
+run-name: Run tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      runs_on:
+        type: choice
+        description: GitHub Actions runner image name
+        required: true
+        default: ubuntu-latest
+        options:
+          - windows-latest
+          - windows-11-arm
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+          - macos-latest
+          - macos-13
+      project:
+        type: string
+        description: Specify test project path
+        required: true
+        default: tests/BenchmarkDotNet.IntegrationTests
+        options:
+          # - BenchmarkDotNet.sln # Currently it can't specify solution. it need to exclude TestAdapter when running on GitHub Actions. https://github.com/dotnet/BenchmarkDotNet/issues/2767
+          - tests/BenchmarkDotNet.Tests
+          - tests/BenchmarkDotNet.IntegrationTests
+          - tests/BenchmarkDotNet.IntegrationTests.ManualRunning
+      filter:
+        type: string
+        description: Test filter text(Used for `dotnet test --filter`)
+        required: true
+        default: AllocationQuantumIsNotAnIssueForNetCore21Plus
+      framework:
+        type: choice
+        description: Specify target framework
+        required: true
+        options:
+          - net8.0
+          - net462
+      count:
+        type: integer
+        description: Count of test loop (It's expected to be used for flaky tests)
+        required: true
+        default: 1
+
+jobs:
+  test:
+    name: test (${{ inputs.runs_on }})
+    runs-on: ${{ inputs.runs_on }}
+    steps:
+      - uses: actions/checkout@v4
+      # Build
+      - name: Run task 'build'
+        run: ./build.cmd build
+
+      # Test
+      - name: Run tests ${{ inputs.count }} times
+        shell: pwsh
+        working-directory: ${{ github.event.inputs.project }}
+        run: |
+          foreach($i in 1..${{ inputs.count }}) {
+            Write-Host ('Executing: {0}/${{ inputs.count }}' -f $i)
+            dotnet test -c Release --framework ${{ inputs.framework }} --no-build --filter ${{ inputs.filter }} -tl:off
+          }
+
