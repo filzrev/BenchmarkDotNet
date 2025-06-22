@@ -1,0 +1,67 @@
+name: run-tests-selected
+run-name: Run selected tests (${{ inputs.runs_on }} --framework ${{ inputs.framework}} --filter ${{ inputs.filter }})
+
+on:
+  workflow_dispatch:
+    inputs:
+      runs_on:
+        type: choice
+        description: GitHub Actions runner image name
+        required: true
+        default: ubuntu-latest
+        options:
+          - windows-latest
+          - windows-11-arm
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+          - macos-latest
+          - macos-13
+      project:
+        type: string
+        description: Specify test project path
+        required: true
+        default: tests/BenchmarkDotNet.IntegrationTests
+        options:
+          - tests/BenchmarkDotNet.Tests
+          - tests/BenchmarkDotNet.IntegrationTests
+          - tests/BenchmarkDotNet.IntegrationTests.ManualRunning
+      framework:
+        type: choice
+        description: Specify target framework
+        required: true
+        options:
+          - net8.0
+          - net462
+      filter:
+        type: string
+        description: Test filter text (It's used for `dotnet test --filter`) Use default value when running all tests
+        required: true
+        default: "BenchmarkDotNet"
+
+jobs:
+  test:
+    name: test (${{ inputs.runs_on }} --framework ${{ inputs.framework}} --filter ${{ inputs.filter }})
+    runs-on: ${{ inputs.runs_on }}
+    timeout-minutes: 60 # Explicitly set timeout. When wrong input parameter is passed. It may continue to run until it times out (Default:360 minutes))
+    steps:
+      - uses: actions/checkout@v4
+
+      # Build
+      - name: Run task 'build'
+        run: ./build.cmd build
+
+      # Test
+      - name: Run tests
+        working-directory: ${{ github.event.inputs.project }}
+        run: |
+          dotnet test -c Release --framework ${{ inputs.framework }} --filter ${{ inputs.filter }} -tl:off --no-build --logger:"console;verbosity=normal"
+
+      # Upload artifact files that are located at `$(GITHUB_WORKSPACE)/artifacts` directory
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results
+          if-no-files-found: ignore
+          path: |
+            artifacts/**/*
