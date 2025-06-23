@@ -35,6 +35,14 @@ namespace BenchmarkDotNet.TestAdapter
             // See: https://github.com/dotnet/BenchmarkDotNet/issues/2494
             var fullyQualifiedName = displayName;
 
+            // Use benchmark method FQN on Visual Studio environment.
+            if (Environment.GetEnvironmentVariable("VSAPPIDNAME") != null)
+            {
+                var benchmarkMethodName = benchmarkCase.Descriptor.WorkloadMethod.Name;
+                var benchmarkFullMethodName = $"{fullClassName}.{benchmarkMethodName}";
+                fullyQualifiedName = benchmarkFullMethodName;
+            }
+
             var vsTestCase = new TestCase(fullyQualifiedName, VsTestAdapter.ExecutorUri, assemblyPath)
             {
                 DisplayName = displayName,
