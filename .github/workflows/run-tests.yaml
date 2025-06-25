@@ -12,7 +12,7 @@ concurrency:
 jobs:
 
   test-windows-core:
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - name: Disable Windows Defender
         run: Set-MpPreference -DisableRealtimeMonitoring $true
@@ -34,7 +34,7 @@ jobs:
           path: "**/*.trx"
 
   test-windows-full:
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - name: Disable Windows Defender
         run: Set-MpPreference -DisableRealtimeMonitoring $true
