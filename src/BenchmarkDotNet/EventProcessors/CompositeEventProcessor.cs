@@ -29,7 +29,7 @@ namespace BenchmarkDotNet.EventProcessors
 
             this.eventProcessors = eventProcessors;
 
-            static bool IsGitHubAction() => Environment.GetEnvironmentVariable("GITHUB_ACTION") == "true";
+            static bool IsGitHubAction() => Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
             static bool IsAzurePipelines() => Environment.GetEnvironmentVariable("TF_BUILD") == "True";
         }
 

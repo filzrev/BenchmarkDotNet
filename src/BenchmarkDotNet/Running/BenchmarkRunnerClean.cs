@@ -55,9 +55,9 @@ namespace BenchmarkDotNet.Running
             using (var streamLogger = new StreamLogger(GetLogFileStreamWriter(benchmarkRunInfos, logFilePath)))
             {
                 var compositeLogger = CreateCompositeLogger(benchmarkRunInfos, streamLogger);
+                var eventProcessor = new CompositeEventProcessor(benchmarkRunInfos, (CompositeLogger)compositeLogger);
 
                 using var wakeLock = WakeLock.Request(WakeLock.GetWakeLockType(benchmarkRunInfos), "BenchmarkDotNet Running Benchmarks", streamLogger);
-                var eventProcessor = new CompositeEventProcessor(benchmarkRunInfos, (CompositeLogger)compositeLogger);
 
                 eventProcessor.OnStartValidationStage();
 
