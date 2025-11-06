@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BenchmarkDotNet.Extensions;
+using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Toolchains.Results;
@@ -12,14 +13,24 @@ namespace BenchmarkDotNet.EventProcessors
     {
         private readonly HashSet<EventProcessor> eventProcessors;
 
-        public CompositeEventProcessor(BenchmarkRunInfo[] benchmarkRunInfos)
+        public CompositeEventProcessor(BenchmarkRunInfo[] benchmarkRunInfos, CompositeLogger compositeLogger)
         {
             var eventProcessors = new HashSet<EventProcessor>();
 
             foreach (var info in benchmarkRunInfos)
                 eventProcessors.AddRange(info.Config.GetEventProcessors());
 
+            // Try add log grouping event processor when running on GitHub Actions or Azure Pipelines.
+            if (IsGitHubAction() || IsAzurePipelines())
+            {
+                if (compositeLogger.TryGetConsoleLogger(out var consoleLogger))
+                    eventProcessors.Add(new LogGroupingEventProcessor(consoleLogger));
+            }
+
             this.eventProcessors = eventProcessors;
+
+            static bool IsGitHubAction() => Environment.GetEnvironmentVariable("GITHUB_ACTION") == "true";
+            static bool IsAzurePipelines() => Environment.GetEnvironmentVariable("TF_BUILD") == "True";
         }
 
         public override void OnStartValidationStage()
