@@ -189,6 +189,11 @@ namespace BenchmarkDotNet.Running
                     compositeLogger.WriteLineHeader("// * Artifacts cleanup *");
                     Cleanup(compositeLogger, new HashSet<string>(artifactsToCleanup.Distinct()));
                     compositeLogger.WriteLineInfo("Artifacts cleanup is finished");
+
+                    var disableLogFile = benchmarkRunInfos.Any(info => info.Config.Options.IsSet(ConfigOptions.DisableLogFile));
+                    if (!disableLogFile)
+                        WriteLogFilePath((CompositeLogger)compositeLogger, logFilePath);
+
                     compositeLogger.Flush();
 
                     eventProcessor.OnEndRunStage();
@@ -619,6 +624,33 @@ namespace BenchmarkDotNet.Running
 
         private static void LogTotalTime(ILogger logger, TimeSpan time, int executedBenchmarksCount, string message = "Total time")
             => logger.WriteLineStatistic($"{message}: {time.ToFormattedTotalTime(DefaultCultureInfo.Instance)}, executed benchmarks: {executedBenchmarksCount}");
+
+        private static void WriteLogFilePath(CompositeLogger compositeLogger, string logFilePath)
+        {
+            // Skip when running benchmarks on CI.
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CI")))
+                return;
+
+            // Get console logger by id.
+            if (!compositeLogger.TryGetConsoleLoggerById(out var consoleLogger))
+                return;
+
+            consoleLogger.WriteLine();
+            consoleLogger.WriteLineHeader("// * Benchmark log *");
+
+            // Output plain path when using `dumb` terminal.
+            if (Environment.GetEnvironmentVariable("TERM") == "dumb")
+            {
+                consoleLogger.WriteLineInfo($"  {logFilePath}");
+                return;
+            }
+
+            // Output clickable link.
+            var linkTitle = logFilePath.Replace(Environment.CurrentDirectory, "").Trim(['/', '\\']);
+            const char ESC = '\x1b'; // \e
+            consoleLogger.WriteInfo("  ");
+            consoleLogger.WriteLineInfo($"{ESC}]8;;{logFilePath}\a{linkTitle}{ESC}]8;;\a");
+        }
 
         private static (BenchmarkRunInfo[], List<ValidationError>) GetSupportedBenchmarks(BenchmarkRunInfo[] benchmarkRunInfos, IResolver resolver)
         {

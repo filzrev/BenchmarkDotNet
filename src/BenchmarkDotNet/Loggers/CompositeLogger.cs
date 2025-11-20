@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 
 namespace BenchmarkDotNet.Loggers
 {
@@ -56,6 +57,16 @@ namespace BenchmarkDotNet.Loggers
                     logger.Flush();
                 }
             }
+        }
+
+        /// <summary>
+        /// Try to gets the logger that has ConsoleLogger id.
+        /// If a higher priority logger has been registered, it may return an ILogger instance that is not a ConsoleLogger.
+        /// </summary>
+        public bool TryGetConsoleLoggerById(out ILogger logger)
+        {
+            logger = loggers.FirstOrDefault(x => x.Id == ConsoleLogger.Default.Id);
+            return logger != null;
         }
     }
 }
