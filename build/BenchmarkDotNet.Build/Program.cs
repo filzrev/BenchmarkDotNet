@@ -37,7 +37,7 @@ public class RestoreTask : FrostingTask<BuildContext>, IHelpProvider
 }
 
 [TaskName(Name)]
-[TaskDescription("Build BenchmarkDotNet.sln solution")]
+[TaskDescription("Build BenchmarkDotNet.slnx solution")]
 [IsDependentOn(typeof(RestoreTask))]
 public class BuildTask : FrostingTask<BuildContext>, IHelpProvider
 {
