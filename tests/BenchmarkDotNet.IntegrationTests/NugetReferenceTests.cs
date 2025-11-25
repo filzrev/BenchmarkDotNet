@@ -35,7 +35,11 @@ namespace BenchmarkDotNet.IntegrationTests
 
             // Validate NuGet package version output message
             var stdout = GetSingleStandardOutput(report);
-            Assert.Contains($"System.Collections.Immutable: {targetVersion}", stdout);
+
+            if (RuntimeInformation.IsNetCore && DotNetRuntimeHelper.GetExpectedDotNetCoreRuntimeName() == ".NET 10.0")
+                Assert.Contains($"System.Collections.Immutable: 10.0.0", stdout);
+            else
+                Assert.Contains($"System.Collections.Immutable: {targetVersion}", stdout);
         }
 
         [FactEnvSpecific("Roslyn toolchain does not support .NET Core", EnvRequirement.FullFrameworkOnly)]

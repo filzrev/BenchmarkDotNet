@@ -62,7 +62,13 @@ public class InstallWasmToolsWorkload : FrostingTask<BuildContext>, IHelpProvide
 {
     private const string Name = "install-wasm-tools";
 
-    public override void Run(BuildContext context) => context.BuildRunner.InstallWorkload("wasm-tools");
+    public override void Run(BuildContext context)
+    {
+        context.BuildRunner.InstallWorkload("wasm-tools");
+                
+        // `wasm-tools-net8` is required for .NET 8
+        context.BuildRunner.InstallWorkload("wasm-tools-net8");
+    }
 
     public HelpInfo GetHelp()
     {
