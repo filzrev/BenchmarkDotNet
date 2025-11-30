@@ -33,8 +33,38 @@ jobs:
 
       - name: Report tests results
         uses: AndreyAkinshin/test-reporter@0e2c48ebec2007001dd77dd4bcbcd450b96d5a38
+        id: reports
         with:
           name: report
           path: "**/*.trx"
           reporter: dotnet-trx
           fail-on-error: true
+
+      - name: Output message to job summary
+        id: output-job-summary
+        shell: pwsh
+        if: ${{ steps.reports.outputs.time != '0' }}
+        run: |
+          $conclusion = "${{ steps.test-reports.outputs.conclusion }}"
+          $passed     = "${{ steps.test-reports.outputs.passed }}"
+          $failed     = "${{ steps.test-reports.outputs.failed }}"
+          $skipped    = "${{ steps.test-reports.outputs.skipped }}"
+          $time       = "${{ steps.test-reports.outputs.time }}"
+          $url_html   = "${{ steps.test-reports.outputs.url_html }}"
+
+          $content = @"
+          ## Summary of Test Report
+
+          - **Report URL**: $url_html
+ 
+          | Conclusion  | Passed  | Failed  | Skipped  | Time       |
+          |-------------|---------|---------|----------|------------|
+          | $conclusion | $passed | $failed | $skipped | $time [ms] |
+          "@
+
+          Write-Output $content >> $env:GITHUB_STEP_SUMMARY
+
+          if($failed -ne '0'){
+            echo "::error::Test Report contains ${failed} errors."
+            exit 1
+          }
