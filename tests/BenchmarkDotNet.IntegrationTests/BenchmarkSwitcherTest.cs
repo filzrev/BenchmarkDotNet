@@ -202,7 +202,7 @@ namespace BenchmarkDotNet.IntegrationTests
         public void WhenUserProvidesCategoriesWithoutFiltersWeDontAskToChooseBenchmarkJustRunGivenCategories(string categoriesConsoleLineArgument)
         {
             var logger = new OutputLogger(Output);
-            var config = ManualConfig.CreateEmpty().AddLogger(logger);
+            var config = ManualConfig.CreateEmpty().AddLogger(logger).SuppressValidatorMessages();
             var types = new[] { typeof(WithDryAttributeAndCategory) };
             var userInteractionMock = new UserInteractionMock(returnValue: types);
 

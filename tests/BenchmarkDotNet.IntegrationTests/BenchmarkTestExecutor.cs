@@ -96,7 +96,8 @@ namespace BenchmarkDotNet.IntegrationTests
             return baseConfig
                 .AddLogger(logger ?? (Output != null ? new OutputLogger(Output) : ConsoleLogger.Default))
                 .AddColumnProvider(DefaultColumnProviders.Instance)
-                .AddAnalyser(DefaultConfig.Instance.GetAnalysers().ToArray());
+                .AddAnalyser(DefaultConfig.Instance.GetAnalysers().ToArray())
+                .SuppressValidatorMessages();
         }
 
         protected static IReadOnlyList<string> GetSingleStandardOutput(Summary summary)

@@ -177,7 +177,9 @@ namespace BenchmarkDotNet.IntegrationTests
                 .AddColumnProvider(DefaultColumnProviders.Instance)
                 .AddAnalyser(DefaultConfig.Instance.GetAnalysers().ToArray());
             if (validator != null)
-                config = config.AddValidator(validator);
+                config.AddValidator(validator);
+            config.SuppressValidatorMessages();
+
             _ = BenchmarkRunner.Run(types, config);
             return eventProcessor.Events;
         }

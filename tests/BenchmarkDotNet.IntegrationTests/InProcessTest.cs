@@ -9,6 +9,7 @@ using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.IntegrationTests.Diagnosers;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
@@ -66,14 +67,16 @@ namespace BenchmarkDotNet.IntegrationTests
                 : Platform.X64;
 
             var otherPlatformConfig = new ManualConfig()
-                .With(Job.Dry.With(InProcessNoEmitToolchain.Instance).With(otherPlatform))
-                .With(new OutputLogger(Output))
-                .With(DefaultColumnProviders.Instance);
+                .AddJob(Job.Dry.WithToolchain(InProcessNoEmitToolchain.Instance).WithPlatform(otherPlatform))
+                .AddLogger(new OutputLogger(Output))
+                .AddColumnProvider(DefaultColumnProviders.Instance)
+                .SuppressValidatorMessages();
 
             var runInfo = BenchmarkConverter.TypeToBenchmarks(typeof(BenchmarkAllCases), otherPlatformConfig);
             var summary = BenchmarkRunner.Run(runInfo);
 
             Assert.NotEmpty(summary.ValidationErrors);
+            Assert.Single(summary.ValidationErrors.DistinctBy(x => x.Message));
         }
 
         [AssertionMethod]
@@ -180,7 +183,8 @@ namespace BenchmarkDotNet.IntegrationTests
             return new ManualConfig()
                 .AddJob(Job.Dry.WithToolchain(new InProcessNoEmitToolchain(TimeSpan.Zero, true)).WithInvocationCount(UnrollFactor).WithUnrollFactor(UnrollFactor))
                 .AddLogger(logger ?? (Output != null ? new OutputLogger(Output) : ConsoleLogger.Default))
-                .AddColumnProvider(DefaultColumnProviders.Instance);
+                .AddColumnProvider(DefaultColumnProviders.Instance)
+                .SuppressValidatorMessages();
         }
 
         [Fact]

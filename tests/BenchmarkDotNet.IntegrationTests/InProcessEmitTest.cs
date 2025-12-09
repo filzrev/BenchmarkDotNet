@@ -36,7 +36,8 @@ namespace BenchmarkDotNet.IntegrationTests
             return new ManualConfig()
                 .AddJob(Job.Dry.WithToolchain(new InProcessEmitToolchain(TimeSpan.Zero, true)).WithInvocationCount(UnrollFactor).WithUnrollFactor(UnrollFactor))
                 .AddLogger(logger ?? (Output != null ? new OutputLogger(Output) : ConsoleLogger.Default))
-                .AddColumnProvider(DefaultColumnProviders.Instance);
+                .AddColumnProvider(DefaultColumnProviders.Instance)
+                .SuppressValidatorMessages();
         }
 
         private IConfig CreateInProcessAndRoslynConfig(OutputLogger logger)
@@ -58,7 +59,8 @@ namespace BenchmarkDotNet.IntegrationTests
                         .WithInvocationCount(4)
                         .WithUnrollFactor(4))
                 .WithOptions(ConfigOptions.KeepBenchmarkFiles)
-                .AddLogger(logger ?? (Output != null ? new OutputLogger(Output) : ConsoleLogger.Default));
+                .AddLogger(logger ?? (Output != null ? new OutputLogger(Output) : ConsoleLogger.Default))
+                .SuppressValidatorMessages();
 
             return config;
         }

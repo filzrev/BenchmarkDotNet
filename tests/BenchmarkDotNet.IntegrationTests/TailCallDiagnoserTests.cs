@@ -86,7 +86,8 @@ namespace BenchmarkDotNet.IntegrationTests
             .AddLogger(DefaultConfig.Instance.GetLoggers().ToArray())
             .AddColumnProvider(DefaultColumnProviders.Instance)
             .AddDiagnoser(diagnoser)
-            .AddLogger(new OutputLogger(Output));
+            .AddLogger(new OutputLogger(Output))
+            .SuppressValidatorMessages();
     }
 }
 #endif

@@ -96,7 +96,8 @@ public class InProcessDiagnoserTests(ITestOutputHelper output) : BenchmarkTestEx
         return new ManualConfig()
             .AddLogger(new OutputLogger(Output))
             .AddColumnProvider(DefaultColumnProviders.Instance)
-            .AddJob(job);
+            .AddJob(job)
+            .SuppressValidatorMessages();
     }
 
     [Theory]
