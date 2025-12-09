@@ -35,13 +35,15 @@ public class UnitTestRunner(BuildContext context)
 
     private DotNetTestSettings GetTestSettingsParameters(FilePath logFile, string tfm)
     {
+        var verbosityLevel = System.Environment.GetEnvironmentVariable("CI") == "true" ? "minimal" : "detailed";
+    
         var settings = new DotNetTestSettings
         {
             Configuration = context.BuildConfiguration,
             Framework = tfm,
             NoBuild = true,
             NoRestore = true,
-            Loggers = new[] { "trx", $"trx;LogFileName={logFile.FullPath}", "console;verbosity=detailed" },
+            Loggers = new[] { "trx", $"trx;LogFileName={logFile.FullPath}", $"console;verbosity={verbosityLevel}" },
             EnvironmentVariables =
             {
                 ["Platform"] = "" // force the tool to not look for the .dll in platform-specific directory
