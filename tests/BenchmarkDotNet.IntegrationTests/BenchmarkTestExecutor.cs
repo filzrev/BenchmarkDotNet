@@ -11,6 +11,7 @@ using Xunit.Abstractions;
 using System.Collections.Generic;
 using BenchmarkDotNet.IntegrationTests.Xunit;
 using BenchmarkDotNet.Reports;
+using BenchmarkDotNet.Exporters;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
@@ -97,7 +98,7 @@ namespace BenchmarkDotNet.IntegrationTests
                 .AddLogger(logger ?? (Output != null ? new OutputLogger(Output) : ConsoleLogger.Default))
                 .AddColumnProvider(DefaultColumnProviders.Instance)
                 .AddAnalyser(DefaultConfig.Instance.GetAnalysers().ToArray())
-                .SuppressValidatorMessages();
+                .AddExporter(new NullExporter());
         }
 
         protected static IReadOnlyList<string> GetSingleStandardOutput(Summary summary)
@@ -105,5 +106,12 @@ namespace BenchmarkDotNet.IntegrationTests
 
         protected static IReadOnlyList<string> GetCombinedStandardOutput(Summary summary)
             => summary.Reports.SelectMany(r => r.ExecuteResults).SelectMany(e => e.StandardOutput).ToArray();
+
+        private class NullExporter : ExporterBase
+        {
+            public override void ExportToLog(Summary summary, ILogger logger)
+            {
+            }
+        }
     }
 }
