@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -130,8 +131,13 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
                 foreach (var environmentVariable in environmentVariables)
                     startInfo.EnvironmentVariables[environmentVariable.Key] = environmentVariable.Value;
 
-            if (!string.IsNullOrEmpty(customDotNetCliPath) && (environmentVariables == null || environmentVariables.All(envVar => envVar.Key != dotnetMultiLevelLookupEnvVarName)))
+            if (customDotNetCliPath.IsNotBlank()
+             && customDotNetCliPath != DefaultDotNetCliPath.Value
+             && (environmentVariables == null || environmentVariables.All(envVar => envVar.Key != dotnetMultiLevelLookupEnvVarName)))
+            {
                 startInfo.EnvironmentVariables[dotnetMultiLevelLookupEnvVarName] = "0";
+                Environment.SetEnvironmentVariable("DOTNET_ROOT", Path.GetDirectoryName(customDotNetCliPath));
+            }
 
             return startInfo;
         }

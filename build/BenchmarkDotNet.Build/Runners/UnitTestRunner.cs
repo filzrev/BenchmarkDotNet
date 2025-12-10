@@ -4,6 +4,10 @@ using Cake.Common.Diagnostics;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Core.IO;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace BenchmarkDotNet.Build.Runners;
@@ -52,6 +56,8 @@ public class UnitTestRunner(BuildContext context)
 
     private void RunTests(FilePath projectFile, string alias, string tfm)
     {
+        FixEnvironmentVariables();
+
         var os = Utils.GetOs();
         var arch = RuntimeInformation.OSArchitecture.ToString().ToLower();
         var trxFileName = $"{os}({arch})-{alias}-{tfm}.trx";
@@ -83,4 +89,24 @@ public class UnitTestRunner(BuildContext context)
     }
 
     public void RunInTests(string tfm) => RunTests(IntegrationTestsProjectFile, "integration", tfm);
+
+    // Helper method to fix environment variables that are set by `build.sh`/`build.ps1`.
+    private static void FixEnvironmentVariables()
+    {
+        // Update `PATH` environment variable.
+        var dotnetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT");
+        var path = Environment.GetEnvironmentVariable("PATH");
+        if (!string.IsNullOrEmpty(path))
+        {
+            var separator = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ';' : ':';
+            var parts = path.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+
+            var result = string.Join(separator, parts.Where(x => x != dotnetRoot));
+            Environment.SetEnvironmentVariable("PATH", result);
+        }
+
+        // Clear `DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX`/`DOTNET_ROOT` environment variable.
+        Environment.SetEnvironmentVariable("DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX", null);
+        Environment.SetEnvironmentVariable("DOTNET_ROOT", null);
+    }
 }
