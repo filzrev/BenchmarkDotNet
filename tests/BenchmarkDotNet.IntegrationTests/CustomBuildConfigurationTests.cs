@@ -22,7 +22,16 @@ namespace BenchmarkDotNet.IntegrationTests
         [FactEnvSpecific("Flaky, see https://github.com/dotnet/BenchmarkDotNet/issues/2376", EnvRequirement.NonFullFramework)]
         public void UserCanSpecifyCustomBuildConfiguration()
         {
-            var jobWithCustomConfiguration = Job.Dry.WithCustomBuildConfiguration("CUSTOM");
+            Console.WriteLine("========================================");
+            Console.WriteLine("DOTNET_ROOT:" + Environment.GetEnvironmentVariable("DOTNET_ROOT"));
+            Console.WriteLine("DOTNET_ROOT_ARM64 :" + Environment.GetEnvironmentVariable("DOTNET_ROOT_ARM64 "));
+            Console.WriteLine("DOTNET_ROOT_X64 :" + Environment.GetEnvironmentVariable("DOTNET_ROOT_X64 "));
+            Console.WriteLine("DOTNET_ROOT_X86 :" + Environment.GetEnvironmentVariable("DOTNET_ROOT_X86 "));
+            Console.WriteLine("BaseDirectory:" + AppContext.BaseDirectory);
+            Console.WriteLine("========================================");
+
+            var jobWithCustomConfiguration = Job.Dry.WithCustomBuildConfiguration("CUSTOM")
+                                                    .WithRuntime(RuntimeInformation.GetCurrentRuntime());
 
             var config = CreateSimpleConfig(job: jobWithCustomConfiguration);
             config = ((ManualConfig)config).WithBuildTimeout(TimeSpan.FromSeconds(240));
