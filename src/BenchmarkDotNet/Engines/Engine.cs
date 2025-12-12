@@ -200,9 +200,9 @@ namespace BenchmarkDotNet.Engines
 
             data.setupAction(); // we run iteration setup first, so even if it allocates, it is not included in the results
 
-            var initialThreadingStats = ThreadingStats.ReadInitial(); // this method might allocate
-            var exceptionsStats = new ExceptionsStats(); // allocates
-            exceptionsStats.StartListening(); // this method might allocate
+            ////var initialThreadingStats = ThreadingStats.ReadInitial(); // this method might allocate
+            ////var exceptionsStats = new ExceptionsStats(); // allocates
+            ////exceptionsStats.StartListening(); // this method might allocate
 
             // GC collect before measuring allocations.
             ForceGcCollect();
@@ -218,15 +218,15 @@ namespace BenchmarkDotNet.Engines
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
             }
 
-            exceptionsStats.Stop(); // this method might (de)allocate
-            var finalThreadingStats = ThreadingStats.ReadFinal();
+            ////exceptionsStats.Stop(); // this method might (de)allocate
+            ////var finalThreadingStats = ThreadingStats.ReadFinal();
 
             data.cleanupAction(); // we run iteration cleanup after collecting GC stats
 
             var totalOperationsCount = data.invokeCount * Parameters.OperationsPerInvoke;
             return (gcStats.WithTotalOperations(totalOperationsCount),
-                (finalThreadingStats - initialThreadingStats).WithTotalOperations(totalOperationsCount),
-                exceptionsStats.ExceptionsCount / (double)totalOperationsCount);
+                ThreadingStats.Empty,
+                0);
         }
 
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]

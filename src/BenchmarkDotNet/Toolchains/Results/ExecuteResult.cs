@@ -148,7 +148,7 @@ namespace BenchmarkDotNet.Toolchains.Results
                 }
                 else if (line.StartsWith(ThreadingStats.ResultsLinePrefix))
                 {
-                    threadingStats = ThreadingStats.Parse(line);
+                    //threadingStats = ThreadingStats.Parse(line);
                 }
                 else if (line.StartsWith(ExceptionsStats.ResultsLinePrefix))
                 {

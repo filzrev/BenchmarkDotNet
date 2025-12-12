@@ -91,10 +91,10 @@ namespace BenchmarkDotNet.Engines
 
             if (!GCStats.Equals(GcStats.Empty))
                 outWriter.WriteLine(GCStats.ToOutputLine());
-            if (!ThreadingStats.Equals(ThreadingStats.Empty))
-                outWriter.WriteLine(ThreadingStats.ToOutputLine());
-            if (ExceptionFrequency > 0)
-                outWriter.WriteLine(ExceptionsStats.ToOutputLine(ExceptionFrequency));
+            //if (!ThreadingStats.Equals(ThreadingStats.Empty))
+            //    outWriter.WriteLine(ThreadingStats.ToOutputLine());
+            //if (ExceptionFrequency > 0)
+            //    outWriter.WriteLine(ExceptionsStats.ToOutputLine(ExceptionFrequency));
 
             outWriter.WriteLine();
         }
