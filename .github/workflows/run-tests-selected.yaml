@@ -68,7 +68,7 @@ jobs:
           name: results
           if-no-files-found: ignore
           path: |
-            BenchmarkDotNet\src\BenchmarkDotNet\bin\Release\net8.0/**/*
+            /Users/runner/work/BenchmarkDotNet/BenchmarkDotNet/src/BenchmarkDotNet/bin/Release/net8.0/**/*
 
       # Test
       - name: Run tests
