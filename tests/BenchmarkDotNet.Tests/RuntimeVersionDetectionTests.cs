@@ -121,8 +121,10 @@ namespace BenchmarkDotNet.Tests
                 Assert.True(runtime is ClrRuntime, $"Actual runtime: {runtime}, tfm: {runtime.MsBuildMoniker}, moniker: {runtime.RuntimeMoniker}");
             else
                 Assert.True(runtime is MonoRuntime, $"Actual runtime: {runtime}, tfm: {runtime.MsBuildMoniker}, moniker: {runtime.RuntimeMoniker}");
-#else
+#elif NET8_0
             Assert.True(runtime is CoreRuntime coreRuntime && coreRuntime.RuntimeMoniker == RuntimeMoniker.Net80, $"Actual runtime: {runtime}, tfm: {runtime.MsBuildMoniker}, moniker: {runtime.RuntimeMoniker}");
+#else
+            Assert.True(runtime is CoreRuntime coreRuntime && coreRuntime.RuntimeMoniker == RuntimeMoniker.Net10_0, $"Actual runtime: {runtime}, tfm: {runtime.MsBuildMoniker}, moniker: {runtime.RuntimeMoniker}");
 #endif
         }
     }
