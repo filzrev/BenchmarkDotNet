@@ -122,9 +122,7 @@ jobs:
         if: always()
         with:
           name: test-linux-${{ matrix.os }}
-          path: |
-            "**/*.trx"
-            "**/*.binlog"
+          path: "**/*.binlog"
           reporter: dotnet-trx
       # Upload Artifacts with Unique Name
       - name: Upload test results
