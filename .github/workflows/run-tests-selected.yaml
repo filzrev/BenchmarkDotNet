@@ -44,7 +44,7 @@ on:
         default: 1
         
 env:
-  VSTEST_TESTHOST_SHUTDOWN_TIMEOUT: "30000" # 30 seconds (Default: 100 [ms])
+  VSTEST_TESTHOST_SHUTDOWN_TIMEOUT: "300000" # 300 seconds (Default: 100 [ms])
 
 jobs:
   test:
