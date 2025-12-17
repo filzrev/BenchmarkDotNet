@@ -3,11 +3,13 @@ using Cake.Common.Diagnostics;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Build;
+using Cake.Common.Tools.DotNet.MSBuild;
 using Cake.Common.Tools.DotNet.Pack;
 using Cake.Common.Tools.DotNet.Restore;
 using Cake.Common.Tools.DotNet.Workload.Install;
 using Cake.Core;
 using Cake.Core.IO;
+using Stubble.Core.Contexts;
 using System;
 using System.IO;
 using System.Linq;
@@ -103,7 +105,7 @@ public class BuildRunner
         {
             NoRestore = true,
             DiagnosticOutput = true,
-            MSBuildSettings = context.MsBuildSettingsBuild,
+            MSBuildSettings = context.MsBuildSettingsBuild.EnableBinaryLogger(),
             Configuration = context.BuildConfiguration,
             Verbosity = context.BuildVerbosity
         };
