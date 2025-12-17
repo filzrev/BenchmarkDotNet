@@ -5,6 +5,9 @@ on:
   pull_request:
   push:
   workflow_dispatch:
+  
+env:
+  VSTEST_TESTHOST_SHUTDOWN_TIMEOUT: "1000" # 30 seconds (Default: 100 [ms])
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref || github.run_id }}
