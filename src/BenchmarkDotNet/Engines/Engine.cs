@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using BenchmarkDotNet.Characteristics;
+﻿using BenchmarkDotNet.Characteristics;
 using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Helpers;
 using BenchmarkDotNet.Jobs;
@@ -11,6 +6,13 @@ using BenchmarkDotNet.Portability;
 using BenchmarkDotNet.Reports;
 using JetBrains.Annotations;
 using Perfolizer.Horology;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace BenchmarkDotNet.Engines
 {
@@ -191,9 +193,38 @@ namespace BenchmarkDotNet.Engines
             return clock.GetElapsed();
         }
 
+        private void GcDump(string key)
+        {
+#if NETSTANDARD2_0
+#else
+            int pid = Environment.ProcessId;
+            var workspace = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
+
+            if (workspace == null)
+            {
+                workspace = Path.Combine(Path.GetTempPath(), "BenchmarkDotNet_GcDump");
+                Directory.CreateDirectory($"{workspace}/artifacts");
+            }
+
+            string outputPath = $"{workspace}/artifacts/{DateTime.Now:yyyyMMdd_HHmmss_fff}_{key}.gcdump";
+
+            var process = Process.Start(new ProcessStartInfo("dotnet", $"gcdump collect -p {pid} --output {outputPath}")
+            {
+                CreateNoWindow = false,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+            })!;
+            var stdout = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            Console.WriteLine(stdout);
+#endif
+        }
+
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         private (GcStats, ThreadingStats, double) GetExtraStats(IterationData data)
         {
+            GcDump("warmup");
+
             // Warm up the measurement functions before starting the actual measurement.
             DeadCodeEliminationHelper.KeepAliveWithoutBoxing(GcStats.ReadInitial());
             DeadCodeEliminationHelper.KeepAliveWithoutBoxing(GcStats.ReadFinal());
@@ -215,7 +246,9 @@ namespace BenchmarkDotNet.Engines
             GcStats gcStats;
             using (FinalizerBlocker.MaybeStart())
             {
+                GcDump("before");
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
+                GcDump("after");
             }
 
             exceptionsStats.Stop(); // this method might (de)allocate
