@@ -210,7 +210,7 @@ namespace BenchmarkDotNet.Engines
 
             string outputPath = $"{workspace}/artifacts/{DateTime.Now:yyyyMMdd_HHmmss_fff}_{key}.gcdump";
 
-            var process = Process.Start(new ProcessStartInfo("dotnet", $"gcdump collect -p {pid} --output {outputPath}")
+            var process = Process.Start(new ProcessStartInfo("dotnet", $"gcdump collect -p {pid} --output {outputPath} --providers Microsoft-Windows-DotNETRuntime:0x1:5 --profile gc")
             {
                 CreateNoWindow = false,
                 UseShellExecute = false,
@@ -222,9 +222,10 @@ namespace BenchmarkDotNet.Engines
 #endif
         }
 
-        public void DotNetTraceStart()
+        public static void DotNetTraceStart()
         {
 #if NETSTANDARD2_0
+            TraceProcess?.WaitForExit();
 #else
             TraceProcess?.WaitForExit();
 
@@ -239,7 +240,7 @@ namespace BenchmarkDotNet.Engines
 
             string outputPath = $"{workspace}/artifacts/{DateTime.Now:yyyyMMdd_HHmmss_fff}.nettrace";
 
-            var process = Process.Start(new ProcessStartInfo("dotnet", $"trace collect -p {pid} --providers Microsoft-Windows-DotNETRuntime:0x3280000:5 --output {outputPath} --duration 00:00:00:05")
+            var process = Process.Start(new ProcessStartInfo("dotnet", $"trace collect -p {pid} --providers Microsoft-Windows-DotNETRuntime:0x3280000:5 --output {outputPath} --duration 00:00:01:00")
             {
                 CreateNoWindow = false,
                 UseShellExecute = false,
@@ -253,7 +254,7 @@ namespace BenchmarkDotNet.Engines
 #endif
         }
 
-        private Process? TraceProcess = null;
+        private static Process? TraceProcess = null;
 
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         private (GcStats, ThreadingStats, double) GetExtraStats(IterationData data)
@@ -270,13 +271,11 @@ namespace BenchmarkDotNet.Engines
 
             data.setupAction(); // we run iteration setup first, so even if it allocates, it is not included in the results
 
-            AppDomain.CurrentDomain.AssemblyLoad += (sender, e) => { Console.WriteLine(e.LoadedAssembly.FullName); };
-            AppDomain.CurrentDomain.FirstChanceException += (sender, e) => { Console.WriteLine(e.Exception.ToString()); };
-            //DotNetTraceStart();
+            // DotNetTraceStart();
 
             var initialThreadingStats = ThreadingStats.ReadInitial(); // this method might allocate
             var exceptionsStats = new ExceptionsStats(); // allocates
-            exceptionsStats.StartListening(); // this method might allocate
+            //exceptionsStats.StartListening(); // this method might allocate
 
             // GC collect before measuring allocations.
             ForceGcCollect();
@@ -289,16 +288,17 @@ namespace BenchmarkDotNet.Engines
             GcStats gcStats;
             using (FinalizerBlocker.MaybeStart())
             {
-                before = GC.GetTotalAllocatedBytes(true);
+                before = GC.GetAllocatedBytesForCurrentThread();
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
-                after = GC.GetTotalAllocatedBytes(true);
+                after = GC.GetAllocatedBytesForCurrentThread();
             }
 
-            exceptionsStats.Stop(); // this method might (de)allocate
+            //exceptionsStats.Stop(); // this method might (de)allocate
             var finalThreadingStats = ThreadingStats.ReadFinal();
 
             data.cleanupAction(); // we run iteration cleanup after collecting GC stats
 
+            Thread.Sleep(5);
             Console.WriteLine($"+++Before: {before}");
             Console.WriteLine($"+++After: {after}");
             Console.WriteLine($"+++Diff: {after - before}");
