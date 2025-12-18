@@ -230,14 +230,13 @@ namespace BenchmarkDotNet.Engines
             DeadCodeEliminationHelper.KeepAliveWithoutBoxing(GcStats.ReadFinal());
 
             data.setupAction(); // we run iteration setup first, so even if it allocates, it is not included in the results
-
+            GcDump("before");
             var initialThreadingStats = ThreadingStats.ReadInitial(); // this method might allocate
             var exceptionsStats = new ExceptionsStats(); // allocates
             exceptionsStats.StartListening(); // this method might allocate
 
             // GC collect before measuring allocations.
             ForceGcCollect();
-            Thread.Sleep(250);
 
             // #1542
             // If the jit is tiered, we put the current thread to sleep so it can kick in, compile its stuff,
@@ -251,6 +250,8 @@ namespace BenchmarkDotNet.Engines
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
                 //GcDump("after");
             }
+
+            GcDump("after");
 
             exceptionsStats.Stop(); // this method might (de)allocate
             var finalThreadingStats = ThreadingStats.ReadFinal();
