@@ -98,11 +98,5 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
         /// Mono AOT Compiler mode, either 'mini' or 'llvm'
         /// </summary>
         public MonoAotCompilerMode AOTCompilerMode { get; }
-
-        public NetCoreAppSettings WithCustomDotNetCliPath(string customDotNetCliPath, string? displayName = null)
-            => new NetCoreAppSettings(TargetFrameworkMoniker, RuntimeFrameworkVersion, displayName ?? Name, customDotNetCliPath, PackagesPath);
-
-        public NetCoreAppSettings WithCustomPackagesRestorePath(string packagesPath, string? displayName = null)
-            => new NetCoreAppSettings(TargetFrameworkMoniker, RuntimeFrameworkVersion, displayName ?? Name, CustomDotNetCliPath, packagesPath);
     }
 }
