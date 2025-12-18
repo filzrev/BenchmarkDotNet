@@ -270,7 +270,9 @@ namespace BenchmarkDotNet.Engines
 
             data.setupAction(); // we run iteration setup first, so even if it allocates, it is not included in the results
 
-            DotNetTraceStart();
+            AppDomain.CurrentDomain.AssemblyLoad += (sender, e) => { Console.WriteLine(e.LoadedAssembly.FullName); };
+            AppDomain.CurrentDomain.FirstChanceException += (sender, e) => { Console.WriteLine(e.Exception.ToString()); };
+            //DotNetTraceStart();
 
             var initialThreadingStats = ThreadingStats.ReadInitial(); // this method might allocate
             var exceptionsStats = new ExceptionsStats(); // allocates
