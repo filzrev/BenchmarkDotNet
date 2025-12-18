@@ -239,7 +239,7 @@ namespace BenchmarkDotNet.Engines
 
             string outputPath = $"{workspace}/artifacts/{DateTime.Now:yyyyMMdd_HHmmss_fff}.nettrace";
 
-            var process = Process.Start(new ProcessStartInfo("dotnet", $"trace collect -p {pid} --providers Microsoft-Windows-DotNETRuntime:0x10 --output {outputPath} --duration 00:00:00:05")
+            var process = Process.Start(new ProcessStartInfo("dotnet", $"trace collect -p {pid} --provider gc-verbose --output {outputPath} --duration 00:00:00:05")
             {
                 CreateNoWindow = false,
                 UseShellExecute = false,
@@ -291,8 +291,6 @@ namespace BenchmarkDotNet.Engines
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
                 after = GC.GetTotalAllocatedBytes(true);
             }
-
-            Thread.Sleep(5000);
 
             exceptionsStats.Stop(); // this method might (de)allocate
             var finalThreadingStats = ThreadingStats.ReadFinal();
