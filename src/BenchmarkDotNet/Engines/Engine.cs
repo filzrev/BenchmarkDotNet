@@ -223,7 +223,9 @@ namespace BenchmarkDotNet.Engines
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         private (GcStats, ThreadingStats, double) GetExtraStats(IterationData data)
         {
-            GcDump("warmup");
+#if NETSTANDARD
+            return (default, default, default);
+#else
 
             // Warm up the measurement functions before starting the actual measurement.
             DeadCodeEliminationHelper.KeepAliveWithoutBoxing(GcStats.ReadInitial());
@@ -246,11 +248,9 @@ namespace BenchmarkDotNet.Engines
             GcStats gcStats;
             using (FinalizerBlocker.MaybeStart())
             {
-                GcDump("before");
-                GC.TryStartNoGCRegion(2048*1000);
+                Console.WriteLine($"Before: {GC.GetAllocatedBytesForCurrentThread()}");
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
-                GcDump("after");
-                GC.EndNoGCRegion();
+                Console.WriteLine($"After: {GC.GetAllocatedBytesForCurrentThread()}");
             }
 
 
@@ -263,6 +263,7 @@ namespace BenchmarkDotNet.Engines
             return (gcStats.WithTotalOperations(totalOperationsCount),
                 (finalThreadingStats - initialThreadingStats).WithTotalOperations(totalOperationsCount),
                 exceptionsStats.ExceptionsCount / (double)totalOperationsCount);
+#endif
         }
 
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
