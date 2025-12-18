@@ -245,6 +245,7 @@ namespace BenchmarkDotNet.Engines
             })!;
             var stdout = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
+            Console.WriteLine(stdout);
 #endif
         }
 
@@ -263,6 +264,8 @@ namespace BenchmarkDotNet.Engines
 
             data.setupAction(); // we run iteration setup first, so even if it allocates, it is not included in the results
 
+            DotNetTraceStart();
+
             var initialThreadingStats = ThreadingStats.ReadInitial(); // this method might allocate
             var exceptionsStats = new ExceptionsStats(); // allocates
             exceptionsStats.StartListening(); // this method might allocate
@@ -278,7 +281,6 @@ namespace BenchmarkDotNet.Engines
             GcStats gcStats;
             using (FinalizerBlocker.MaybeStart())
             {
-                DotNetTraceStart();
                 before = GC.GetTotalAllocatedBytes(true);
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
                 after = GC.GetTotalAllocatedBytes(true);
