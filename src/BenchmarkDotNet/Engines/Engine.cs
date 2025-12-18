@@ -237,7 +237,7 @@ namespace BenchmarkDotNet.Engines
 
             string outputPath = $"{workspace}/artifacts/{DateTime.Now:yyyyMMdd_HHmmss_fff}.nettrace";
 
-            var process = Process.Start(new ProcessStartInfo("dotnet", $"dotnet trace collect -p {pid} --providers Microsoft-Windows-DotNETRuntime:0x10 --output {outputPath} --duration 00:00:05")
+            var process = Process.Start(new ProcessStartInfo("dotnet", $"trace collect -p {pid} --providers Microsoft-Windows-DotNETRuntime:0x10 --output {outputPath} --duration 00:00:05")
             {
                 CreateNoWindow = false,
                 UseShellExecute = false,
