@@ -12,7 +12,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Threading;
+using static Microsoft.Diagnostics.Tracing.Analysis.TraceLoadedDotNetRuntimeExtensions;
 
 namespace BenchmarkDotNet.Engines
 {
@@ -220,6 +222,32 @@ namespace BenchmarkDotNet.Engines
 #endif
         }
 
+        public void DotNetTraceStart()
+        {
+#if NETSTANDARD2_0
+#else
+            int pid = Environment.ProcessId;
+            var workspace = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
+
+            if (workspace == null)
+            {
+                workspace = Path.Combine(Path.GetTempPath(), "BenchmarkDotNet_NetTrace");
+                Directory.CreateDirectory($"{workspace}/artifacts");
+            }
+
+            string outputPath = $"{workspace}/artifacts/{DateTime.Now:yyyyMMdd_HHmmss_fff}.nettrace";
+
+            var process = Process.Start(new ProcessStartInfo("dotnet", $"dotnet trace collect -p {pid} --providers Microsoft-Windows-DotNETRuntime:0x10 --output {outputPath} --duration 00:00:05")
+            {
+                CreateNoWindow = false,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+            })!;
+            var stdout = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+#endif
+        }
+
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         private (GcStats, ThreadingStats, double) GetExtraStats(IterationData data)
         {
@@ -250,10 +278,13 @@ namespace BenchmarkDotNet.Engines
             GcStats gcStats;
             using (FinalizerBlocker.MaybeStart())
             {
+                DotNetTraceStart();
                 before = GC.GetTotalAllocatedBytes(true);
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
                 after = GC.GetTotalAllocatedBytes(true);
             }
+
+            Thread.Sleep(5000);
 
             exceptionsStats.Stop(); // this method might (de)allocate
             var finalThreadingStats = ThreadingStats.ReadFinal();
