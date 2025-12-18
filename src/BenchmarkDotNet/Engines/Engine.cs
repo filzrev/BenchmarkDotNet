@@ -226,6 +226,8 @@ namespace BenchmarkDotNet.Engines
 #if NETSTANDARD
             return (default, default, default);
 #else
+            long before = 0;
+            long after = 0;
 
             // Warm up the measurement functions before starting the actual measurement.
             DeadCodeEliminationHelper.KeepAliveWithoutBoxing(GcStats.ReadInitial());
@@ -248,9 +250,11 @@ namespace BenchmarkDotNet.Engines
             GcStats gcStats;
             using (FinalizerBlocker.MaybeStart())
             {
-                Console.WriteLine($"Before: {GC.GetAllocatedBytesForCurrentThread()}");
+                before = GC.GetAllocatedBytesForCurrentThread();
+
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
-                Console.WriteLine($"After: {GC.GetAllocatedBytesForCurrentThread()}");
+
+                after = GC.GetAllocatedBytesForCurrentThread();
             }
 
 
@@ -258,6 +262,10 @@ namespace BenchmarkDotNet.Engines
             var finalThreadingStats = ThreadingStats.ReadFinal();
 
             data.cleanupAction(); // we run iteration cleanup after collecting GC stats
+
+            Console.WriteLine($"+++Before: {before}");
+            Console.WriteLine($"+++After: {after}");
+            Console.WriteLine($"+++Diff: {after - before}");
 
             var totalOperationsCount = data.invokeCount * Parameters.OperationsPerInvoke;
             return (gcStats.WithTotalOperations(totalOperationsCount),
