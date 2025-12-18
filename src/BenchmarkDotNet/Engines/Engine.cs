@@ -235,7 +235,6 @@ namespace BenchmarkDotNet.Engines
             var exceptionsStats = new ExceptionsStats(); // allocates
             exceptionsStats.StartListening(); // this method might allocate
 
-            GcDump("before");
             // GC collect before measuring allocations.
             ForceGcCollect();
 
@@ -247,12 +246,16 @@ namespace BenchmarkDotNet.Engines
             GcStats gcStats;
             using (FinalizerBlocker.MaybeStart())
             {
-                //GcDump("before");
-                gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
-                //GcDump("after");
+                GcDump("before");
+                if (GC.TryStartNoGCRegion(2048))
+                {
+                    gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
+                    GcDump("after");
+
+                    GC.EndNoGCRegion();
+                }
             }
 
-            GcDump("after");
 
             exceptionsStats.Stop(); // this method might (de)allocate
             var finalThreadingStats = ThreadingStats.ReadFinal();
