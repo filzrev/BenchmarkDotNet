@@ -250,13 +250,10 @@ namespace BenchmarkDotNet.Engines
             GcStats gcStats;
             using (FinalizerBlocker.MaybeStart())
             {
-                before = GC.GetAllocatedBytesForCurrentThread();
-
+                before = GC.GetTotalAllocatedBytes(true);
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
-
-                after = GC.GetAllocatedBytesForCurrentThread();
+                after = GC.GetTotalAllocatedBytes(true);
             }
-
 
             exceptionsStats.Stop(); // this method might (de)allocate
             var finalThreadingStats = ThreadingStats.ReadFinal();
