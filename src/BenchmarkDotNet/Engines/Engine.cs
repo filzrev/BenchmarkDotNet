@@ -237,7 +237,7 @@ namespace BenchmarkDotNet.Engines
 
             // GC collect before measuring allocations.
             ForceGcCollect();
-
+            ForceGcCollect();
             // #1542
             // If the jit is tiered, we put the current thread to sleep so it can kick in, compile its stuff,
             // and NOT allocate anything on the background thread when we are measuring allocations.
@@ -246,9 +246,9 @@ namespace BenchmarkDotNet.Engines
             GcStats gcStats;
             using (FinalizerBlocker.MaybeStart())
             {
-                GcDump("before");
+                //GcDump("before");
                 gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
-                GcDump("after");
+                //GcDump("after");
             }
 
             exceptionsStats.Stop(); // this method might (de)allocate
