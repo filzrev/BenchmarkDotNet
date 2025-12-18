@@ -237,7 +237,8 @@ namespace BenchmarkDotNet.Engines
 
             // GC collect before measuring allocations.
             ForceGcCollect();
-            ForceGcCollect();
+            Thread.Sleep(250);
+
             // #1542
             // If the jit is tiered, we put the current thread to sleep so it can kick in, compile its stuff,
             // and NOT allocate anything on the background thread when we are measuring allocations.
