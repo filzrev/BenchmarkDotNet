@@ -230,11 +230,12 @@ namespace BenchmarkDotNet.Engines
             DeadCodeEliminationHelper.KeepAliveWithoutBoxing(GcStats.ReadFinal());
 
             data.setupAction(); // we run iteration setup first, so even if it allocates, it is not included in the results
-            GcDump("before");
+
             var initialThreadingStats = ThreadingStats.ReadInitial(); // this method might allocate
             var exceptionsStats = new ExceptionsStats(); // allocates
             exceptionsStats.StartListening(); // this method might allocate
 
+            GcDump("before");
             // GC collect before measuring allocations.
             ForceGcCollect();
 
