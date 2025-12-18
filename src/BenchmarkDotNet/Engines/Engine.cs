@@ -247,13 +247,10 @@ namespace BenchmarkDotNet.Engines
             using (FinalizerBlocker.MaybeStart())
             {
                 GcDump("before");
-                if (GC.TryStartNoGCRegion(2048))
-                {
-                    gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
-                    GcDump("after");
-
-                    GC.EndNoGCRegion();
-                }
+                GC.TryStartNoGCRegion(2048*1000);
+                gcStats = MeasureWithGc(data.workloadAction, data.invokeCount / data.unrollFactor);
+                GcDump("after");
+                GC.EndNoGCRegion();
             }
 
 
