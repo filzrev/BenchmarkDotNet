@@ -55,6 +55,7 @@ jobs:
       - name: Setup
         run: |
           mkdir artifacts
+          dotnet tool install dotnet-gcdump -g
 
       # Build
       - name: Run build
