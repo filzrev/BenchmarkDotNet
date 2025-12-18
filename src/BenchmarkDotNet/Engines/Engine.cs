@@ -226,6 +226,8 @@ namespace BenchmarkDotNet.Engines
         {
 #if NETSTANDARD2_0
 #else
+            TraceProcess?.WaitForExit();
+
             int pid = Environment.ProcessId;
             var workspace = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
 
@@ -243,11 +245,15 @@ namespace BenchmarkDotNet.Engines
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
             })!;
-            var stdout = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-            Console.WriteLine(stdout);
+
+            TraceProcess = process;
+            //var stdout = process.StandardOutput.ReadToEnd();
+            //process.WaitForExit();
+            //Console.WriteLine(stdout);
 #endif
         }
+
+        private Process? TraceProcess = null;
 
         [MethodImpl(CodeGenHelper.AggressiveOptimizationOption)]
         private (GcStats, ThreadingStats, double) GetExtraStats(IterationData data)
