@@ -20,10 +20,10 @@ jobs:
     # --- Init ---
 
     - name: Checkout sources
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Checkout changelog
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         ref: docs-changelog
         path: docs/_changelog
