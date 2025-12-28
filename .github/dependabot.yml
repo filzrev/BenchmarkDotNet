@@ -1,0 +1,26 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  target-branch: master
+  directory: "/"
+  schedule:
+    interval: daily
+  ignore:
+     dependency-name: "Verify.*"
+  groups:
+    roslyn:
+      patterns:
+        - "Microsoft.CodeAnalysis"
+        - "Microsoft.CodeAnalysis.*"
+    xunit:
+      patterns:
+        - "xunit"
+        - "xunit.*"
+
+- package-ecosystem: "github-actions"
+  target-branch: master
+  directory: "/"
+  schedule: 
+    interval: daily
+  cooldown:
+    default-days: 14
