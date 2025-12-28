@@ -49,7 +49,7 @@ jobs:
       run: ./build.cmd pack --stable
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: nupkgs
         path: artifacts/*.nupkg
