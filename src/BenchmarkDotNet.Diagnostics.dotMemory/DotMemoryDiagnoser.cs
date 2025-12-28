@@ -10,6 +10,9 @@ namespace BenchmarkDotNet.Diagnostics.dotMemory;
 
 public class DotMemoryDiagnoser(Uri? nugetUrl = null, string? downloadTo = null) : SnapshotProfilerBase
 {
+    private DotMemory.Config GetBaseConfig()
+        => new DotMemory.Config().UseCustomResponseTimeout(milliseconds: 60 * 1000); // Default: 30 seconds
+
     public override string ShortName => "dotMemory";
 
     protected override void InitTool(Progress progress)
@@ -19,12 +22,12 @@ public class DotMemoryDiagnoser(Uri? nugetUrl = null, string? downloadTo = null)
 
     protected override void AttachToCurrentProcess(string snapshotFile)
     {
-        DotMemory.Attach(new DotMemory.Config().SaveToFile(snapshotFile));
+        DotMemory.Attach(GetBaseConfig().SaveToFile(snapshotFile));
     }
 
     protected override void AttachToProcessByPid(int pid, string snapshotFile)
     {
-        DotMemory.Attach(new DotMemory.Config().ProfileExternalProcess(pid).SaveToFile(snapshotFile));
+        DotMemory.Attach(GetBaseConfig().ProfileExternalProcess(pid).SaveToFile(snapshotFile));
     }
 
     protected override void TakeSnapshot()

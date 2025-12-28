@@ -10,6 +10,9 @@ namespace BenchmarkDotNet.Diagnostics.dotTrace;
 
 public class DotTraceDiagnoser(Uri? nugetUrl = null, string? downloadTo = null) : SnapshotProfilerBase
 {
+    private DotTrace.Config GetBaseConfig()
+        => new DotTrace.Config().UseCustomResponseTimeout(milliseconds: 60 * 1000); // Default: 30 seconds
+
     public override string ShortName => "dotTrace";
 
     protected override void InitTool(Progress progress)
@@ -19,13 +22,13 @@ public class DotTraceDiagnoser(Uri? nugetUrl = null, string? downloadTo = null) 
 
     protected override void AttachToCurrentProcess(string snapshotFile)
     {
-        DotTrace.Attach(new DotTrace.Config().SaveToFile(snapshotFile));
+        DotTrace.Attach(GetBaseConfig().SaveToFile(snapshotFile));
         DotTrace.StartCollectingData();
     }
 
     protected override void AttachToProcessByPid(int pid, string snapshotFile)
     {
-        DotTrace.Attach(new DotTrace.Config().ProfileExternalProcess(pid).SaveToFile(snapshotFile));
+        DotTrace.Attach(GetBaseConfig().ProfileExternalProcess(pid).SaveToFile(snapshotFile));
         DotTrace.StartCollectingData();
     }
 
