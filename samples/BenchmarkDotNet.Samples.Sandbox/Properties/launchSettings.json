@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Default": {
+      "commandName": "Project",
+      "commandLineArgs": "--filter *DefaultBenchmarks*",
+      "environmentVariables": {
+      }
+    }
+  }
+}
