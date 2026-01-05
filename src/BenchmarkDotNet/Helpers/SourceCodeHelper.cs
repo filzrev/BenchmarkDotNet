@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Numerics;
 using BenchmarkDotNet.Extensions;
 using Perfolizer.Horology;
-using SimpleJson.Reflection;
 
 #nullable enable
 
@@ -47,11 +46,12 @@ namespace BenchmarkDotNet.Helpers
                     return $"new {array.GetType().GetElementType()!.GetCorrectCSharpTypeName()}[] {{ {string.Join(", ", elementsSourceCode)} }}";
                 }
             }
-            if (ReflectionUtils.GetTypeInfo(value.GetType()).IsEnum)
+            var valueType = value.GetType();
+            if (valueType.IsEnum)
                 return $"({value.GetType().GetCorrectCSharpTypeName()})({ToInvariantCultureString(value)})";
             if (value is Type type)
                 return "typeof(" + type.GetCorrectCSharpTypeName() + ")";
-            if (!ReflectionUtils.GetTypeInfo(value.GetType()).IsValueType)
+            if (!valueType.IsValueType)
                 return "System.Activator.CreateInstance<" + value.GetType().GetCorrectCSharpTypeName() + ">()";
 
             switch (value) {

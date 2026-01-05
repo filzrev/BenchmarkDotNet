@@ -1,10 +1,10 @@
-﻿using System;
+﻿using BenchmarkDotNet.Extensions;
+using Perfolizer.Horology;
+using SimpleJson.Reflection;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using BenchmarkDotNet.Extensions;
-using Perfolizer.Horology;
-using SimpleJson.Reflection;
 
 namespace BenchmarkDotNet.Helpers
 {
@@ -12,7 +12,8 @@ namespace BenchmarkDotNet.Helpers
     {
         public static string ToFolderName(object? value)
         {
-            switch (value) {
+            switch (value)
+            {
                 case null:
                     return "null";
                 case bool b:
@@ -29,12 +30,13 @@ namespace BenchmarkDotNet.Helpers
                     return d.ToString("F", CultureInfo.InvariantCulture).Replace(".", "-");
             }
 
-            if (ReflectionUtils.GetTypeInfo(value.GetType()).IsEnum)
+            var valueType = value.GetType();
+            if (valueType.IsEnum)
                 return value.ToString();
             if (value is Type type)
                 return ToFolderName(type: type);
-            if (!ReflectionUtils.GetTypeInfo(value.GetType()).IsValueType)
-                return value.GetType().Name; // TODO
+            if (!valueType.IsValueType)
+                return valueType.Name; // TODO
             if (value is TimeInterval interval)
                 return interval.Nanoseconds + "ns";
 
