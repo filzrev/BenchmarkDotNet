@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using BenchmarkDotNet.Analysers;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Exporters;
@@ -159,6 +160,8 @@ public abstract class SnapshotProfilerBase : IProfiler
         {
             logger.WriteLineError(e.ToString());
         }
+
+        Thread.Sleep(100);
     }
 
 
