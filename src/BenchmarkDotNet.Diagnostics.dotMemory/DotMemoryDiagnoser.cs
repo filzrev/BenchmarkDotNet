@@ -25,7 +25,7 @@ public class DotMemoryDiagnoser(Uri? nugetUrl = null, string? downloadTo = null)
     protected override void AttachToProcessByPid(int pid, string snapshotFile)
     {
         DotMemory.Attach(new DotMemory.Config()
-            .UseLogLevelVerbose()
+            .UseLogLevelTrace()
             .UseLogFile(Environment.GetEnvironmentVariable("GITHUB_WORKSPACE") + $"/artifacts/dotMemory_{DateTime.Now.ToString("HH:mm:ss_fff")}.log")
             .ProfileExternalProcess(pid).SaveToFile(snapshotFile));
     }
