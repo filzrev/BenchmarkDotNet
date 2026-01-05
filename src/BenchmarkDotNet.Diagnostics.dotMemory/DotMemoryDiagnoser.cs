@@ -26,7 +26,7 @@ public class DotMemoryDiagnoser(Uri? nugetUrl = null, string? downloadTo = null)
     {
         DotMemory.Attach(new DotMemory.Config()
             .UseLogLevelVerbose()
-            .UseLogFile(Environment.GetEnvironmentVariable("GITHUB_WORKSPACE") + $"/artifacts/dotMemory_{DateTime.Now.ToString("HH:mm:ss_fff")}.log")
+            .UseLogFile(Environment.GetEnvironmentVariable("GITHUB_WORKSPACE") + $"/artifacts/dotMemory_{DateTime.Now.ToString("HHmmss_fff")}.log")
             .ProfileExternalProcess(pid).SaveToFile(snapshotFile));
     }
 
