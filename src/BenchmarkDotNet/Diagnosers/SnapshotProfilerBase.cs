@@ -160,8 +160,6 @@ public abstract class SnapshotProfilerBase : IProfiler
         {
             logger.WriteLineError(e.ToString());
         }
-
-        Thread.Sleep(100);
     }
 
 
