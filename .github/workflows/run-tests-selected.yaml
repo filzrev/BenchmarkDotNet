@@ -72,7 +72,7 @@ jobs:
 
           foreach($i in 1..$iterationCount) {
             Write-Output ('##[group]Executing Iteration: {0}/${{ inputs.iteration_count }}' -f $i)
-            dotnet test -c Release --framework ${{ inputs.framework }} --filter ${{ inputs.filter }} -tl:off --no-build -v diag
+            dotnet test -c Release --framework ${{ inputs.framework }} --no-build -v diag
 
             Write-Output '##[endgroup]'
           }
