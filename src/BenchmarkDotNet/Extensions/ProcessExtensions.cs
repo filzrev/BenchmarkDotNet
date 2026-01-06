@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace BenchmarkDotNet.Extensions
 {
@@ -35,6 +36,9 @@ namespace BenchmarkDotNet.Extensions
             {
                 logger.WriteLineInfo($"// Failed to set up high priority ({ex.Message}). In order to run benchmarks with high priority, make sure you have the right permissions.");
             }
+
+            Thread.Sleep(100);
+            Console.WriteLine($"// Process Id: {process.Id}, Priority: {process.PriorityClass}");
         }
 
         internal static string ToPresentation(this IntPtr processorAffinity, int processorCount)
