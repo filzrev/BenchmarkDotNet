@@ -72,7 +72,7 @@ jobs:
 
           foreach($i in 1..$iterationCount) {
             Write-Output ('##[group]Executing Iteration: {0}/${{ inputs.iteration_count }}' -f $i)
-            sudo dotnet test -c Release --framework ${{ inputs.framework }} --no-build -v diag --diagnostic --results-directory /home/runner/work/BenchmarkDotNet/BenchmarkDotNet/artifacts --crashdump --crashdump-type mini
+            dotnet test -c Release --framework ${{ inputs.framework }} --no-build -v diag --diagnostic --results-directory /home/runner/work/BenchmarkDotNet/BenchmarkDotNet/artifacts --crashdump --crashdump-type mini
 
             Write-Output '##[endgroup]'
           }

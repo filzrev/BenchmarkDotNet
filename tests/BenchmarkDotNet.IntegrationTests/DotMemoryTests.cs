@@ -73,14 +73,14 @@ namespace BenchmarkDotNet.IntegrationTests
                 return list.Count;
             }
 
-            [Benchmark]
-            public int Foo1()
-            {
-                var list = new List<object>();
-                for (int i = 0; i < 1000; i++)
-                    list.Add(new object());
-                return list.Count;
-            }
+            ////[Benchmark]
+            ////public int Foo1()
+            ////{
+            ////    var list = new List<object>();
+            ////    for (int i = 0; i < 1000; i++)
+            ////        list.Add(new object());
+            ////    return list.Count;
+            ////}
         }
     }
 }
