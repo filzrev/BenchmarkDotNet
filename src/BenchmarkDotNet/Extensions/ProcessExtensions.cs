@@ -38,6 +38,7 @@ namespace BenchmarkDotNet.Extensions
             }
 
             Thread.Sleep(100);
+            process.Refresh();
             Console.WriteLine($"// Process Id: {process.Id}, Priority: {process.PriorityClass}");
         }
 
