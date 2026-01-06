@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace BenchmarkDotNet.Extensions
@@ -27,9 +26,9 @@ namespace BenchmarkDotNet.Extensions
     {
         private static readonly TimeSpan DefaultKillTimeout = TimeSpan.FromSeconds(30);
 
-        [DllImport("kernel32.dll")]
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         static extern int GetThreadPriority(IntPtr hThread);
-        [DllImport("kernel32.dll")]
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         static extern IntPtr GetCurrentThread();
         public static void EnsureHighPriority(this Process process, ILogger logger)
         {
