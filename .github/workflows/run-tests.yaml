@@ -156,13 +156,13 @@ jobs:
         run: ./build.cmd install-wasm-tools
       # Build and Test
       - name: Run task 'build'
-        run: ./build.cmd build
+        run: sudo ./build.cmd build
       - name: Run task 'analyzer-tests'
-        run: ./build.cmd analyzer-tests -e
+        run: sudo ./build.cmd analyzer-tests -e
       - name: Run task 'unit-tests'
-        run: ./build.cmd unit-tests -e
+        run: sudo ./build.cmd unit-tests -e
       - name: Run task 'in-tests-core'
-        run: ./build.cmd in-tests-core -e
+        run: sudo ./build.cmd in-tests-core -e
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@fe45e9537387dac839af0d33ba56eed8e24189e8 # v2.3.0
