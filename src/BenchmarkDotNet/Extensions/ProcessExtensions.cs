@@ -30,6 +30,10 @@ namespace BenchmarkDotNet.Extensions
         static extern int GetThreadPriority(IntPtr hThread);
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         static extern IntPtr GetCurrentThread();
+
+        [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
+        static extern uint GetPriorityClass(IntPtr hProcess);
+
         public static void EnsureHighPriority(this Process process, ILogger logger)
         {
             try
@@ -48,9 +52,10 @@ namespace BenchmarkDotNet.Extensions
                 process.Refresh();
                 Console.WriteLine($"// Process Id: {process.Id}, Priority: {process.PriorityClass}");
 
-                int pri = GetThreadPriority(GetCurrentThread());
-                Console.WriteLine($"Process.PriorityClass = {process.PriorityClass}");
-                Console.WriteLine($"Thread priority (numeric) = {pri}");
+                uint pri = GetPriorityClass(process.Handle);
+
+                Console.WriteLine($"Process.PriorityClass (managed) = {process.PriorityClass}");
+                Console.WriteLine($"GetPriorityClass (native)       = 0x{pri:X}");
             }
         }
 
