@@ -30,6 +30,7 @@
     <ProjectReference Include="..\..\src\BenchmarkDotNet.Diagnostics.dotMemory\BenchmarkDotNet.Diagnostics.dotMemory.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Testing.Extensions.CrashDump" Version="2.0.2" />
     <PackageReference Include="xunit.v3.mtp-v2" Version="3.2.1" />
     <PackageReference Include="Mono.Cecil" Version="0.11.6" />
   </ItemGroup>
