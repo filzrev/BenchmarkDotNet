@@ -39,8 +39,8 @@ namespace BenchmarkDotNet.IntegrationTests
             }
 
             var config = new ManualConfig().AddJob(
-                 Job.Dry.WithId("ExternalProcess")
-                //Job.Dry.WithToolchain(InProcessEmitToolchain.Default).WithId("InProcess")
+                // Job.Dry.WithId("ExternalProcess")
+                Job.Dry.WithToolchain(InProcessEmitToolchain.Default).WithId("InProcess")
             );
             string snapshotDirectory = Path.Combine(Directory.GetCurrentDirectory(), "BenchmarkDotNet.Artifacts", "snapshots");
             if (Directory.Exists(snapshotDirectory))
