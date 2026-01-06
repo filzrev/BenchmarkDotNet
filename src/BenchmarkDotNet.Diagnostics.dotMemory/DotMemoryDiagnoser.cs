@@ -19,7 +19,10 @@ public class DotMemoryDiagnoser(Uri? nugetUrl = null, string? downloadTo = null)
 
     protected override void AttachToCurrentProcess(string snapshotFile)
     {
-        DotMemory.Attach(new DotMemory.Config().SaveToFile(snapshotFile));
+        DotMemory.Attach(new DotMemory.Config()
+            .UseLogLevelVerbose()
+            .UseLogFile(Environment.GetEnvironmentVariable("GITHUB_WORKSPACE") + $"/artifacts/dotMemory_{DateTime.Now.ToString("HHmmss_fff")}.log")
+            .SaveToFile(snapshotFile));
     }
 
     protected override void AttachToProcessByPid(int pid, string snapshotFile)
