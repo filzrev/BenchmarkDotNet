@@ -37,7 +37,8 @@ namespace BenchmarkDotNet.Extensions
                 logger.WriteLineInfo($"// Failed to set up high priority ({ex.Message}). In order to run benchmarks with high priority, make sure you have the right permissions.");
             }
 
-            Thread.Sleep(100);
+            Console.WriteLine($"// Process Id: {process.Id}, Priority: {process.PriorityClass}");
+            Thread.Sleep(1000);
             process.Refresh();
             Console.WriteLine($"// Process Id: {process.Id}, Priority: {process.PriorityClass}");
         }
