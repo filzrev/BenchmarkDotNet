@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Detectors;
@@ -15,7 +16,18 @@ namespace BenchmarkDotNet.IntegrationTests
 {
     public class DotMemoryTests : BenchmarkTestExecutor
     {
-        public DotMemoryTests(ITestOutputHelper output) : base(output) { }
+        public DotMemoryTests(ITestOutputHelper output) : base(output) 
+        {
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                Output.WriteLine("Unhandled exception: " + args.ExceptionObject);
+            };
+
+            TaskScheduler.UnobservedTaskException += (sender, args) =>
+            {
+                Output.WriteLine("Unobserved task exception: " + args.Exception);
+            };
+        }
 
         [Fact]
         public void DotMemorySmokeTest()
