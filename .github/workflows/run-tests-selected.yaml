@@ -72,8 +72,7 @@ jobs:
 
           foreach($i in 1..$iterationCount) {
             Write-Output ('##[group]Executing Iteration: {0}/${{ inputs.iteration_count }}' -f $i)
-
-            dotnet test -c Release --framework ${{ inputs.framework }} --filter ${{ inputs.filter }} -tl:off --no-build --logger "console;verbosity=normal" --diag:/home/runner/work/BenchmarkDotNet/BenchmarkDotNet/artifacts/log.txt
+            sudo nice -n -5 dotnet test -c Release --framework ${{ inputs.framework }} --filter ${{ inputs.filter }} -tl:off --no-build --logger "console;verbosity=normal" --diag:/home/runner/work/BenchmarkDotNet/BenchmarkDotNet/artifacts/log.txt
 
             Write-Output '##[endgroup]'
           }
