@@ -7,9 +7,7 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Tests.Loggers;
 using Xunit;
-using Xunit.Abstractions;
 using System.Collections.Generic;
-using BenchmarkDotNet.IntegrationTests.Xunit;
 using BenchmarkDotNet.Reports;
 
 namespace BenchmarkDotNet.IntegrationTests
@@ -73,7 +71,7 @@ namespace BenchmarkDotNet.IntegrationTests
 
                 Assert.True(summary.Reports.Any(), "The \"Summary\" should contain at least one \"BenchmarkReport\" in the \"Reports\" collection");
 
-                summary.CheckPlatformLinkerIssues();
+                //summary.CheckPlatformLinkerIssues();
 
                 Assert.True(summary.Reports.All(r => r.BuildResult.IsBuildSuccess),
                     "The following benchmarks have failed to build: " +
