@@ -10,6 +10,7 @@ using BenchmarkDotNet.Diagnostics.dotMemory;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Portability;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
+using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
 using Xunit;
 
 namespace BenchmarkDotNet.IntegrationTests
@@ -40,7 +41,7 @@ namespace BenchmarkDotNet.IntegrationTests
 
             var config = new ManualConfig().AddJob(
                 // Job.Dry.WithId("ExternalProcess")
-                Job.Dry.WithToolchain(InProcessEmitToolchain.Default).WithId("InProcess")
+                Job.Dry.WithToolchain(InProcessNoEmitToolchain.Default).WithId("InProcess")
             );
             string snapshotDirectory = Path.Combine(Directory.GetCurrentDirectory(), "BenchmarkDotNet.Artifacts", "snapshots");
             if (Directory.Exists(snapshotDirectory))
