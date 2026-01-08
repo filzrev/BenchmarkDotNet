@@ -137,6 +137,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
             => new StringBuilder()
                 .AppendArgument("restore")
                 .AppendArgument($"\"{filePath}\"")
+                .AppendArgument("/graph")
                 // restore doesn't support -f argument.
                 .AppendArgument(artifactsPaths.PackagesDirectoryName.IsBlank() ? string.Empty : $"--packages \"{artifactsPaths.PackagesDirectoryName}\"")
                 .AppendArgument(GetCustomMsBuildArguments(buildPartition.RepresentativeBenchmarkCase, buildPartition.Resolver))
@@ -153,6 +154,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
                 .AppendArgument($"-f {tfm}")
                 .AppendArgument($"-c {buildPartition.BuildConfiguration}")
                 .AppendArgument(GetCustomMsBuildArguments(buildPartition.RepresentativeBenchmarkCase, buildPartition.Resolver))
+                .AppendArgument("/graph")
                 .AppendArgument(extraArguments)
                 .AppendArgument(GetMandatoryMsBuildSettings(buildPartition.BuildConfiguration))
                 .AppendArgument(artifactsPaths.PackagesDirectoryName.IsBlank() ? string.Empty : $"/p:NuGetPackageRoot=\"{artifactsPaths.PackagesDirectoryName}\"")
