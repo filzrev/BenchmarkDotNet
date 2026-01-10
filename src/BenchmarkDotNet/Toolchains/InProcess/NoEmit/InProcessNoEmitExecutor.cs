@@ -32,12 +32,13 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex);
+                        executeParameters.Logger.WriteLine(ex.ToString());
                         threadException = ex;
                     }
                     finally 
                     {
-                        Console.WriteLine("Finally!");
+                        executeParameters.Logger.WriteLine("Finally!");
+                        executeParameters.Logger.Flush();
                     }
                 })
                 {
