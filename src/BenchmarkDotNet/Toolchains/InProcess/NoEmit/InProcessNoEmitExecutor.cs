@@ -32,8 +32,6 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
                     }
                     catch (Exception ex)
                     {
-                        executeParameters.Logger.WriteLineError(threadException.ToString());
-                        executeParameters.Logger.Flush();
                         threadException = ex;
                     }
                 })
