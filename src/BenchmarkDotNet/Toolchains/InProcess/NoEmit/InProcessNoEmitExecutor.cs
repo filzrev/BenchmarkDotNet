@@ -30,7 +30,10 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
                     {
                         exitCode = ExecuteCore(host, executeParameters);
                     }
-                    catch (Exception ex) { threadException = ex; }
+                    catch (Exception ex) {
+                        executeParameters.Logger.WriteLineError(threadException.ToString());
+                        threadException = ex;
+                    }
                 });
 
                 if (executeParameters.BenchmarkCase.Descriptor.WorkloadMethod.GetCustomAttributes<STAThreadAttribute>(false).Any()
