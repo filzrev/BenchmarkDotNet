@@ -1,7 +1,5 @@
 ﻿using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Serialization;
-using SimpleJson;
-using System;
 using System.Linq;
 using System.Text.Json.Serialization;
 

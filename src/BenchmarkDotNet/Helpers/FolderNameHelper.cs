@@ -1,6 +1,5 @@
 ﻿using BenchmarkDotNet.Extensions;
 using Perfolizer.Horology;
-using SimpleJson.Reflection;
 using System;
 using System.Globalization;
 using System.IO;

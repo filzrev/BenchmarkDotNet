@@ -18,7 +18,6 @@ using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
 using BenchmarkDotNet.Validators;
 using JetBrains.Annotations;
 using Perfolizer.Metrology;
-using SimpleJson;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
