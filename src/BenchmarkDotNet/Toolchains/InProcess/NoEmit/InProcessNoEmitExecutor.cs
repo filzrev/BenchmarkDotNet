@@ -1,15 +1,16 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using BenchmarkDotNet.Detectors;
+﻿using BenchmarkDotNet.Detectors;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Toolchains.Parameters;
 using BenchmarkDotNet.Toolchains.Results;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.ExceptionServices;
+using System.Threading;
 
 namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
 {
@@ -19,10 +20,18 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
         {
             var host = new InProcessHost(executeParameters.BenchmarkCase, executeParameters.Logger, executeParameters.Diagnoser);
 
+            Exception? threadException = null;
             int exitCode = -1;
             if (executeOnSeparateThread)
             {
-                var runThread = new Thread(() => exitCode = ExecuteCore(host, executeParameters));
+                var runThread = new Thread(() =>
+                {
+                    try
+                    {
+                        exitCode = ExecuteCore(host, executeParameters);
+                    }
+                    catch (Exception ex) { threadException = ex; }
+                });
 
                 if (executeParameters.BenchmarkCase.Descriptor.WorkloadMethod.GetCustomAttributes<STAThreadAttribute>(false).Any()
                     && OsDetector.IsWindows())
@@ -34,6 +43,9 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
 
                 runThread.Start();
                 runThread.Join();
+
+                if (threadException != null)
+                    ExceptionDispatchInfo.Capture(threadException).Throw();
             }
             else
             {
