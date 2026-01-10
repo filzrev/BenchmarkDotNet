@@ -30,19 +30,23 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
                     {
                         exitCode = ExecuteCore(host, executeParameters);
                     }
-                    catch (Exception ex) {
+                    catch (Exception ex)
+                    {
                         executeParameters.Logger.WriteLineError(threadException.ToString());
+                        executeParameters.Logger.Flush();
                         threadException = ex;
                     }
-                });
+                })
+                {
+                    Name = "Background",
+                    IsBackground = true,
+                };
 
                 if (executeParameters.BenchmarkCase.Descriptor.WorkloadMethod.GetCustomAttributes<STAThreadAttribute>(false).Any()
                     && OsDetector.IsWindows())
                 {
                     runThread.SetApartmentState(ApartmentState.STA);
                 }
-
-                // runThread.IsBackground = true;
 
                 runThread.Start();
                 runThread.Join();
