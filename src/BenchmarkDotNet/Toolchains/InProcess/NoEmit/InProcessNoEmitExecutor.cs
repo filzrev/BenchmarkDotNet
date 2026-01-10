@@ -45,7 +45,11 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
                 runThread.Join();
 
                 if (threadException != null)
+                {
+                    Console.WriteLine(threadException.ToString());
+                    executeParameters.Logger.WriteLineError(threadException.ToString());
                     ExceptionDispatchInfo.Capture(threadException).Throw();
+                }
             }
             else
             {
