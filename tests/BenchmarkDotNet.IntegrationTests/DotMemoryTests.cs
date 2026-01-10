@@ -17,7 +17,7 @@ namespace BenchmarkDotNet.IntegrationTests
 {
     public class DotMemoryTests : BenchmarkTestExecutor
     {
-        public DotMemoryTests(ITestOutputHelper output) : base(output) 
+        public DotMemoryTests(ITestOutputHelper output) : base(output)
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
@@ -40,26 +40,17 @@ namespace BenchmarkDotNet.IntegrationTests
             }
 
             var config = new ManualConfig().AddJob(
-                Job.Dry.WithId("ExternalProcess")
-                //Job.Dry.WithToolchain(InProcessEmitToolchain.Default).WithId("InProcess")
+                // Job.Dry.WithId("ExternalProcess")
+                Job.Dry.WithToolchain(InProcessNoEmitToolchain.Default).WithId("InProcess")
             );
             string snapshotDirectory = Path.Combine(Directory.GetCurrentDirectory(), "BenchmarkDotNet.Artifacts", "snapshots");
             if (Directory.Exists(snapshotDirectory))
                 Directory.Delete(snapshotDirectory, true);
 
-            CanExecute<Benchmarks>(config);
-
-            Output.WriteLine("---------------------------------------------");
-            Output.WriteLine("SnapshotDirectory:" + snapshotDirectory);
-            var snapshots = Directory.EnumerateFiles(snapshotDirectory)
-                .Where(filePath => Path.GetExtension(filePath).Equals(".dmw", StringComparison.OrdinalIgnoreCase))
-                .Select(Path.GetFileName)
-                .OrderBy(fileName => fileName)
-                .ToList();
-            Output.WriteLine("Snapshots:");
-            foreach (string snapshot in snapshots)
-                Output.WriteLine("* " + snapshot);
-            // Assert.Equal(4, snapshots.Count);
+            foreach (var i in Enumerable.Range(1, 200))
+            {
+                CanExecute<Benchmarks>(config);
+            }
         }
 
         [DotMemoryDiagnoser]
@@ -73,15 +64,6 @@ namespace BenchmarkDotNet.IntegrationTests
                     list.Add(new object());
                 return list.Count;
             }
-
-            ////[Benchmark]
-            ////public int Foo1()
-            ////{
-            ////    var list = new List<object>();
-            ////    for (int i = 0; i < 1000; i++)
-            ////        list.Add(new object());
-            ////    return list.Count;
-            ////}
         }
     }
 }
