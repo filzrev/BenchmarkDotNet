@@ -42,7 +42,7 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
                     runThread.SetApartmentState(ApartmentState.STA);
                 }
 
-                runThread.IsBackground = true;
+                // runThread.IsBackground = true;
 
                 runThread.Start();
                 runThread.Join();
