@@ -27,21 +27,7 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
                 Console.WriteLine("Execte: " + executeParameters.DiagnoserRunMode.ToString());
                 var runThread = new Thread(() =>
                 {
-                    try
-                    {
-                        exitCode = ExecuteCore(host, executeParameters);
-                    }
-                    catch (Exception ex)
-                    {
-                        executeParameters.Logger.WriteLine("Exception:" + ex.ToString());
-                        threadException = ex;
-                    }
-                    finally
-                    {
-                        executeParameters.Logger.WriteLine("Finally!");
-                        executeParameters.Logger.Flush();
-                    }
-                    throw new Exception("Unknown Error!");
+                    exitCode = ExecuteCore(host, executeParameters);
                 })
                 {
                     Name = "Background",
