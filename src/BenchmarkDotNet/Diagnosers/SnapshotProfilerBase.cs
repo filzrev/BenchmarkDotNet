@@ -125,6 +125,7 @@ public abstract class SnapshotProfilerBase : IProfiler
         try
         {
             logger.WriteLineInfo($"Attaching {ShortName} to the process...");
+            logger.Flush();
             Attach(parameters, snapshotFilePath);
             logger.WriteLineInfo($"{ShortName} is successfully attached");
         }
@@ -168,9 +169,15 @@ public abstract class SnapshotProfilerBase : IProfiler
         int pid = parameters.ProcessId;
         int currentPid = Process.GetCurrentProcess().Id;
         if (pid != currentPid)
+        {
+            Console.WriteLine("AttachToProcessByPid");
             AttachToProcessByPid(pid, snapshotFile);
+        }
         else
+        {
+            Console.WriteLine("AttachToCurrentProcess");
             AttachToCurrentProcess(snapshotFile);
+        }
     }
 
     protected class Progress(ILogger logger, string title) : IProgress<double>
