@@ -14,7 +14,7 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
     public sealed class InProcessNoEmitToolchain : IToolchain
     {
         /// <summary>A toolchain instance with default settings.</summary>
-        public static readonly IToolchain Default = new InProcessNoEmitToolchain(new() { ExecuteOnSeparateThread = true });
+        public static readonly IToolchain Default = new InProcessNoEmitToolchain(new() { ExecuteOnSeparateThread = false });
 
         /// <summary>Initializes a new instance of the <see cref="InProcessNoEmitToolchain" /> class.</summary>
         /// <param name="settings">The settings to use for the toolchain.</param>
