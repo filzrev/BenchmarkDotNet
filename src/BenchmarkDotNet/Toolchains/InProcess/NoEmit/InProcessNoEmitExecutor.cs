@@ -24,6 +24,7 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
             int exitCode = -1;
             if (executeOnSeparateThread)
             {
+                Console.WriteLine("Execte: " + executeParameters.DiagnoserRunMode.ToString());
                 var runThread = new Thread(() =>
                 {
                     try
