@@ -41,6 +41,7 @@ namespace BenchmarkDotNet.Toolchains.InProcess.NoEmit
                         executeParameters.Logger.WriteLine("Finally!");
                         executeParameters.Logger.Flush();
                     }
+                    throw new Exception("Unknown Error!");
                 })
                 {
                     Name = "Background",
