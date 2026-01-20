@@ -21,7 +21,7 @@ namespace BenchmarkDotNet.Tests
         public void MandatorySettingsAreAlwaysEnabled(EventPipeProfile eventPipeProfile)
         {
             var result = EventPipeProfiler.MapToProviders(eventPipeProfile, null);
-
+            Assert.Equal(1, 2);
             Assert.Contains(Mandatory, result);
         }
 
