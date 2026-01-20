@@ -37,6 +37,11 @@ jobs:
           name: test-windows-core-${{ matrix.os }}
           path: "**/*.trx"
           reporter: dotnet-trx
+          fail-on-error: false
+      # Report failed tests
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failed-tests
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v6
@@ -76,6 +81,11 @@ jobs:
           name: test-windows-full-${{ matrix.os }}
           path: "**/*.trx"
           reporter: dotnet-trx
+          fail-on-error: false
+      # Report failed tests
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failed-tests
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v6
@@ -124,6 +134,11 @@ jobs:
           name: test-linux-${{ matrix.os }}
           path: "**/*.trx"
           reporter: dotnet-trx
+          fail-on-error: false
+      # Report failed tests
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failed-tests
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v6
@@ -171,6 +186,11 @@ jobs:
           name: test-macos(${{ matrix.os.arch }})
           path: "**/*.trx"
           reporter: dotnet-trx
+          fail-on-error: false
+      # Report failed tests
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failed-tests
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v6

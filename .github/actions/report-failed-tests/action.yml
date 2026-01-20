@@ -1,0 +1,43 @@
+name: report-failed-tests
+runs:
+  using: "composite"
+  steps:
+  - name: Report failed tests
+    if: failure()
+    shell: pwsh
+    run: |
+      $trxFiles = Get-ChildItem -Recurse -Filter *.trx
+
+      if ($trxFiles.Count -eq 0) {
+        Write-Host 'Trx files not found.'
+        return
+      }
+
+      foreach ($trxFile in $trxFiles) 
+      {
+        Write-Host ('Start processing trx file: {0}' -f $trxFile)
+
+        $xml = [xml]::new()
+        $xml.Load($trxFile.FullName)
+
+        $ns = New-Object System.Xml.XmlNamespaceManager($xml.NameTable)
+        $ns.AddNamespace('ns', 'http://microsoft.com/schemas/VisualStudio/TeamTest/2010')
+
+        $failedTests = $xml.SelectNodes('//ns:UnitTestResult[@outcome="Failed"]', $ns)
+
+        if ($failedTests.Count -eq 0) {
+          continue
+        }
+
+        foreach ($failedTest in $failedTests) 
+        {
+          $testName = $failedTest.testName
+          $message = $failedTest.Output.ErrorInfo.Message
+          $stackTrace = $failedTest.Output.ErrorInfo.StackTrace
+
+          # Concat messages and escape special chars.
+          $message = "${message}`n{$stackTrace}" -replace '%','%25' -replace "`r","%0D" -replace "`n","%0A"
+
+          # Write error message by using GitHub Actions workflow command (https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#setting-an-error-message)
+          Write-Output ("::error title=❌ {0}::{1}" -f $testName, $message) 
+        }
