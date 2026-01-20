@@ -3,7 +3,6 @@ runs:
   using: "composite"
   steps:
   - name: Report failed tests
-    if: failure()
     shell: pwsh
     run: |
       $trxFiles = Get-ChildItem -Recurse -Filter *.trx
@@ -41,3 +40,4 @@ runs:
           # Write error message by using GitHub Actions workflow command (https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#setting-an-error-message)
           Write-Output ("::error title=❌ {0}::{1}" -f $testName, $message) 
         }
+      }
