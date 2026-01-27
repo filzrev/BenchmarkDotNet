@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.TestPlatform.TranslationLayer" Version="17.8.0" />
   </ItemGroup>
 
+  <!-- Suppress FileNotFoundException that is thrown when discovering tests for project that targeting net462. -->
   <ItemGroup>
     <ProjectReference Include="..\BenchmarkDotNet\BenchmarkDotNet.csproj" />
   </ItemGroup>
