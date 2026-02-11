@@ -58,8 +58,8 @@ if (!(Test-Path $InstallPath)) {
     (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, $ScriptPath);
     & $ScriptPath -JSonFile $GlobalJsonPath -InstallDir $InstallPath;
 
-    # Install .NET 8 SDK
-    & $ScriptPath -Channel 8.0 -InstallDir $InstallPath -NoPath;
+    # Install .NET 10 SDK
+    & $ScriptPath -Channel 10.0 -InstallDir $InstallPath -NoPath;
 }
 
 Remove-PathVariable "$InstallPath"

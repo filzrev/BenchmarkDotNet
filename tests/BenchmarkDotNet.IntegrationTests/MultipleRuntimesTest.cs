@@ -29,7 +29,7 @@ namespace BenchmarkDotNet.IntegrationTests
             var summary = BenchmarkRunner
                 .Run<C>(
                     ManualConfig.CreateEmpty()
-                        .AddJob(Job.Dry.WithRuntime(CoreRuntime.Core80).WithId("Core"))
+                        .AddJob(Job.Dry.WithRuntime(CoreRuntime.Core10_0).WithId("Core"))
                         .AddJob(Job.Dry.WithRuntime(ClrRuntime.Net462).WithId("Framework"))
                         .AddColumnProvider(DefaultColumnProviders.Instance)
                         .AddLogger(new OutputLogger(output)));
@@ -51,7 +51,7 @@ namespace BenchmarkDotNet.IntegrationTests
                 .Any());
 
             Assert.Contains(".NET Framework", summary.AllRuntimes);
-            Assert.Contains(".NET 8.0", summary.AllRuntimes);
+            Assert.Contains(".NET 10.0", summary.AllRuntimes);
         }
     }
 

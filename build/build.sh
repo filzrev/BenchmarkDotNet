@@ -16,8 +16,8 @@ if [ ! -d "$PROJECT_ROOT/.dotnet" ]; then
     curl -Lsfo "$PROJECT_ROOT/.dotnet/dotnet-install.sh" https://dot.net/v1/dotnet-install.sh
     bash "$PROJECT_ROOT/.dotnet/dotnet-install.sh" --jsonfile ./build/sdk/global.json --install-dir .dotnet --no-path
 
-    # Install .NET 8 SDK
-    bash "$PROJECT_ROOT/.dotnet/dotnet-install.sh" --channel 8.0 --install-dir .dotnet --no-path
+    # Install .NET 10 SDK
+    bash "$PROJECT_ROOT/.dotnet/dotnet-install.sh" --channel 10.0 --install-dir .dotnet --no-path
 fi
 
 export PATH="$PROJECT_ROOT/.dotnet":$PATH

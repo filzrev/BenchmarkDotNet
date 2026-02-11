@@ -160,12 +160,12 @@ public class InTestsFullTask : FrostingTask<BuildContext>, IHelpProvider
 }
 
 [TaskName(Name)]
-[TaskDescription("Run integration tests using .NET 8 (slow)")]
+[TaskDescription("Run integration tests using .NET 10 (slow)")]
 [IsDependentOn(typeof(BuildTask))]
 public class InTestsCoreTask : FrostingTask<BuildContext>, IHelpProvider
 {
     private const string Name = "in-tests-core";
-    public override void Run(BuildContext context) => context.UnitTestRunner.RunInTests("net8.0");
+    public override void Run(BuildContext context) => context.UnitTestRunner.RunInTests("net10.0");
     public HelpInfo GetHelp() => new();
 }
 
