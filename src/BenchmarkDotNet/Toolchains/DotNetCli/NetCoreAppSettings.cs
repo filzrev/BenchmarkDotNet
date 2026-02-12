@@ -39,7 +39,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
         /// </param>
         /// <param name="customDotNetCliPath">
         /// customize dotnet cli path if default is not desired
-        /// simply ignored if null
+        /// simply ignored if null or empty
         /// </param>
         /// <param name="packagesPath">the directory to restore packages to</param>
         /// <param name="customRuntimePack">path to a custom runtime pack</param>
