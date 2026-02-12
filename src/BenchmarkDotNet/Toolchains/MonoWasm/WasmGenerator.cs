@@ -8,15 +8,17 @@ using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Toolchains.CsProj;
 
+#nullable enable
+
 namespace BenchmarkDotNet.Toolchains.MonoWasm
 {
     public class WasmGenerator : CsProjGenerator
     {
-        private readonly string CustomRuntimePack;
+        private readonly string? CustomRuntimePack;
         private readonly string MainJS;
 
-        public WasmGenerator(string targetFrameworkMoniker, string cliPath, string packagesPath, string customRuntimePack, bool aot)
-            : base(targetFrameworkMoniker, cliPath, packagesPath, runtimeFrameworkVersion: null)
+        public WasmGenerator(string targetFrameworkMoniker, string cliPath, string packagesPath, string? customRuntimePack, bool aot)
+            : base(targetFrameworkMoniker, cliPath, packagesPath)
         {
             CustomRuntimePack = customRuntimePack;
             MainJS = (targetFrameworkMoniker == "net5.0" || targetFrameworkMoniker == "net6.0") ? "main.js" : "test-main.js";

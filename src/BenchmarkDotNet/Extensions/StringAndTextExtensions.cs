@@ -151,5 +151,14 @@ namespace BenchmarkDotNet.Extensions
 
         public static bool IsBlank([NotNullWhen(false)] this string? value) => string.IsNullOrWhiteSpace(value);
         public static bool IsNotBlank([NotNullWhen(true)] this string? value) => !value.IsBlank();
+
+        /// <summary>
+        /// Helper method to ensure not null value.
+        /// It's expected to be used for public API parameters handling.
+        /// </summary>
+        public static string EnsureNotNull(this string? value)
+        {
+            return value ?? "";
+        }
     }
 }

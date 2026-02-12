@@ -13,6 +13,8 @@ using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Toolchains.Results;
 using JetBrains.Annotations;
 
+#nullable enable
+
 namespace BenchmarkDotNet.Toolchains.DotNetCli
 {
     public class DotNetCliCommand
@@ -23,7 +25,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
 
         [PublicAPI] public string TargetFrameworkMoniker { get; }
 
-        [PublicAPI] public string? Arguments { get; }
+        [PublicAPI] public string Arguments { get; }
 
         [PublicAPI] public GenerateResult GenerateResult { get; }
 
@@ -37,7 +39,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
 
         [PublicAPI] public bool LogOutput { get; }
 
-        public DotNetCliCommand(string cliPath, string filePath, string tfm, string? arguments, GenerateResult generateResult, ILogger logger,
+        public DotNetCliCommand(string cliPath, string filePath, string tfm, string arguments, GenerateResult generateResult, ILogger logger,
             BuildPartition buildPartition, IReadOnlyList<EnvironmentVariable>? environmentVariables, TimeSpan timeout, bool logOutput = false)
         {
             CliPath = cliPath.IsBlank() ? DotNetCliCommandExecutor.DefaultDotNetCliPath.Value : cliPath;
@@ -52,7 +54,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
             LogOutput = logOutput || (buildPartition is not null && buildPartition.LogBuildOutput);
         }
 
-        public DotNetCliCommand WithArguments(string? arguments)
+        public DotNetCliCommand WithArguments(string arguments)
             => new(CliPath, FilePath, TargetFrameworkMoniker, arguments, GenerateResult, Logger, BuildPartition, EnvironmentVariables, Timeout, LogOutput);
 
         public DotNetCliCommand WithCliPath(string cliPath)
@@ -61,7 +63,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
         [PublicAPI]
         public BuildResult RestoreThenBuild()
         {
-            DotNetCliCommandExecutor.LogEnvVars(WithArguments(null));
+            DotNetCliCommandExecutor.LogEnvVars(WithArguments(""));
 
             // there is no way to do tell dotnet restore which configuration to use (https://github.com/NuGet/Home/issues/5119)
             // so when users go with custom build configuration, we must perform full build
@@ -97,7 +99,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
         [PublicAPI]
         public BuildResult RestoreThenBuildThenPublish()
         {
-            DotNetCliCommandExecutor.LogEnvVars(WithArguments(null));
+            DotNetCliCommandExecutor.LogEnvVars(WithArguments(""));
 
             // there is no way to do tell dotnet restore which configuration to use (https://github.com/NuGet/Home/issues/5119)
             // so when users go with custom build configuration, we must perform full publish
@@ -140,7 +142,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
                 .AppendArgument($"\"{filePath}\"")
                 // restore doesn't support -f argument.
                 .AppendArgument(artifactsPaths.PackagesDirectoryName.IsBlank() ? string.Empty : $"--packages \"{artifactsPaths.PackagesDirectoryName}\"")
-                .AppendArgument(buildPartition?.Runtime is WasmRuntime ? "-r browser-wasm" : string.Empty)
+                .AppendArgument(buildPartition.Runtime is WasmRuntime ? "-r browser-wasm" : string.Empty)
                 .AppendArgument(GetCustomMsBuildArguments(buildPartition.RepresentativeBenchmarkCase, buildPartition.Resolver))
                 .AppendArgument(extraArguments)
                 .AppendArgument(GetMandatoryMsBuildSettings(buildPartition.BuildConfiguration))
@@ -187,7 +189,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
         private static string GetCustomMsBuildArguments(BenchmarkCase benchmarkCase, IResolver resolver)
         {
             if (!benchmarkCase.Job.HasValue(InfrastructureMode.ArgumentsCharacteristic))
-                return null;
+                return "";
 
             var msBuildArguments = benchmarkCase.Job.ResolveValue(InfrastructureMode.ArgumentsCharacteristic, resolver)!.OfType<MsBuildArgument>();
 

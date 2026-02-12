@@ -4,6 +4,8 @@ using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Toolchains.DotNetCli;
 using BenchmarkDotNet.Validators;
 
+#nullable enable
+
 namespace BenchmarkDotNet.Toolchains.NativeAot
 {
     public class NativeAotToolchain : Toolchain
@@ -59,7 +61,7 @@ namespace BenchmarkDotNet.Toolchains.NativeAot
         internal NativeAotToolchain(string displayName,
             string ilCompilerVersion,
             string runtimeFrameworkVersion, string targetFrameworkMoniker, string runtimeIdentifier,
-            string customDotNetCliPath, string packagesRestorePath,
+            string customDotNetCliPath, string? packagesRestorePath,
             Dictionary<string, string> feeds, bool useNuGetClearTag, bool useTempFolderForRestore,
             bool rootAllApplicationAssemblies, bool ilcGenerateStackTraceData,
             string ilcOptimizationPreference, string ilcInstructionSet)

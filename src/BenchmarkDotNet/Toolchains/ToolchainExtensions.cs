@@ -79,13 +79,13 @@ namespace BenchmarkDotNet.Toolchains
                                 RuntimeMoniker.Mono90 => GetToolchain(RuntimeMoniker.Net90),
                                 RuntimeMoniker.Mono10_0 => GetToolchain(RuntimeMoniker.Net10_0),
                                 RuntimeMoniker.Mono11_0 => GetToolchain(RuntimeMoniker.Net11_0),
-                                _ => CsProjCoreToolchain.From(new NetCoreAppSettings(mono.MsBuildMoniker, null, mono.Name))
+                                _ => CsProjCoreToolchain.From(new NetCoreAppSettings(mono.MsBuildMoniker, mono.Name))
                             };
                         }
                         else
                         {
                             return MonoToolchain.From(
-                                new NetCoreAppSettings(targetFrameworkMoniker: mono.MsBuildMoniker, runtimeFrameworkVersion: null, name: mono.Name));
+                                new NetCoreAppSettings(targetFrameworkMoniker: mono.MsBuildMoniker, name: mono.Name));
                         }
 
                     return RoslynToolchain.Instance;
@@ -96,7 +96,7 @@ namespace BenchmarkDotNet.Toolchains
                     if (coreRuntime.RuntimeMoniker != RuntimeMoniker.NotRecognized && !coreRuntime.IsPlatformSpecific)
                         return GetToolchain(coreRuntime.RuntimeMoniker);
 
-                    return CsProjCoreToolchain.From(new NetCoreAppSettings(coreRuntime.MsBuildMoniker, null, coreRuntime.Name));
+                    return CsProjCoreToolchain.From(new NetCoreAppSettings(coreRuntime.MsBuildMoniker, coreRuntime.Name));
 
                 case NativeAotRuntime nativeAotRuntime:
                     return nativeAotRuntime.RuntimeMoniker != RuntimeMoniker.NotRecognized
@@ -104,13 +104,13 @@ namespace BenchmarkDotNet.Toolchains
                             : NativeAotToolchain.CreateBuilder().UseNuGet().TargetFrameworkMoniker(nativeAotRuntime.MsBuildMoniker).ToToolchain();
 
                 case WasmRuntime wasmRuntime:
-                    return WasmToolchain.From(new NetCoreAppSettings(targetFrameworkMoniker: wasmRuntime.MsBuildMoniker, name: wasmRuntime.Name, runtimeFrameworkVersion: null));
+                    return WasmToolchain.From(new NetCoreAppSettings(targetFrameworkMoniker: wasmRuntime.MsBuildMoniker, name: wasmRuntime.Name));
 
                 case R2RRuntime r2rRuntime:
                     if (r2rRuntime.RuntimeMoniker != RuntimeMoniker.NotRecognized)
                         return GetToolchain(r2rRuntime.RuntimeMoniker);
 
-                    return CsProjCoreToolchain.From(new NetCoreAppSettings(r2rRuntime.MsBuildMoniker, null, r2rRuntime.Name));
+                    return CsProjCoreToolchain.From(new NetCoreAppSettings(r2rRuntime.MsBuildMoniker, r2rRuntime.Name));
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(runtime), runtime, "Runtime not supported");
