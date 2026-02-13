@@ -82,6 +82,8 @@ namespace BenchmarkDotNet.Toolchains.NativeAot
             string projectFilePath = GetProjectFilePath(buildPartition.RepresentativeBenchmarkCase.Descriptor.Type, NullLogger.Instance).FullName;
             string extraArguments = NativeAotToolchain.GetExtraArguments(runtimeIdentifier);
 
+            Console.WriteLine("+++RuntimeIdentifier: " + runtimeIdentifier);
+
             var content = new StringBuilder(300)
                 .AppendLine($"call {CliPath} {DotNetCliCommand.GetRestoreCommand(artifactsPaths, buildPartition, projectFilePath, extraArguments)}")
                 .AppendLine($"call {CliPath} {DotNetCliCommand.GetPublishCommand(artifactsPaths, buildPartition, projectFilePath, TargetFrameworkMoniker, extraArguments)}")
