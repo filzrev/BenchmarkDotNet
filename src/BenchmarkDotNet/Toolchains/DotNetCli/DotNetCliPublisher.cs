@@ -24,7 +24,7 @@ public class DotNetCliPublisher : IBuilder
     {
         TargetFrameworkMoniker = tfm;
         CustomDotNetCliPath = customDotNetCliPath.EnsureNotNull();
-        ExtraArguments = ExtraArguments.EnsureNotNull();
+        ExtraArguments = extraArguments.EnsureNotNull();
         EnvironmentVariables = environmentVariables;
     }
 
