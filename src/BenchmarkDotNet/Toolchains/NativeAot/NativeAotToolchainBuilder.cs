@@ -138,6 +138,10 @@ namespace BenchmarkDotNet.Toolchains.NativeAot
             if (!isIlCompilerConfigured)
                 throw new InvalidOperationException("You need to use UseNuGet or UseLocalBuild methods to tell us which ILCompiler to use.");
 
+            if(runtimeIdentifier != null)
+                Console.WriteLine("!!!!!!! Enexpected RuntimeIdentifier: " + runtimeIdentifier);
+            Console.WriteLine("!!!!!!! RuntimeIdentifier: " + GetPortableRuntimeIdentifier());
+
             return new NativeAotToolchain(
                 displayName: displayName!,
                 ilCompilerVersion: ilCompilerVersion!,
