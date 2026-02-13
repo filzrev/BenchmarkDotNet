@@ -83,6 +83,7 @@ namespace BenchmarkDotNet.Toolchains.NativeAot
             string extraArguments = NativeAotToolchain.GetExtraArguments(runtimeIdentifier);
 
             Console.WriteLine("+++RuntimeIdentifier: " + runtimeIdentifier);
+            Console.WriteLine("+++ExtraArguments: " + extraArguments);
 
             var content = new StringBuilder(300)
                 .AppendLine($"call {CliPath} {DotNetCliCommand.GetRestoreCommand(artifactsPaths, buildPartition, projectFilePath, extraArguments)}")
@@ -90,6 +91,8 @@ namespace BenchmarkDotNet.Toolchains.NativeAot
                 .AppendLine($"call {CliPath} {DotNetCliCommand.GetRestoreCommand(artifactsPaths, buildPartition, artifactsPaths.ProjectFilePath, extraArguments)}")
                 .AppendLine($"call {CliPath} {DotNetCliCommand.GetPublishCommand(artifactsPaths, buildPartition, artifactsPaths.ProjectFilePath, TargetFrameworkMoniker, extraArguments)}")
                 .ToString();
+
+            Console.WriteLine("Content: " + Environment.NewLine + content);
 
             File.WriteAllText(artifactsPaths.BuildScriptFilePath, content);
         }
@@ -203,9 +206,9 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
             string instructionSet = ilcInstructionSet.IsBlank()
                 ? GetCurrentInstructionSet(buildPartition.Platform)
                 : ilcInstructionSet;
-         
-            return instructionSet.IsNotBlank() 
-                ? $"<IlcInstructionSet>{instructionSet}</IlcInstructionSet>" 
+
+            return instructionSet.IsNotBlank()
+                ? $"<IlcInstructionSet>{instructionSet}</IlcInstructionSet>"
                 : "";
         }
 
