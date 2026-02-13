@@ -65,6 +65,8 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
         {
             DotNetCliCommandExecutor.LogEnvVars(WithArguments(""));
 
+            Console.WriteLine("=====Args: " + Arguments);
+
             // there is no way to do tell dotnet restore which configuration to use (https://github.com/NuGet/Home/issues/5119)
             // so when users go with custom build configuration, we must perform full build
             // which will internally restore for the right configuration
