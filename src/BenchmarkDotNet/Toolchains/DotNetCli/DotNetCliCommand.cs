@@ -63,16 +63,23 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
         {
             DotNetCliCommandExecutor.LogEnvVars(WithArguments(""));
 
+            Console.WriteLine("+++++BuildConfiguration: " + BuildPartition.BuildConfiguration);
+
             // there is no way to do tell dotnet restore which configuration to use (https://github.com/NuGet/Home/issues/5119)
             // so when users go with custom build configuration, we must perform full build
             // which will internally restore for the right configuration
             if (BuildPartition.IsCustomBuildConfiguration)
                 return Build().ToBuildResult(GenerateResult);
 
+            Console.WriteLine("+++++Skipped???????????????????: ");
+
+
             // On our CI, Integration tests take too much time, because each benchmark run rebuilds BenchmarkDotNet itself.
             // To reduce the total duration of the CI workflows, we build all the projects without dependencies
             if (BuildPartition.ForcedNoDependenciesForIntegrationTests)
             {
+                Console.WriteLine("+++++ForcedNoDependenciesForIntegrationTests");
+
                 var restoreResult = DotNetCliCommandExecutor.Execute(WithArguments(
                     GetRestoreCommand(GenerateResult.ArtifactsPaths, BuildPartition, FilePath, $"{Arguments} --no-dependencies", "restore-no-deps", excludeOutput: true)));
                 if (!restoreResult.IsSuccess)
