@@ -31,7 +31,7 @@ jobs:
       - name: Install `dotnet-coverage` as .NET Global Tool
         run: dotnet tool install -g dotnet-coverage
       - name: Start dotnet-coverage with background server mode
-        run: dotnet coverage collect --session-id bdn_coverage --settings --server-mode --background
+        run: dotnet coverage collect --session-id bdn_coverage --settings test/CodeCoverage.runsettings --server-mode --background
       - name: Run task 'analyzer-tests'
         run: dotnet coverage connect bdn_coverage "./build.cmd analyzer-tests -e"
       - name: Run task 'unit-tests'
@@ -55,7 +55,9 @@ jobs:
         if: always()
         with:
           name: test-windows-core-trx-${{ github.run_id }}-${{ matrix.os }}
-          path: "**/*.trx"
+          path: |
+            "**/*.trx"
+            "**/*.coverage"
 
   test-windows-full:
     strategy:
