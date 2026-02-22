@@ -28,9 +28,19 @@ jobs:
       - name: Run task 'build'
         shell: cmd
         run: ./build.cmd build
+      - name: Install `dotnet-coverage` as .NET Global Tool
+        run: dotnet tool install -g dotnet-coverage
+      - name: Start dotnet-coverage with background server mode
+        run: dotnet coverage collect --session-id bdn_coverage --settings --server-mode --background
+      - name: Run task 'analyzer-tests'
+        run: dotnet coverage connect bdn_coverage "./build.cmd analyzer-tests -e"
+      - name: Run task 'unit-tests'
+        run: dotnet coverage connect bdn_coverage "./build.cmd unit-tests -e"
       - name: Run task 'in-tests-core'
         shell: cmd
-        run: ./build.cmd in-tests-core -e
+        run: dotnet coverage connect bdn_coverage "./build.cmd in-tests-core -e"
+      - name: Shutdown dotnet-coverage server.
+        run: dotnet coverage shutdown bdn_coverage --timeout 60000
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@fe45e9537387dac839af0d33ba56eed8e24189e8 # v2.3.0
