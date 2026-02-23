@@ -1,0 +1,72 @@
+name: generate-codecoverage-report
+run-name: Run tests / ${{ github.event.head_commit.message }}
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  collect:
+    runs-on: ${{ matrix.os }}
+    shwll: pwsh
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install dotnet-coverage
+        run: dotnet tool install --global dotnet-coverage
+
+      - name: Run task 'build'
+        run: ./build.cmd build
+
+      - name: Start dotnet-coverage with background server mode
+        run: dotnet coverage collect --session-id bdn_coverage --settings test/CodeCoverage.runsettings --server-mode --background
+
+      - name: Run analyzer tests
+        run: dotnet coverage connect bdn_coverage "dotnet test tests\BenchmarkDotNet.Tests --no-build --framework net8.0 --setting --settings test/CodeCoverage.runsettings"
+        
+      - name: Run unit tests
+        run: dotnet coverage connect bdn_coverage "dotnet test tests\BenchmarkDotNet.Analyzers.Tests --no-build --framework net8.0 --setting --settings test/CodeCoverage.runsettings"
+        
+      - name: Run integration tests
+        run: dotnet coverage connect bdn_coverage "dotnet test tests\BenchmarkDotNet.IntegrationTests --no-build --framework net8.0 --setting --settings test/CodeCoverage.runsettings"
+
+      - name: Shutdown dotnet-coverage server.
+        run: dotnet coverage shutdown bdn_coverage --timeout 60000
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-${{ matrix.os }}
+          path: *.cobertura.xml
+
+  merge:
+    needs: collect
+    runs-on: ubuntu-latest
+    shwll: pwsh
+    steps:
+      - uses: actions/download-artifact@v6
+        with:
+          path: coverage
+
+      - name: Install reportgenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      - name: Merge reports
+        run: |
+          reportgenerator `
+            -reports:"coverage/**/coverage.cobertura.xml" `
+            -targetdir:"coverage-report" `
+            -reporttypes:HtmlSummary;Cobertura
+
+      - name: Upload merged report
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-report
+          path: coverage-report
