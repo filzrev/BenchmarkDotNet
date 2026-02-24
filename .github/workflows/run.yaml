@@ -1,0 +1,29 @@
+name: run
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+jobs:
+
+  test-windows-core:
+    strategy:
+      matrix:
+        os: [windows-latest, windows-11-arm]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Run net472
+        run: |
+          dotnet run -c Release -f net472 TestCode.cs
+          
+      - name: Run net481
+        run: |
+          dotnet run -c Release -f net481 TestCode.cs
+          
+      - name: Run net80
+        run: |
+          dotnet run -c Release -f net80 TestCode.cs
+ 
+        
