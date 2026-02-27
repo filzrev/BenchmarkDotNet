@@ -9,6 +9,10 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);NU1701;1701;CA1018;CA2007;CA1825</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <!-- Set Solution Dir to suppress warning that raised by Verify.Xunit solution discovery feature -->
+    <SolutionDir>$([System.IO.Directory]::GetParent($(MSBuildThisFileDirectory)).Parent.FullName)</SolutionDir>
+  </PropertyGroup>
   <ItemGroup>
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -16,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AwesomeAssertions" Version="9.4.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageReference Include="Verify.Xunit" Version="31.12.5" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="[2.8.2]">
