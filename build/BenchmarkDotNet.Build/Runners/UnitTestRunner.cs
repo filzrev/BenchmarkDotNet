@@ -37,6 +37,7 @@ public class UnitTestRunner(BuildContext context)
     {
         var settings = new DotNetTestSettings
         {
+            PathType = DotNetTestPathType.Auto,
             Configuration = context.BuildConfiguration,
             Framework = tfm,
             NoBuild = true,
