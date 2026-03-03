@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Loggers;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace BenchmarkDotNet.Tests.Loggers
 {

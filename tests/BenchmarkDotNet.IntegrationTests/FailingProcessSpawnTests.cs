@@ -4,7 +4,6 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Portability;
 using System.Linq;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
 {

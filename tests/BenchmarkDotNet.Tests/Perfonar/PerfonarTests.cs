@@ -14,7 +14,6 @@ using Perfolizer.Perfonar.Base;
 using Perfolizer.Perfonar.Tables;
 using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.Tests.Perfonar;
 

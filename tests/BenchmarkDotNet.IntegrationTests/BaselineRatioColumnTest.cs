@@ -8,7 +8,6 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
 {

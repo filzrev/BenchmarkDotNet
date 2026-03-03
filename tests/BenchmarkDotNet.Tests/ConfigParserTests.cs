@@ -23,7 +23,6 @@ using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using BenchmarkDotNet.Toolchains.NativeAot;
 using Perfolizer.Horology;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.Tests
 {

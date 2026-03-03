@@ -8,7 +8,6 @@ using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using JetBrains.Annotations;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
 {

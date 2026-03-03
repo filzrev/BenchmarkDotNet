@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using Xunit;
-using Xunit.Abstractions;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Engines;

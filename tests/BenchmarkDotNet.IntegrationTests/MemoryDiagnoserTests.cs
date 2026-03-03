@@ -22,7 +22,6 @@ using BenchmarkDotNet.Toolchains;
 using BenchmarkDotNet.Toolchains.NativeAot;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using Xunit;
-using Xunit.Abstractions;
 using BenchmarkDotNet.Toolchains.Mono;
 
 namespace BenchmarkDotNet.IntegrationTests

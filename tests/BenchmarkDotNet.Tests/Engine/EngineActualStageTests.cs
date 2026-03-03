@@ -4,7 +4,6 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Tests.Mocks;
 using Perfolizer.Horology;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.Tests.Engine
 {

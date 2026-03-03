@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Sources;
 using BenchmarkDotNet.Attributes;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
 {

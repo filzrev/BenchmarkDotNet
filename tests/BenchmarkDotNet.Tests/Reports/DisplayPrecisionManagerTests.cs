@@ -4,7 +4,6 @@ using System.Linq;
 using BenchmarkDotNet.Reports;
 using JetBrains.Annotations;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.Tests.Reports
 {

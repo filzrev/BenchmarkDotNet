@@ -9,7 +9,6 @@ using BenchmarkDotNet.Tests.XUnit;
 using BenchmarkDotNet.Toolchains.R2R;
 using BenchmarkDotNet.Toolchains.DotNetCli;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
 {

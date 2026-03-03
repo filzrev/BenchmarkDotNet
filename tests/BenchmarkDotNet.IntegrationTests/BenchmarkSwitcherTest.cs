@@ -12,7 +12,6 @@ using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Tests.Loggers;
 using BenchmarkDotNet.Tests.XUnit;
-using Xunit.Abstractions;
 using System.IO;
 
 namespace BenchmarkDotNet.IntegrationTests

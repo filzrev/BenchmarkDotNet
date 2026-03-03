@@ -11,7 +11,6 @@ using BenchmarkDotNet.Tests.Loggers;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
 using Xunit;
-using Xunit.Abstractions;
 using RunMode = BenchmarkDotNet.Diagnosers.RunMode;
 
 namespace BenchmarkDotNet.IntegrationTests;

@@ -7,7 +7,7 @@ using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using JetBrains.Annotations;
 using Perfolizer.Horology;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace BenchmarkDotNet.Tests.Mocks
 {

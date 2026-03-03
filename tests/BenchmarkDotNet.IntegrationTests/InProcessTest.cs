@@ -17,8 +17,6 @@ using BenchmarkDotNet.Tests.Loggers;
 using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
 using JetBrains.Annotations;
 using Xunit;
-using Xunit.Abstractions;
-
 
 namespace BenchmarkDotNet.IntegrationTests
 {

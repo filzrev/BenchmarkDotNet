@@ -6,7 +6,6 @@ using BenchmarkDotNet.Helpers;
 using BenchmarkDotNet.Mathematics;
 using Perfolizer.Horology;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.Tests.Analysers
 {

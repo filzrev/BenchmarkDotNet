@@ -6,7 +6,6 @@ using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Loggers;
 using Xunit;
-using Xunit.Abstractions;
 using BenchmarkDotNet.Exporters.Json;
 using BenchmarkDotNet.Exporters.OpenMetrics;
 using BenchmarkDotNet.Exporters.Xml;

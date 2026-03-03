@@ -5,7 +5,6 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
 using Xunit;
-using Xunit.Abstractions;
 #pragma warning disable CS0414
 
 namespace BenchmarkDotNet.Tests.Validators

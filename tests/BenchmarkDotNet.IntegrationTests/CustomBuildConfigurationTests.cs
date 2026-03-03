@@ -6,10 +6,7 @@ using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Portability;
 using BenchmarkDotNet.Tests.XUnit;
-#if !DEBUG
 using Xunit;
-#endif
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
 {

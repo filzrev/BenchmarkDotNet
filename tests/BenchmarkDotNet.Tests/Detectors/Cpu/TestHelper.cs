@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using Perfolizer.Helpers;
 using Perfolizer.Models;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.Tests.Detectors.Cpu;
 

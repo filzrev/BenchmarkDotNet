@@ -21,7 +21,6 @@ using Perfolizer.Metrology;
 using Pragmastat;
 using Pragmastat.Metrology;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests.ManualRunning
 {

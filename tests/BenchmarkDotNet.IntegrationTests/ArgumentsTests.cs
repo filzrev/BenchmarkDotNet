@@ -11,7 +11,6 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
