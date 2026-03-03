@@ -2,6 +2,39 @@
   <PropertyGroup>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <IsPackable>false</IsPackable>
+    <!-- Disable parallel tests between TargetFrameworks -->
+    <TestTfmsInParallel>false</TestTfmsInParallel>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Following setting is not required when using .NET 10 SDK. -->
+    <!-- It's added to suppress following message is shown on Visual Studio Tests output pane -->
+    <!--   Test project does not reference any .NET NuGet adapter.Test discovery or execution might not work for this project. -->
+    <UseMicrosoftTestingPlatform>true</UseMicrosoftTestingPlatform>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+    <TestingPlatformCaptureOutput>false</TestingPlatformCaptureOutput>
+
+    <!-- Use `Microsoft.Testing.Platform` entrypoint -->
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Change TestResults output directory. And enable detailed log outputs -->
+    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --results-directory "$(MSBuildThisFileDirectory)TestResults"</TestingPlatformCommandLineArguments>
+
+    <!-- Ignore exit code 8 (the test session run zero tests) -->
+    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --ignore-exit-code 8</TestingPlatformCommandLineArguments>
+
+    <!-- Enable output for passed tests -->
+    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --output Detailed</TestingPlatformCommandLineArguments>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(MSBuildProjectName)' != 'BenchmarkDotNet.IntegrationTests.ManualRunning.MultipleFrameworks'">
+    <!-- Show xUnit.net headers and information -->
+    <TestingPlatformCommandLineArguments>$(TestingPlatformCommandLineArguments) --xunit-info</TestingPlatformCommandLineArguments>
   </PropertyGroup>
 
   <PropertyGroup>
