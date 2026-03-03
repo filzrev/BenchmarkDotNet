@@ -35,9 +35,7 @@ public class ParamsAllValuesAttributeAnalyzerTests
         }
 
         public static IEnumerable<string> FieldOrPropertyDeclarations
-#pragma warning disable IDE0028 // Simplify collection initialization
-            => new FieldOrPropertyDeclarationsTheoryData();
-#pragma warning restore IDE0028 // Simplify collection initialization
+            => new FieldOrPropertyDeclarationsTheoryData().Select(x => x.Data);
 
         public static IEnumerable<string> InvalidTypes =>
         [
@@ -152,9 +150,7 @@ public class ParamsAllValuesAttributeAnalyzerTests
         }
 
         public static IEnumerable<string> FieldOrPropertyDeclarations
-#pragma warning disable IDE0028 // Simplify collection initialization
-            => new FieldOrPropertyDeclarationsTheoryData();
-#pragma warning restore IDE0028 // Simplify collection initialization
+            => new FieldOrPropertyDeclarationsTheoryData().Select(x => x.Data);
 
         public static IEnumerable<string> NonEnumStructs =>
         [
@@ -252,9 +248,7 @@ public class ParamsAllValuesAttributeAnalyzerTests
         }
 
         public static IEnumerable<string> FieldOrPropertyDeclarations
-#pragma warning disable IDE0028 // Simplify collection initialization
-            => new FieldOrPropertyDeclarationsTheoryData();
-#pragma warning restore IDE0028 // Simplify collection initialization
+            => new FieldOrPropertyDeclarationsTheoryData().Select(x => x.Data);
 
         public static IEnumerable<string> NonEnumOrBoolStructs =>
         [

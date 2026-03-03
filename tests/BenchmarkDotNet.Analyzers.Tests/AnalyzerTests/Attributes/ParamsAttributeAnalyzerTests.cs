@@ -35,9 +35,7 @@ public class ParamsAttributeAnalyzerTests
         }
 
         public static IEnumerable<string> FieldOrPropertyDeclarations
-#pragma warning disable IDE0028 // Simplify collection initialization
-            => new FieldOrPropertyDeclarationsTheoryData();
-#pragma warning restore IDE0028 // Simplify collection initialization
+            => new FieldOrPropertyDeclarationsTheoryData().Select(x => x.Data);
     }
 
     public class MustHaveValues : AnalyzerTestFixture<ParamsAttributeAnalyzer>
@@ -116,12 +114,10 @@ public class ParamsAttributeAnalyzerTests
         }
 
         public static IEnumerable<string> FieldOrPropertyDeclarations
-#pragma warning disable IDE0028 // Simplify collection initialization
-            => new FieldOrPropertyDeclarationsTheoryData();
-#pragma warning restore IDE0028 // Simplify collection initialization
+            => new FieldOrPropertyDeclarationsTheoryData().Select(x => x.Data);
 
         public static IEnumerable<string> DummyAttributeUsage
-            => DummyAttributeUsageTheoryData;
+            => DummyAttributeUsageTheoryData.Select(x => x.Data);
 
         public static IEnumerable<int> ScalarValuesListLength
             => Enumerable.Range(1, ScalarValues.Count);
@@ -133,7 +129,7 @@ public class ParamsAttributeAnalyzerTests
             .AsReadOnly();
 
         public static IEnumerable<string> ScalarValuesContainerAttributeArgument
-            => ScalarValuesContainerAttributeArgumentTheoryData();
+            => ScalarValuesContainerAttributeArgumentTheoryData().Select(x => x.Data);
 
         public static IEnumerable<string> EmptyParamsAttributeUsagesWithLocationMarker()
         {
@@ -841,12 +837,10 @@ public class ParamsAttributeAnalyzerTests
         }
 
         public static IEnumerable<string> FieldOrPropertyDeclarations
-#pragma warning disable IDE0028 // Simplify collection initialization
-            => new FieldOrPropertyDeclarationsTheoryData();
-#pragma warning restore IDE0028 // Simplify collection initialization
+            => new FieldOrPropertyDeclarationsTheoryData().Select(x => x.Data);
 
         public static IEnumerable<string> DummyAttributeUsage
-            => DummyAttributeUsageTheoryData;
+            => DummyAttributeUsageTheoryData.Select(x => x.Data);
 
         public static IEnumerable<ValueTupleDouble<string, string>> IntegerValuesAndTypesWithinTargetTypeRange =>
         [
@@ -970,7 +964,7 @@ public class ParamsAttributeAnalyzerTests
         }
 
         public static IEnumerable<string> ScalarValuesContainerAttributeArgumentEnumerable
-            => ScalarValuesContainerAttributeArgumentTheoryData();
+            => ScalarValuesContainerAttributeArgumentTheoryData().Select(x => x.Data);
 
         public static IEnumerable<string> ArrayValuesContainerAttributeArgumentEnumerableLocal()
         {
@@ -1211,12 +1205,10 @@ public class ParamsAttributeAnalyzerTests
         }
 
         public static IEnumerable<string> FieldOrPropertyDeclarations
-#pragma warning disable IDE0028 // Simplify collection initialization
-            => new FieldOrPropertyDeclarationsTheoryData();
-#pragma warning restore IDE0028 // Simplify collection initialization
+            => new FieldOrPropertyDeclarationsTheoryData().Select(x => x.Data);
 
         public static IEnumerable<string> DummyAttributeUsage
-            => DummyAttributeUsageTheoryData;
+            => DummyAttributeUsageTheoryData.Select(x => x.Data);
 
         public static IEnumerable<int> ScalarValuesListLength
             => Enumerable.Range(2, ScalarValues.Count);
@@ -1227,7 +1219,7 @@ public class ParamsAttributeAnalyzerTests
             .ToList()
             .AsReadOnly();
         public static IEnumerable<string> ScalarValuesContainerAttributeArgument
-            => ScalarValuesContainerAttributeArgumentTheoryData();
+            => ScalarValuesContainerAttributeArgumentTheoryData().Select(x => x.Data);
 
         public static IEnumerable<string> ScalarValuesContainerAttributeArgumentWithLocationMarker()
         {

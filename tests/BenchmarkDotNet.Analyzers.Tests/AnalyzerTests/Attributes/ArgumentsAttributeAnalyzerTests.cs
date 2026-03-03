@@ -1113,7 +1113,7 @@ public class ArgumentsAttributeAnalyzerTests
         }
 
         public static IEnumerable<string> DummyAttributeUsage
-            => DummyAttributeUsageTheoryData;
+            => DummyAttributeUsageTheoryData.Select(x => x.Data);
 
         public static TheoryData<string> EmptyArgumentsAttributeUsagesWithMismatchingValueCount()
         {
