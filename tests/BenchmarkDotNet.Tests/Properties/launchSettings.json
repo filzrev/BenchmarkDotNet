@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "Default": {
+      "commandName": "Project",
+      "commandLineArgs": "",
+      "environmentVariables": {
+        "DOTNET_CLI_UI_LANGUAGE": "en"
+      }
+    },
+    "Help": {
+      "commandName": "Project",
+      "commandLineArgs": "--help",
+      "environmentVariables": {
+        "DOTNET_CLI_UI_LANGUAGE": "en"
+      }
+    }
+  }
+}

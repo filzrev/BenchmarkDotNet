@@ -43,7 +43,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Testing.Platform.MSBuild" Version="2.1.0" />
     <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)testconfig.json" />
   </ItemGroup>
 
   <!-- ProjectReferences are not transitive, so we need to directly include the analyzers for all test projects. -->

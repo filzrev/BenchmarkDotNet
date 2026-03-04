@@ -4,6 +4,7 @@
     <WasmPropsPath>$([System.IO.Path]::ChangeExtension('$(OriginalCSProjPath)', '.Wasm.props'))</WasmPropsPath>
     <WasmTargetsPath>$([System.IO.Path]::ChangeExtension('$(OriginalCSProjPath)', '.Wasm.targets'))</WasmTargetsPath>
     <WasmMainJSPath>$MAINJS$</WasmMainJSPath>
+    <UseAppHost>false</UseAppHost>
   </PropertyGroup>
 
   <Import Project="$(WasmPropsPath)" Condition="Exists($(WasmPropsPath))" />
