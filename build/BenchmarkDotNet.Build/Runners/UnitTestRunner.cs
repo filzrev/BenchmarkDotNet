@@ -45,7 +45,8 @@ public class UnitTestRunner(BuildContext context)
             EnvironmentVariables =
             {
                 ["Platform"] = "" // force the tool to not look for the .dll in platform-specific directory
-            }
+            },
+            PathType = DotNetTestPathType.Auto,
         };
         return settings;
     }
