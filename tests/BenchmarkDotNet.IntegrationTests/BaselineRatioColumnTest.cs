@@ -1,10 +1,10 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {

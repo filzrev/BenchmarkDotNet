@@ -16,8 +16,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Xunit.Abstractions;
-
+using Xunit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {

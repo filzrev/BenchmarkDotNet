@@ -1,8 +1,9 @@
-﻿using System.Runtime;
-using Xunit.Abstractions;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
+using System.Runtime;
+using Xunit;
+
 #if NETFRAMEWORK
 using BenchmarkDotNet.Environments;
 #endif

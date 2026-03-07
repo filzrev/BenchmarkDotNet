@@ -1,6 +1,6 @@
-﻿using BenchmarkDotNet.Helpers;
+using BenchmarkDotNet.Helpers;
 using System.Reflection;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace BenchmarkDotNet.Tests
 {
