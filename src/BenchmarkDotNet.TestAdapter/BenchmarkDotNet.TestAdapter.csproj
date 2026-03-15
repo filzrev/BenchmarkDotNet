@@ -8,6 +8,10 @@
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageType>TestAdapter</PackageType>
+  </PropertyGroup>
+
   <!-- Use minimum supported LTSC version of Visual Studio 2022 -->
   <!-- https://learn.microsoft.com/en-us/lifecycle/products/visual-studio-2022 -->
   <ItemGroup>

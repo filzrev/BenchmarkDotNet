@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <BenchmarkDotNet>
+    <Arguments>--inProcess --strategy Monitoring</Arguments>
+  </BenchmarkDotNet>
+</RunSettings>

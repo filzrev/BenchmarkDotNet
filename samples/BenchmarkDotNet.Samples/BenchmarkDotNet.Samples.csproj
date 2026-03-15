@@ -15,6 +15,9 @@
     <!-- Disable parallel tests between TargetFrameworks -->
     <TestTfmsInParallel>false</TestTfmsInParallel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\BenchmarkDotNet.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETFramework' ">
     <Reference Include="System.Reflection" />
   </ItemGroup>
