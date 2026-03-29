@@ -53,5 +53,14 @@ $CORECLR_OVERRIDES$
     </ItemGroup>
   </Target>
 
+  <Target Name="ExcludeDuplicateReferenceOutputAssemblies" AfterTargets="ResolveReferences">
+    <ItemGroup>
+      <_Resolved Include="@(ReferencePath->'%(FileName)')" />
+      <Reference Update="@(Reference)" Condition="'%(Reference.NuGetPackageId)' == '' AND $([System.String]::Copy('@(_Resolved)').Contains('%(FileName)'))">
+        <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      </Reference>
+    </ItemGroup>
+  </Target>
+
   <Import Project="$(WasmTargetsPath)" Condition="Exists($(WasmTargetsPath))" />
 </Project>

@@ -39,6 +39,7 @@
     <Project Path="tests/BenchmarkDotNet.IntegrationTests.ManualRunning.MultipleFrameworks/BenchmarkDotNet.IntegrationTests.ManualRunning.MultipleFrameworks.csproj" />
     <Project Path="tests/BenchmarkDotNet.IntegrationTests.ManualRunning/BenchmarkDotNet.IntegrationTests.ManualRunning.csproj" />
     <Project Path="tests/BenchmarkDotNet.IntegrationTests.Static/BenchmarkDotNet.IntegrationTests.Static.csproj" />
+    <Project Path="tests/BenchmarkDotNet.IntegrationTests.TUnit/BenchmarkDotNet.IntegrationTests.TUnit.csproj" />
     <Project Path="tests/BenchmarkDotNet.IntegrationTests.VisualBasic/BenchmarkDotNet.IntegrationTests.VisualBasic.vbproj" />
     <Project Path="tests/BenchmarkDotNet.IntegrationTests/BenchmarkDotNet.IntegrationTests.csproj" />
     <Project Path="tests/BenchmarkDotNet.Tests/BenchmarkDotNet.Tests.csproj" />
