@@ -37,7 +37,7 @@ jobs:
       run: ./build.cmd docs-build
 
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: site
         path: docs/_site

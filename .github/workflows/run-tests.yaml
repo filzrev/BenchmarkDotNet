@@ -59,7 +59,7 @@ jobs:
           reporter: dotnet-trx
       # Upload Artifacts with Unique Name
       - name: Upload test results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: test-windows-core-trx-${{ github.run_id }}-${{ matrix.os }}
@@ -112,7 +112,7 @@ jobs:
           reporter: dotnet-trx
       # Upload Artifacts with Unique Name
       - name: Upload test results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: test-windows-full-trx-${{ github.run_id }}-${{ matrix.os }}
@@ -160,7 +160,7 @@ jobs:
           reporter: dotnet-trx
       # Upload Artifacts with Unique Name
       - name: Upload test results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: test-linux-trx-${{ github.run_id }}-${{ matrix.os }}
@@ -207,7 +207,7 @@ jobs:
           reporter: dotnet-trx
       # Upload Artifacts with Unique Name
       - name: Upload test results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: test-macos(${{ matrix.os.arch }})-trx-${{ github.run_id }}
