@@ -106,7 +106,7 @@ jobs:
         milestone_name: v${{ steps.version.outputs.VERSION }}
 
     - name: Create new milestone
-      uses: WyriHaximus/github-action-create-milestone@bcd9e15439836d6098d353a5bcf82de46591a35d # v1.1.2
+      uses: WyriHaximus/github-action-create-milestone@6f8e11bb23890a15c6cc520abf7a36510dfd0f94 # v1.2.0
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
       with:
