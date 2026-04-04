@@ -2,6 +2,7 @@ using BenchmarkDotNet.Helpers;
 
 namespace BenchmarkDotNet.IntegrationTests;
 
+[LogOnStart]
 public class IntegrationTestSetupTests
 {
     [Fact]

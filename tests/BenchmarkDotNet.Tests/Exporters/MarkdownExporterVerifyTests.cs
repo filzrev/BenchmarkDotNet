@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Loggers;
@@ -40,7 +40,7 @@ namespace BenchmarkDotNet.Tests.Exporters
             await ((ExporterBase)exporter).ExportToLogAsync(summary, logger, CancellationToken.None);
 
             var validator = BaselineValidator.FailOnError;
-            var errors = await validator.ValidateAsync(new ValidationParameters(summary.BenchmarksCases, summary.BenchmarksCases.First().Config)).ToArrayAsync();
+            var errors = await validator.ValidateAsync(new ValidationParameters(summary.BenchmarksCases, summary.BenchmarksCases.First().Config)).ToArrayAsync(TestContext.Current.CancellationToken);
             logger.WriteLine();
             logger.WriteLine("Errors: " + errors.Length);
             foreach (var error in errors)

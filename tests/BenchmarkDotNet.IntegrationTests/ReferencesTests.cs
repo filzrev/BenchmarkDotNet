@@ -1,5 +1,6 @@
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class ReferencesTests : BenchmarkTestExecutor
     {
         public ReferencesTests(ITestOutputHelper output) : base(output) { }

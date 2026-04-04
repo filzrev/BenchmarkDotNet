@@ -10,6 +10,7 @@ using System.Collections.Immutable;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class ExporterIOTests : BenchmarkTestExecutor
     {
         public ExporterIOTests(ITestOutputHelper output) : base(output) { }

@@ -2,6 +2,7 @@ using BenchmarkDotNet.Attributes;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class PriorityTests : BenchmarkTestExecutor
     {
         public PriorityTests(ITestOutputHelper output) : base(output) { }

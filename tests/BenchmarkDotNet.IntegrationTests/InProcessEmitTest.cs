@@ -15,6 +15,7 @@ using JetBrains.Annotations;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class InProcessEmitTest : BenchmarkTestExecutor
     {
         public InProcessEmitTest(ITestOutputHelper output) : base(output) { }

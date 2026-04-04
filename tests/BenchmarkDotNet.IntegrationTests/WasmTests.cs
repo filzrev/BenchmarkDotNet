@@ -19,6 +19,7 @@ namespace BenchmarkDotNet.IntegrationTests
     /// * Install v8: `npm install jsvu -g && jsvu --os=default --engines=v8`
     /// * Add `$HOME/.jsvu/bin` to PATH
     /// </summary>
+    [LogOnStart]
     public class WasmTests(ITestOutputHelper output) : BenchmarkTestExecutor(output)
     {
         private const string V8SkipReason = "JSVU does not support ARM on Windows or Linux";

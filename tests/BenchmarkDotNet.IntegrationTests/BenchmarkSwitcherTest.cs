@@ -12,6 +12,7 @@ using BenchmarkDotNet.Tests.XUnit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class BenchmarkSwitcherTest
     {
         internal const string TestCategory = "TestCategory";

@@ -2,6 +2,7 @@ using static FSharpBenchmarks;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class FSharpTests : BenchmarkTestExecutor
     {
         public FSharpTests(ITestOutputHelper output) : base(output) { }

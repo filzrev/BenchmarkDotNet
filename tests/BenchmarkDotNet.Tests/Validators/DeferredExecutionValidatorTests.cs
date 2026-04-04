@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
 using System.Collections;
@@ -72,7 +72,7 @@ namespace BenchmarkDotNet.Tests.Validators
         {
             var benchmarks = BenchmarkConverter.TypeToBenchmarks(returningDeferredExecutionResult);
 
-            var validationErrors = await DeferredExecutionValidator.FailOnError.ValidateAsync(benchmarks).ToArrayAsync();
+            var validationErrors = await DeferredExecutionValidator.FailOnError.ValidateAsync(benchmarks).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Equal(5, validationErrors.Count(error => error.IsCritical));
         }
@@ -106,7 +106,7 @@ namespace BenchmarkDotNet.Tests.Validators
         {
             var benchmarks = BenchmarkConverter.TypeToBenchmarks(returningMaterializedResult);
 
-            var validationErrors = await DeferredExecutionValidator.FailOnError.ValidateAsync(benchmarks).ToArrayAsync();
+            var validationErrors = await DeferredExecutionValidator.FailOnError.ValidateAsync(benchmarks).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Empty(validationErrors);
         }

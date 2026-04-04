@@ -7,6 +7,7 @@ using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
 
 namespace BenchmarkDotNet.IntegrationTests;
 
+[LogOnStart]
 public class RunAsyncTests(ITestOutputHelper output) : BenchmarkTestExecutor(output)
 {
     public static TheoryData<IToolchain> GetToolchains() => new(

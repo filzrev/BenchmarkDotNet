@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
 using System.Text.RegularExpressions;
@@ -12,7 +12,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task ThrowingBenchmarksAreDiscovered()
         {
-            var validationErrors = await ReturnValueValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(ThrowingBenchmark))).ToArrayAsync();
+            var validationErrors = await ReturnValueValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(ThrowingBenchmark))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Single(validationErrors);
             Assert.Contains("Oops, sorry", validationErrors.Single().Message);

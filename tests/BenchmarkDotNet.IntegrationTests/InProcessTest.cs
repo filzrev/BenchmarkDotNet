@@ -19,6 +19,7 @@ using System.Runtime.CompilerServices;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class InProcessTest : BenchmarkTestExecutor
     {
         public InProcessTest(ITestOutputHelper output) : base(output)

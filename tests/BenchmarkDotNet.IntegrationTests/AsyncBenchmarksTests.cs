@@ -35,6 +35,7 @@ namespace BenchmarkDotNet.IntegrationTests
         public void SetResult(T result) => _core.SetResult(result);
     }
 
+    [LogOnStart]
     public class AsyncBenchmarksTests : BenchmarkTestExecutor
     {
         public AsyncBenchmarksTests(ITestOutputHelper output) : base(output) { }

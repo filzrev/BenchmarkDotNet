@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Parameters;
@@ -26,7 +26,7 @@ namespace BenchmarkDotNet.Tests.Validators
                         )
                 ], config);
 
-            var errors = await CompilationValidator.FailOnError.ValidateAsync(parameters).Select(e => e.Message).ToArrayAsync();
+            var errors = await CompilationValidator.FailOnError.ValidateAsync(parameters).Select(e => e.Message).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Contains(errors,
                 s => s.Equals(
@@ -48,7 +48,7 @@ namespace BenchmarkDotNet.Tests.Validators
                         config)
                 ], config);
 
-            var errors = await CompilationValidator.FailOnError.ValidateAsync(parameters).Select(e => e.Message).ToArrayAsync();
+            var errors = await CompilationValidator.FailOnError.ValidateAsync(parameters).Select(e => e.Message).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Contains(errors,
                 s => s.Equals(
@@ -73,7 +73,7 @@ namespace BenchmarkDotNet.Tests.Validators
         /* Generics Remaining */
         public async Task Benchmark_Class_Modifers_Must_Be_Public(Type type, bool hasErrors)
         {
-            var validationErrors = await CompilationValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(type)).ToArrayAsync();
+            var validationErrors = await CompilationValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(type)).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Equal(hasErrors, validationErrors.Any());
         }
@@ -83,7 +83,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [InlineData(typeof(BenchmarkClass<PublicClass>), false)]
         public async Task Benchmark_Class_Methods_Must_Be_Non_Static(Type type, bool hasErrors)
         {
-            var validationErrors = await CompilationValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(type)).ToArrayAsync();
+            var validationErrors = await CompilationValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(type)).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Equal(hasErrors, validationErrors.Any());
         }
@@ -105,7 +105,7 @@ namespace BenchmarkDotNet.Tests.Validators
             var constructed = typeof(BenchmarkClass<>).MakeGenericType(type);
 
             // Act
-            var validationErrors = await CompilationValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(constructed)).ToArrayAsync();
+            var validationErrors = await CompilationValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(constructed)).ToArrayAsync(TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(hasErrors, validationErrors.Any());

@@ -11,6 +11,7 @@ using BenchmarkDotNet.Toolchains.NativeAot;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class NativeAotTests(ITestOutputHelper outputHelper) : BenchmarkTestExecutor(outputHelper)
     {
         private bool IsAvx2Supported()

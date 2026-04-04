@@ -3,6 +3,7 @@ using BenchmarkDotNet.Tests.XUnit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class ExtraAttributesForEntryMethodTests : BenchmarkTestExecutor
     {
         public ExtraAttributesForEntryMethodTests(ITestOutputHelper output) : base(output)

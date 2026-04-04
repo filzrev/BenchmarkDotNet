@@ -10,6 +10,7 @@ using System.Diagnostics;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class EngineTests : BenchmarkTestExecutor
     {
         public EngineTests(ITestOutputHelper output) : base(output) { }

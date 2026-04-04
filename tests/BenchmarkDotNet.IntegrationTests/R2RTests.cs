@@ -9,6 +9,7 @@ using BenchmarkDotNet.Toolchains.R2R;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class R2RTests : BenchmarkTestExecutor
     {
         public R2RTests(ITestOutputHelper output) : base(output) { }

@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
 
@@ -17,7 +17,7 @@ namespace BenchmarkDotNet.Tests.Validators
         public async Task InvalidGlobalSetupTooManyBlankTargets()
         {
             var validationErrors = await SetupCleanupValidator.FailOnError.ValidateAsync(
-                BenchmarkConverter.TypeToBenchmarks(typeof(BlankTargetClass))).ToArrayAsync();
+                BenchmarkConverter.TypeToBenchmarks(typeof(BlankTargetClass))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             var count = validationErrors.Count(v =>
                 v.IsCritical && v.Message.Contains("[GlobalSetupAttribute]") && v.Message.Contains("Blank"));
@@ -36,7 +36,7 @@ namespace BenchmarkDotNet.Tests.Validators
         public async Task InvalidGlobalSetupTooManyExplicitTargets()
         {
             var validationErrors = await SetupCleanupValidator.FailOnError.ValidateAsync(
-                BenchmarkConverter.TypeToBenchmarks(typeof(ExplicitTargetClass))).ToArrayAsync();
+                BenchmarkConverter.TypeToBenchmarks(typeof(ExplicitTargetClass))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             var count = validationErrors.Count(v =>
                 v.IsCritical && v.Message.Contains("[GlobalSetupAttribute]") && v.Message.Contains("Target = Benchmark"));

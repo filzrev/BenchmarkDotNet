@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Jobs;
@@ -19,7 +19,7 @@ public class RuntimeValidatorTests
         var parameters = new ValidationParameters(runInfo.BenchmarksCases, config);
 
         // Act
-        var errors = await RuntimeValidator.DontFailOnError.ValidateAsync(parameters).Select(e => e.Message).ToArrayAsync();
+        var errors = await RuntimeValidator.DontFailOnError.ValidateAsync(parameters).Select(e => e.Message).ToArrayAsync(TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Empty(errors);
@@ -34,7 +34,7 @@ public class RuntimeValidatorTests
         var parameters = new ValidationParameters(runInfo.BenchmarksCases, config);
 
         // Act
-        var errors = await RuntimeValidator.DontFailOnError.ValidateAsync(parameters).Select(e => e.Message).ToArrayAsync();
+        var errors = await RuntimeValidator.DontFailOnError.ValidateAsync(parameters).Select(e => e.Message).ToArrayAsync(TestContext.Current.CancellationToken);
 
         // Assert
         {
@@ -56,7 +56,7 @@ public class RuntimeValidatorTests
         var parameters = new ValidationParameters(runInfo.BenchmarksCases, config);
 
         // Act
-        var errors = await RuntimeValidator.DontFailOnError.ValidateAsync(parameters).Select(e => e.Message).ToArrayAsync();
+        var errors = await RuntimeValidator.DontFailOnError.ValidateAsync(parameters).Select(e => e.Message).ToArrayAsync(TestContext.Current.CancellationToken);
 
         // Assert
         Assert.Empty(errors);

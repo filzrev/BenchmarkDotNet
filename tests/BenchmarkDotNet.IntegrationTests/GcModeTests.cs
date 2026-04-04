@@ -9,6 +9,7 @@ using BenchmarkDotNet.Environments;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class GcModeTests : BenchmarkTestExecutor
     {
         public GcModeTests(ITestOutputHelper outputHelper) : base(outputHelper) { }

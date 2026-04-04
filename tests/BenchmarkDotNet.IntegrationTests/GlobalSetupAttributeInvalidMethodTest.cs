@@ -2,6 +2,7 @@ using BenchmarkDotNet.Attributes;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class GlobalSetupAttributeInvalidMethodTest : BenchmarkTestExecutor
     {
         public GlobalSetupAttributeInvalidMethodTest(ITestOutputHelper output) : base(output) { }

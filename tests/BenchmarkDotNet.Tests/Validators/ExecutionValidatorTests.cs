@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Validators;
 using JetBrains.Annotations;
@@ -11,7 +11,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task FailingConstructorsAreDiscovered()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(FailingConstructor))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(FailingConstructor))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.NotEmpty(validationErrors);
             Assert.StartsWith("Unable to create instance of FailingConstructor", validationErrors.Single().Message);
@@ -29,7 +29,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task FailingGlobalSetupsAreDiscovered()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(FailingGlobalSetup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(FailingGlobalSetup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.NotEmpty(validationErrors);
             Assert.StartsWith("Failed to execute [GlobalSetup]", validationErrors.Single().Message);
@@ -48,7 +48,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task FailingGlobalCleanupsAreDiscovered()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(FailingGlobalCleanup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(FailingGlobalCleanup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.NotEmpty(validationErrors);
             Assert.StartsWith("Failed to execute [GlobalCleanup]", validationErrors.Single().Message);
@@ -67,7 +67,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task MultipleGlobalSetupsAreDiscovered()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(MultipleGlobalSetups))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(MultipleGlobalSetups))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.NotEmpty(validationErrors);
             Assert.StartsWith("Only single [GlobalSetup] method is allowed per type", validationErrors.Single().Message);
@@ -88,7 +88,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task MultipleGlobalCleanupsAreDiscovered()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(MultipleGlobalCleanups))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(MultipleGlobalCleanups))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.NotEmpty(validationErrors);
             Assert.StartsWith("Only single [GlobalCleanup] method is allowed per type", validationErrors.Single().Message);
@@ -110,7 +110,7 @@ namespace BenchmarkDotNet.Tests.Validators
         public async Task VirtualGlobalSetupsAreSupported()
         {
             Assert.False(OverridesGlobalSetup.WasCalled);
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(OverridesGlobalSetup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(OverridesGlobalSetup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(OverridesGlobalSetup.WasCalled);
             Assert.Empty(validationErrors);
@@ -137,7 +137,7 @@ namespace BenchmarkDotNet.Tests.Validators
         public async Task VirtualGlobalCleanupsAreSupported()
         {
             Assert.False(OverridesGlobalCleanup.WasCalled);
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(OverridesGlobalCleanup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(OverridesGlobalCleanup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(OverridesGlobalCleanup.WasCalled);
             Assert.Empty(validationErrors);
@@ -163,7 +163,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task NonFailingGlobalSetupsAreOmitted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(GlobalSetupThatRequiresParamsToBeSetFirst))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(GlobalSetupThatRequiresParamsToBeSetFirst))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Empty(validationErrors);
         }
@@ -188,7 +188,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task NonFailingGlobalCleanupsAreOmitted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(GlobalCleanupThatRequiresParamsToBeSetFirst))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(GlobalCleanupThatRequiresParamsToBeSetFirst))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Empty(validationErrors);
         }
@@ -215,7 +215,7 @@ namespace BenchmarkDotNet.Tests.Validators
         {
             var validationErrors = await ExecutionValidator.FailOnError
                 .ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(FailingGlobalSetupWhichShouldHaveHadParamsForField)))
-                .ToArrayAsync();
+                .ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.NotEmpty(validationErrors);
             Assert.StartsWith("Failed to execute [GlobalSetup]", validationErrors.Single().Message);
@@ -242,7 +242,7 @@ namespace BenchmarkDotNet.Tests.Validators
         {
             var validationErrors = await ExecutionValidator.FailOnError
                 .ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(FailingGlobalCleanupWhichShouldHaveHadParamsForField)))
-                .ToArrayAsync();
+                .ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.NotEmpty(validationErrors);
             Assert.StartsWith("Failed to execute [GlobalCleanup]", validationErrors.Single().Message);
@@ -269,7 +269,7 @@ namespace BenchmarkDotNet.Tests.Validators
         {
             var validationErrors = await ExecutionValidator.FailOnError
                 .ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(NonPublicFieldWithParams)))
-                .ToArrayAsync();
+                .ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.NotEmpty(validationErrors);
             Assert.StartsWith("Fields marked with [Params] must be public", validationErrors.Single().Message);
@@ -308,7 +308,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task NonFailingBenchmarksAreOmitted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(NonFailingBenchmark))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(NonFailingBenchmark))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Empty(validationErrors);
         }
@@ -322,7 +322,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task FailingBenchmarksAreDiscovered()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(FailingBenchmark))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(FailingBenchmark))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.NotEmpty(validationErrors);
             Assert.Contains(validationErrors, error => error.Message.Contains("This benchmark throws"));
@@ -337,7 +337,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task MultipleParamsDoNotMultiplyGlobalSetup()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(MultipleParamsAndSingleGlobalSetup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(MultipleParamsAndSingleGlobalSetup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.Empty(validationErrors);
         }
@@ -358,7 +358,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task AsyncTaskGlobalSetupIsExecuted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncTaskGlobalSetup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncTaskGlobalSetup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(AsyncTaskGlobalSetup.WasCalled);
             Assert.Empty(validationErrors);
@@ -383,7 +383,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task AsyncTaskGlobalCleanupIsExecuted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncTaskGlobalCleanup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncTaskGlobalCleanup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(AsyncTaskGlobalCleanup.WasCalled);
             Assert.Empty(validationErrors);
@@ -408,7 +408,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task AsyncGenericTaskGlobalSetupIsExecuted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncGenericTaskGlobalSetup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncGenericTaskGlobalSetup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(AsyncGenericTaskGlobalSetup.WasCalled);
             Assert.Empty(validationErrors);
@@ -435,7 +435,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task AsyncGenericTaskGlobalCleanupIsExecuted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncGenericTaskGlobalCleanup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncGenericTaskGlobalCleanup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(AsyncGenericTaskGlobalCleanup.WasCalled);
             Assert.Empty(validationErrors);
@@ -462,7 +462,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task AsyncValueTaskGlobalSetupIsExecuted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncValueTaskGlobalSetup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncValueTaskGlobalSetup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(AsyncValueTaskGlobalSetup.WasCalled);
             Assert.Empty(validationErrors);
@@ -487,7 +487,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task AsyncValueTaskGlobalCleanupIsExecuted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncValueTaskGlobalCleanup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncValueTaskGlobalCleanup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(AsyncValueTaskGlobalCleanup.WasCalled);
             Assert.Empty(validationErrors);
@@ -512,7 +512,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task AsyncGenericValueTaskGlobalSetupIsExecuted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncGenericValueTaskGlobalSetup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncGenericValueTaskGlobalSetup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(AsyncGenericValueTaskGlobalSetup.WasCalled);
             Assert.Empty(validationErrors);
@@ -539,7 +539,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task AsyncGenericValueTaskGlobalCleanupIsExecuted()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncGenericValueTaskGlobalCleanup))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncGenericValueTaskGlobalCleanup))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(AsyncGenericValueTaskGlobalCleanup.WasCalled);
             Assert.Empty(validationErrors);
@@ -581,7 +581,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task AsyncValueTaskBackedByIValueTaskSourceIsAwaitedProperly()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncValueTaskSource))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncValueTaskSource))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(AsyncValueTaskSource.WasCalled);
             Assert.Empty(validationErrors);
@@ -612,7 +612,7 @@ namespace BenchmarkDotNet.Tests.Validators
         [Fact]
         public async Task AsyncGenericValueTaskBackedByIValueTaskSourceIsAwaitedProperly()
         {
-            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncGenericValueTaskSource))).ToArrayAsync();
+            var validationErrors = await ExecutionValidator.FailOnError.ValidateAsync(BenchmarkConverter.TypeToBenchmarks(typeof(AsyncGenericValueTaskSource))).ToArrayAsync(TestContext.Current.CancellationToken);
 
             Assert.True(AsyncGenericValueTaskSource.WasCalled);
             Assert.Empty(validationErrors);

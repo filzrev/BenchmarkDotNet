@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace BenchmarkDotNet.IntegrationTests.InProcess.EmitTests
 {
+    [LogOnStart]
     public class NaiveRunnableEmitDiff
     {
         private static readonly HashSet<string> IgnoredTypeNames =

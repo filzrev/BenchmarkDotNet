@@ -10,6 +10,7 @@ using RunMode = BenchmarkDotNet.Diagnosers.RunMode;
 
 namespace BenchmarkDotNet.IntegrationTests;
 
+[LogOnStart]
 public class InProcessDiagnoserTests(ITestOutputHelper output) : BenchmarkTestExecutor(output)
 {
     // For test explorer since it doesn't handle interfaces well.

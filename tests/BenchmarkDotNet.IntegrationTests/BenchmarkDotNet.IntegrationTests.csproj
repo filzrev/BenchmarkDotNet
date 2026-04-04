@@ -15,10 +15,16 @@
     <NoWarn>$(NoWarn);CA2007;CA1825</NoWarn>
     <ServerGarbageCollection>true</ServerGarbageCollection>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT' and '$(PROCESSOR_ARCHITEW6432)' == 'ARM64'">
+    <RuntimeIdentifier>win-arm64</RuntimeIdentifier>
+  </PropertyGroup>
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="testconfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -38,9 +44,7 @@
     <ProjectReference Include="..\..\src\BenchmarkDotNet\BenchmarkDotNet.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\BenchmarkDotNet.Tests\XUnit\**\*.cs"
-             Exclude="*Tests.cs"
-             Link="Shared\XUnit\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\BenchmarkDotNet.Tests\XUnit\**\*.cs" Exclude="*Tests.cs" Link="Shared\XUnit\%(RecursiveDir)%(Filename)%(Extension)" />
 
     <Compile Include="..\BenchmarkDotNet.Tests\Loggers\OutputLogger.cs" Link="Shared\Loggers\%(RecursiveDir)%(Filename)%(Extension)" />
     <Compile Include="..\BenchmarkDotNet.Tests\Mocks\**\*.cs" Link="Shared\Mocks\%(RecursiveDir)%(Filename)%(Extension)" />

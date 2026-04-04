@@ -3,6 +3,7 @@ using BenchmarkDotNet.Tests.XUnit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class PathTooLongTests : BenchmarkTestExecutor
     {
         public PathTooLongTests(ITestOutputHelper output) : base(output)

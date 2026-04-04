@@ -2,6 +2,7 @@ using BenchmarkDotNet.Attributes;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class ParamsTests : BenchmarkTestExecutor
     {
         public ParamsTests(ITestOutputHelper output) : base(output) { }

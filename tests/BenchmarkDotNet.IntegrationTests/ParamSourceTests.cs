@@ -9,6 +9,7 @@ using BenchmarkDotNet.Toolchains.InProcess.Emit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class ParamSourceTests : BenchmarkTestExecutor
     {
         public ParamSourceTests(ITestOutputHelper output) : base(output) { }

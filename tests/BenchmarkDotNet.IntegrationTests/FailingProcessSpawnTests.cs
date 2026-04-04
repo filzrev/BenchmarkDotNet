@@ -5,6 +5,7 @@ using BenchmarkDotNet.Portability;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class FailingProcessSpawnTests : BenchmarkTestExecutor
     {
         public FailingProcessSpawnTests(ITestOutputHelper output) : base(output)
@@ -19,6 +20,10 @@ namespace BenchmarkDotNet.IntegrationTests
                 Platform.X64 or Platform.X86 => Platform.Arm64,
                 _ => Platform.X64
             };
+
+            TestContext.Current.TestOutputHelper!.WriteLine("wrongPlatform: " + wrongPlatform);
+            TestContext.Current.TestOutputHelper!.WriteLine("FrameworkDescription: " + System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription);
+            TestContext.Current.TestOutputHelper!.WriteLine("OSArchitecture: " + System.Runtime.InteropServices.RuntimeInformation.OSArchitecture);
 
             if (wrongPlatform == Platform.X64 && RuntimeInformation.IsFullFramework)
             {

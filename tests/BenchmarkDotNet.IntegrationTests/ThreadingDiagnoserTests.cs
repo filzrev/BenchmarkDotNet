@@ -21,6 +21,7 @@ using Xunit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+[LogOnStart]
     public class ThreadingDiagnoserTests
     {
         private readonly ITestOutputHelper output;
