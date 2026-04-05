@@ -3,6 +3,7 @@ using BenchmarkDotNet.Validators;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class JitOptimizationsTests
     {
         private readonly ITestOutputHelper output;

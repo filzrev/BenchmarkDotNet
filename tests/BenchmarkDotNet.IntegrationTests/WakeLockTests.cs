@@ -9,6 +9,7 @@ using System.Runtime.Versioning;
 
 namespace BenchmarkDotNet.IntegrationTests;
 
+[LogOnStart]
 public class WakeLockTests : BenchmarkTestExecutor
 {
     private const string PingEventName = @"Global\WakeLockTests-ping";

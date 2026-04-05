@@ -6,6 +6,7 @@ using Perfolizer.Mathematics.OutlierDetection;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class CustomEngineTests : BenchmarkTestExecutor
     {
         private const string GlobalSetupMessage = "// GlobalSetup got called";

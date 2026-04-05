@@ -13,6 +13,7 @@ using BenchmarkDotNet.Validators;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class EventProcessorTests
     {
         [Fact]

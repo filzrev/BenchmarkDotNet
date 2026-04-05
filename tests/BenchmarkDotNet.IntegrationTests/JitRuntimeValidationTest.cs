@@ -9,6 +9,7 @@ using BenchmarkDotNet.Tests.XUnit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class JitRuntimeValidationTest : BenchmarkTestExecutor
     {
         public JitRuntimeValidationTest(ITestOutputHelper output) : base(output) { }

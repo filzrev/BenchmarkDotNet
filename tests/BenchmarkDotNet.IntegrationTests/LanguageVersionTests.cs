@@ -2,6 +2,7 @@ using BenchmarkDotNet.Attributes;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class LanguageVersionTests : BenchmarkTestExecutor
     {
         public LanguageVersionTests(ITestOutputHelper output) : base(output) { }

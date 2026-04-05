@@ -10,6 +10,7 @@ using BenchmarkDotNet.Tests.XUnit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class LargeAddressAwareTest
     {
         private readonly ITestOutputHelper output;

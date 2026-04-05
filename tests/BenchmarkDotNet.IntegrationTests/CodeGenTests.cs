@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace BenchmarkDotNet.IntegrationTests;
 
+[LogOnStart]
 public class CodeGenTests(ITestOutputHelper output) : BenchmarkTestExecutor(output)
 {
     public static IEnumerable<object[]> GetToolchains() =>

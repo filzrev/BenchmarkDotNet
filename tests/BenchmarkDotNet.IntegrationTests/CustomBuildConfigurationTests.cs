@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class CustomBuildConfigurationTests : BenchmarkTestExecutor
     {
         public CustomBuildConfigurationTests(ITestOutputHelper output) : base(output)

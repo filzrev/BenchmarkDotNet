@@ -8,6 +8,7 @@ using BenchmarkDotNet.Running;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class ExceptionDiagnoserTests
     {
         [Fact]

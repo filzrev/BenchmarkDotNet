@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace BenchmarkDotNet.IntegrationTests;
 
+[LogOnStart]
 public class CustomTaskAndAwaitableTests(ITestOutputHelper output) : BenchmarkTestExecutor(output)
 {
     public static TheoryData<IToolchain> GetToolchains() => new(

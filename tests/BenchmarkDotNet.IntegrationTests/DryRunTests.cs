@@ -3,6 +3,7 @@ using BenchmarkDotNet.Engines;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class DryRunTests(ITestOutputHelper output) : BenchmarkTestExecutor(output)
     {
         [Fact]

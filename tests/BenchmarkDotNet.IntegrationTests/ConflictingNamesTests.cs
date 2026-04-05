@@ -2,6 +2,7 @@ using BenchmarkDotNet.Attributes;
 
 namespace BenchmarkDotNet.IntegrationTests;
 
+[LogOnStart]
 public class ConflictingNamesTests(ITestOutputHelper output) : BenchmarkTestExecutor(output)
 {
     [Fact]

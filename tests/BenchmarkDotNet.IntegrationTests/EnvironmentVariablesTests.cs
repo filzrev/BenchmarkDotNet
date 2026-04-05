@@ -3,6 +3,7 @@ using BenchmarkDotNet.Jobs;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class EnvironmentVariablesTests : BenchmarkTestExecutor
     {
         internal const string Key = "VeryNiceKey";
