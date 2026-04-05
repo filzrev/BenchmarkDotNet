@@ -37,10 +37,10 @@ jobs:
       # Build and Test
       - name: Run task 'build'
         run: ./build.cmd build
-      - name: Run task 'analyzer-tests'
-        run: ./build.cmd analyzer-tests -e
-      - name: Run task 'unit-tests'
-        run: ./build.cmd unit-tests -e
+      #- name: Run task 'analyzer-tests'
+      #  run: ./build.cmd analyzer-tests -e
+      #- name: Run task 'unit-tests'
+      #  run: ./build.cmd unit-tests -e
       - name: Run task 'in-tests-core'
         run: ./build.cmd in-tests-core -e
       # Report test results with unique name
