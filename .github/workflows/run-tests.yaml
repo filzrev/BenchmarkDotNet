@@ -57,6 +57,4 @@ jobs:
         if: always()
         with:
           name: test-macos(${{ matrix.os.arch }})-trx-${{ github.run_id }}
-          path: |
-            "**/*.trx"
-            "**/log_*.diag"
+          path: "**/log_*.diag"
