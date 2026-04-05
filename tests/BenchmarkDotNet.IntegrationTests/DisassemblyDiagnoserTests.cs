@@ -17,7 +17,7 @@ using System.Runtime.CompilerServices;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
-    [LogOnStart]
+    //[LogOnStart]
     public class DisassemblyDiagnoserTests : BenchmarkTestExecutor
     {
         public DisassemblyDiagnoserTests(ITestOutputHelper output) : base(output) { }
