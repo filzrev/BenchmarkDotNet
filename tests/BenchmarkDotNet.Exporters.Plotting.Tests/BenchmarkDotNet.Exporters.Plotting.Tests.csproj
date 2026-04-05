@@ -15,7 +15,7 @@
     <ProjectReference Include="..\BenchmarkDotNet.Tests\BenchmarkDotNet.Tests.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="xunit.v3.mtp-v2" Version="3.2.2" />
+    <PackageReference Include="xunit.v3.mtp-v2" Version="4.0.0-pre.33" />
   </ItemGroup>
   <Import Project="..\..\build\common.targets" />
 </Project>
