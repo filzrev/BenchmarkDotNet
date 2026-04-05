@@ -4,7 +4,9 @@ using Cake.Common.Diagnostics;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Microsoft.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -55,8 +57,10 @@ public class UnitTestRunner(BuildContext context)
                     .AppendSwitchQuoted("--report-trx-filename", System.IO.Path.GetFileName(logFile.FullPath))
                     .Append("--no-ansi")
                     .AppendSwitch("--xunit-diagnostics", "on")
-                    .AppendSwitch("--show-live-output", "on")
+                    //.AppendSwitch("--show-live-output", "on")
                     .AppendSwitch("--output", "Detailed")
+                    .Append("--diagnostic")
+                    .AppendSwitch("--diagnostic-verbosity", "Trace")                    
                     .Append("--hangdump")
                     .AppendSwitch("--hangdump-timeout", "40min")
                     ,
