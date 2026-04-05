@@ -55,7 +55,7 @@ public class UnitTestRunner(BuildContext context)
                     .AppendSwitchQuoted("--report-trx-filename", System.IO.Path.GetFileName(logFile.FullPath))
                     .Append("--no-ansi")
                     .AppendSwitch("--xunit-diagnostics", "on")
-                    .AppendSwitch("--show-live-output", "on")
+                    //.AppendSwitch("--show-live-output", "on")
                     .AppendSwitch("--output", "Detailed"),
         };
         return settings;
