@@ -104,7 +104,7 @@ namespace BenchmarkDotNet.Exporters
             var prefixedWriter = GetPrefixedWriter(writer);
 
             await prefixedWriter.WriteLineAsync(cancellationToken).ConfigureAwait(false);
-            foreach (string infoLine in summary.HostEnvironmentInfo.ToFormattedString())
+            foreach (string infoLine in summary.HostEnvironmentInfo.ToFormattedString().ToArray())
             {
                 await prefixedWriter.WriteLineAsync(infoLine, LogKind.Info, cancellationToken).ConfigureAwait(false);
             }
