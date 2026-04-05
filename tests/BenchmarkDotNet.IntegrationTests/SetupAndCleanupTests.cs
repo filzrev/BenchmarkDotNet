@@ -4,6 +4,7 @@ using BenchmarkDotNet.Jobs;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class SetupAndCleanupTests : BenchmarkTestExecutor
     {
         private const string FirstPrefix = "// ### First Called: ";

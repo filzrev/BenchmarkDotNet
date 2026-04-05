@@ -1,8 +1,9 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Tests.Loggers;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class StandardErrorTests : BenchmarkTestExecutor
     {
         private const string ErrorMessage = "ErrorMessage";

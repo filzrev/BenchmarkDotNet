@@ -8,6 +8,7 @@ using System.Collections.Immutable;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class ValuesReturnedByBenchmarkTest : BenchmarkTestExecutor
     {
         public ValuesReturnedByBenchmarkTest(ITestOutputHelper output) : base(output) { }

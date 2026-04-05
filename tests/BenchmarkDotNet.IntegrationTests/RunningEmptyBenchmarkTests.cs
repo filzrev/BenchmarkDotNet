@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class RunningEmptyBenchmarkTests
     {
         #region BenchmarkRunner Methods Overview

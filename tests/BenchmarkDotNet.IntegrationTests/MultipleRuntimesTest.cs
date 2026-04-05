@@ -12,6 +12,7 @@ using BenchmarkDotNet.Toolchains;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class MultipleRuntimesTest
     {
         private readonly ITestOutputHelper output;

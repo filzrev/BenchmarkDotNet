@@ -56,7 +56,10 @@ public class UnitTestRunner(BuildContext context)
                     .Append("--no-ansi")
                     .AppendSwitch("--xunit-diagnostics", "on")
                     .AppendSwitch("--show-live-output", "on")
-                    .AppendSwitch("--output", "Detailed"),
+                    .AppendSwitch("--output", "Detailed")
+                    .Append("--hangdump")
+                    .AppendSwitch("--hangdump-timeout", "40min")
+                    ,
         };
         return settings;
     }

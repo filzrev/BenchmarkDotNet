@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class ExceptionHandlingTests : BenchmarkTestExecutor
     {
         private const string BenchmarkExceptionMessage = "we have a problem in our benchmark method";

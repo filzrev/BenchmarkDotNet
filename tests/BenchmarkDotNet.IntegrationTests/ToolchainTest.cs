@@ -10,6 +10,7 @@ using BenchmarkDotNet.Toolchains.Results;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class ToolchainTest(ITestOutputHelper output) : BenchmarkTestExecutor(output)
     {
         private class MyGenerator : IGenerator

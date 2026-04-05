@@ -24,6 +24,7 @@ using System.Runtime.CompilerServices;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class MemoryDiagnoserTests
     {
         private readonly ITestOutputHelper output;

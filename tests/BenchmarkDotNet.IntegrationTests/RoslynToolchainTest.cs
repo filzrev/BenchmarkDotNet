@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Tests.XUnit;
 using BenchmarkDotNet.Toolchains.Roslyn;
@@ -6,6 +6,7 @@ using System.Globalization;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class RoslynToolchainTest : BenchmarkTestExecutor
     {
         public RoslynToolchainTest(ITestOutputHelper output) : base(output) { }

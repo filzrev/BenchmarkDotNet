@@ -10,6 +10,7 @@ using BenchmarkDotNet.Validators;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class ValidatorsTest : BenchmarkTestExecutor
     {
         public ValidatorsTest(ITestOutputHelper output) : base(output) { }

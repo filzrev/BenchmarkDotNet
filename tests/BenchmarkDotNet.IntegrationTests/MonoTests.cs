@@ -8,6 +8,7 @@ using BenchmarkDotNet.Tests.XUnit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class MonoTests : BenchmarkTestExecutor
     {
         public MonoTests(ITestOutputHelper output) : base(output) { }

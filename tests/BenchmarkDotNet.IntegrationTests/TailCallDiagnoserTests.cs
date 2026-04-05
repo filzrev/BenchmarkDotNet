@@ -1,4 +1,4 @@
-﻿#if NETFRAMEWORK
+#if NETFRAMEWORK
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
@@ -15,6 +15,7 @@ using Xunit;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class TailCallDiagnoserTests : BenchmarkTestExecutor
     {
         private const string WindowsOnly = "Use JIT ETW Tail Call Event (Windows only)";

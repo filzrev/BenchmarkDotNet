@@ -7,6 +7,7 @@ using Perfolizer.Horology;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class StatResultExtenderTests : BenchmarkTestExecutor
     {
         public StatResultExtenderTests(ITestOutputHelper output) : base(output)

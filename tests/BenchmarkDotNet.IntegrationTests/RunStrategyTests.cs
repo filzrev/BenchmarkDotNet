@@ -7,6 +7,7 @@ using BenchmarkDotNet.Tests.Loggers;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
+    [LogOnStart]
     public class RunStrategyTests : BenchmarkTestExecutor
     {
         public RunStrategyTests(ITestOutputHelper output) : base(output) { }
