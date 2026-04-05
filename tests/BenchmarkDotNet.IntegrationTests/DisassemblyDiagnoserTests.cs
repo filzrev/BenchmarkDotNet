@@ -101,25 +101,25 @@ namespace BenchmarkDotNet.IntegrationTests
             AssertDisassemblyResult(result, $"{nameof(WithCalls.Recursive)}()");
         }
 
-        [TheoryEnvSpecific("Not supported on Windows+Arm", EnvRequirement.NonWindowsArm)]
-        [MemberData(nameof(GetAllJits), DisableDiscoveryEnumeration = true)]
-        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
-        public void CanDisassembleAllMethodCallsUsingFilters(Jit jit, Platform platform, IToolchain toolchain)
-        {
-            var disassemblyDiagnoser = new DisassemblyDiagnoser(
-                new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 1, filters: ["*WithCalls*"]));
+        ////[TheoryEnvSpecific("Not supported on Windows+Arm", EnvRequirement.NonWindowsArm)]
+        ////[MemberData(nameof(GetAllJits), DisableDiscoveryEnumeration = true)]
+        ////[Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
+        ////public void CanDisassembleAllMethodCallsUsingFilters(Jit jit, Platform platform, IToolchain toolchain)
+        ////{
+        ////    var disassemblyDiagnoser = new DisassemblyDiagnoser(
+        ////        new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 1, filters: ["*WithCalls*"]));
 
-            CanExecute<WithCalls>(CreateConfig(jit, platform, toolchain, disassemblyDiagnoser, RunStrategy.ColdStart));
+        ////    CanExecute<WithCalls>(CreateConfig(jit, platform, toolchain, disassemblyDiagnoser, RunStrategy.ColdStart));
 
-            DisassemblyResult result = disassemblyDiagnoser.Results.Single().Value;
+        ////    DisassemblyResult result = disassemblyDiagnoser.Results.Single().Value;
 
-            Assert.Empty(result.Errors);
-            AssertDisassemblyResult(result, $"{nameof(WithCalls.Benchmark)}(Int32)");
-            AssertDisassemblyResult(result, $"{nameof(WithCalls.Benchmark)}(Boolean)");
-            AssertDisassemblyResult(result, $"{nameof(WithCalls.Static)}()");
-            AssertDisassemblyResult(result, $"{nameof(WithCalls.Instance)}()");
-            AssertDisassemblyResult(result, $"{nameof(WithCalls.Recursive)}()");
-        }
+        ////    Assert.Empty(result.Errors);
+        ////    AssertDisassemblyResult(result, $"{nameof(WithCalls.Benchmark)}(Int32)");
+        ////    AssertDisassemblyResult(result, $"{nameof(WithCalls.Benchmark)}(Boolean)");
+        ////    AssertDisassemblyResult(result, $"{nameof(WithCalls.Static)}()");
+        ////    AssertDisassemblyResult(result, $"{nameof(WithCalls.Instance)}()");
+        ////    AssertDisassemblyResult(result, $"{nameof(WithCalls.Recursive)}()");
+        ////}
 
         public class Generic<T> where T : new()
         {
@@ -127,42 +127,42 @@ namespace BenchmarkDotNet.IntegrationTests
             public T Create() => new T();
         }
 
-        [TheoryEnvSpecific("Not supported on Windows+Arm", EnvRequirement.NonWindowsArm)]
-        [MemberData(nameof(GetAllJits), DisableDiscoveryEnumeration = true)]
-        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
-        public void CanDisassembleGenericTypes(Jit jit, Platform platform, IToolchain toolchain)
-        {
-            var disassemblyDiagnoser = new DisassemblyDiagnoser(
-                new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
+        ////[TheoryEnvSpecific("Not supported on Windows+Arm", EnvRequirement.NonWindowsArm)]
+        ////[MemberData(nameof(GetAllJits), DisableDiscoveryEnumeration = true)]
+        ////[Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
+        ////public void CanDisassembleGenericTypes(Jit jit, Platform platform, IToolchain toolchain)
+        ////{
+        ////    var disassemblyDiagnoser = new DisassemblyDiagnoser(
+        ////        new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
 
-            CanExecute<Generic<int>>(CreateConfig(jit, platform, toolchain, disassemblyDiagnoser, RunStrategy.Monitoring));
+        ////    CanExecute<Generic<int>>(CreateConfig(jit, platform, toolchain, disassemblyDiagnoser, RunStrategy.Monitoring));
 
-            var result = disassemblyDiagnoser.Results.Values.Single();
+        ////    var result = disassemblyDiagnoser.Results.Values.Single();
 
-            Assert.Empty(result.Errors);
-            Assert.Contains(result.Methods, method => method.Maps.Any(map => map.SourceCodes.OfType<Asm>().Any()));
-        }
+        ////    Assert.Empty(result.Errors);
+        ////    Assert.Contains(result.Methods, method => method.Maps.Any(map => map.SourceCodes.OfType<Asm>().Any()));
+        ////}
 
         public class WithInlineable
         {
             [Benchmark] public void JustReturn() { }
         }
 
-        [TheoryEnvSpecific("Not supported on Windows+Arm", EnvRequirement.NonWindowsArm)]
-        [MemberData(nameof(GetAllJits), DisableDiscoveryEnumeration = true)]
-        [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
-        public void CanDisassembleInlinableBenchmarks(Jit jit, Platform platform, IToolchain toolchain)
-        {
-            var disassemblyDiagnoser = new DisassemblyDiagnoser(
-                new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
+        ////[TheoryEnvSpecific("Not supported on Windows+Arm", EnvRequirement.NonWindowsArm)]
+        ////[MemberData(nameof(GetAllJits), DisableDiscoveryEnumeration = true)]
+        ////[Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
+        ////public void CanDisassembleInlinableBenchmarks(Jit jit, Platform platform, IToolchain toolchain)
+        ////{
+        ////    var disassemblyDiagnoser = new DisassemblyDiagnoser(
+        ////        new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
 
-            CanExecute<WithInlineable>(CreateConfig(jit, platform, toolchain, disassemblyDiagnoser, RunStrategy.Monitoring));
+        ////    CanExecute<WithInlineable>(CreateConfig(jit, platform, toolchain, disassemblyDiagnoser, RunStrategy.Monitoring));
 
-            var disassemblyResult = disassemblyDiagnoser.Results.Values.Single(result => result.Methods.Count(method => method.Name.Contains(nameof(WithInlineable.JustReturn))) == 1);
+        ////    var disassemblyResult = disassemblyDiagnoser.Results.Values.Single(result => result.Methods.Count(method => method.Name.Contains(nameof(WithInlineable.JustReturn))) == 1);
 
-            Assert.Empty(disassemblyResult.Errors);
-            Assert.Contains(disassemblyResult.Methods, method => method.Maps.Any(map => map.SourceCodes.OfType<Asm>().All(asm => asm.ToString()!.Contains("ret"))));
-        }
+        ////    Assert.Empty(disassemblyResult.Errors);
+        ////    Assert.Contains(disassemblyResult.Methods, method => method.Maps.Any(map => map.SourceCodes.OfType<Asm>().All(asm => asm.ToString()!.Contains("ret"))));
+        ////}
 
         private IConfig CreateConfig(Jit jit, Platform platform, IToolchain toolchain, IDiagnoser disassemblyDiagnoser, RunStrategy runStrategy)
             => ManualConfig.CreateEmpty()

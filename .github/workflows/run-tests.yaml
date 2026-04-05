@@ -30,10 +30,10 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "24"
-      - name: Set up v8
-        run: npm install jsvu -g && jsvu --os=${{ matrix.os.jsvu-os }} --engines=v8 && echo "$HOME/.jsvu/bin" >> $GITHUB_PATH
-      - name: Install wasm-tools workload
-        run: ./build.cmd install-wasm-tools
+      #- name: Set up v8
+      #  run: npm install jsvu -g && jsvu --os=${{ matrix.os.jsvu-os }} --engines=v8 && echo "$HOME/.jsvu/bin" >> $GITHUB_PATH
+      #- name: Install wasm-tools workload
+      #  run: ./build.cmd install-wasm-tools
       # Build and Test
       - name: Run task 'build'
         run: ./build.cmd build

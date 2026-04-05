@@ -51,6 +51,7 @@
         <Compile Include="..\BenchmarkDotNet.Tests\Builders\**\*.cs" Link="Shared\Builders\%(RecursiveDir)%(Filename)%(Extension)" />
         <Compile Include="..\BenchmarkDotNet.Tests\Helpers\**\*.cs" Link="Shared\Helpers\%(RecursiveDir)%(Filename)%(Extension)" />
         <Compile Remove="..\BenchmarkDotNet.Tests\Helpers\LinuxOsReleaseHelperTests.cs" />
+        <Compile Remove="..\BenchmarkDotNet.Tests\XUnit\EnvRequirementCheckerTests.cs" />
         <Compile Include="..\BenchmarkDotNet.Tests\TestCultureInfo.cs" />
     </ItemGroup>
     <ItemGroup>
