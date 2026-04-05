@@ -515,6 +515,7 @@ namespace BenchmarkDotNet.Running
 
             logger.WriteLineInfo("// *** Execute ***");
             Console.WriteLine("++++++ Execute: " + benchmarkCase.DisplayInfo);
+            Console.Out.Flush();
             bool analyzeRunToRunVariance = benchmarkCase.Job.ResolveValue(AccuracyMode.AnalyzeLaunchVarianceCharacteristic, resolver);
             bool autoLaunchCount = !benchmarkCase.Job.HasValue(RunMode.LaunchCountCharacteristic);
             int defaultValue = analyzeRunToRunVariance ? 2 : 1;
