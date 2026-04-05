@@ -3,7 +3,6 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <IsPackable>false</IsPackable>
     <NoWarn>$(NoWarn);CA2007</NoWarn>
-    <PreferNativeArm64>true</PreferNativeArm64>
   </PropertyGroup>
 
   <PropertyGroup>
