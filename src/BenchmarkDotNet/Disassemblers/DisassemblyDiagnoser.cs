@@ -261,8 +261,8 @@ namespace BenchmarkDotNet.Diagnosers
     [EditorBrowsable(EditorBrowsableState.Never)]
     public sealed class DisassemblyDiagnoserInProcessHandler : IInProcessDiagnoserHandler
     {
-        private ClrMdArgs _clrMdArgs;
-        private DisassemblyResult _result = default!;
+        //private ClrMdArgs _clrMdArgs;
+        //private DisassemblyResult _result = default!;
 
         void IInProcessDiagnoserHandler.Initialize(string? serializedConfig)
         {
