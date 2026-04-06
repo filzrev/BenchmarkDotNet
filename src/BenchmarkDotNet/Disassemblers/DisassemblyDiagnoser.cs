@@ -61,8 +61,10 @@ namespace BenchmarkDotNet.Diagnosers
 
         public IEnumerable<Metric> ProcessResults(DiagnoserResults diagnoserResults)
         {
+            File.AppendAllText("logs_temp.diag", "[START] ProcessResults" + Environment.NewLine);
             if (results.TryGetValue(diagnoserResults.BenchmarkCase, out var disassemblyResult))
                 yield return new Metric(NativeCodeSizeMetricDescriptor.Instance, SumNativeCodeSize(disassemblyResult));
+            File.AppendAllText("logs_temp.diag", "[  End] HandleAsync" + Environment.NewLine);
         }
 
         public RunMode GetRunMode(BenchmarkCase benchmarkCase)
@@ -89,6 +91,7 @@ namespace BenchmarkDotNet.Diagnosers
 
         public async ValueTask HandleAsync(HostSignal signal, DiagnoserActionParameters parameters, CancellationToken cancellationToken)
         {
+            File.AppendAllText("logs_temp.diag", "[START] HandleAsync" + Environment.NewLine);
             var benchmark = parameters.BenchmarkCase;
             bool isInProcess = parameters.BenchmarkCase.Job.Infrastructure.TryGetToolchain(out var toolchain) && toolchain.IsInProcess;
 
@@ -104,6 +107,7 @@ namespace BenchmarkDotNet.Diagnosers
                     results.Add(benchmark, result);
                     break;
             }
+            File.AppendAllText("logs_temp.diag", "[  End] HandleAsync" + Environment.NewLine);
         }
 
         public void DisplayResults(ILogger logger)
@@ -114,6 +118,7 @@ namespace BenchmarkDotNet.Diagnosers
 
         public async IAsyncEnumerable<ValidationError> ValidateAsync(ValidationParameters validationParameters)
         {
+            File.AppendAllText("logs_temp.diag", "[START] ValidateAsync" + Environment.NewLine);
             var currentPlatform = RuntimeInformation.GetCurrentPlatform();
             if (!(currentPlatform is Platform.X64 or Platform.X86 or Platform.Arm64))
             {
@@ -174,6 +179,7 @@ namespace BenchmarkDotNet.Diagnosers
                 {
                     yield return new ValidationError(true, $"Only Windows and Linux are supported in DisassemblyDiagnoser without Mono. Current OS is {System.Runtime.InteropServices.RuntimeInformation.OSDescription}");
                 }
+                File.AppendAllText("logs_temp.diag", "[  End] ValidateAsync" + Environment.NewLine);
             }
         }
 
