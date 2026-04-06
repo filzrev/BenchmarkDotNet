@@ -64,7 +64,7 @@ namespace BenchmarkDotNet.Diagnosers
             File.AppendAllText("log_temp.diag", "[START] ProcessResults" + Environment.NewLine);
             if (results.TryGetValue(diagnoserResults.BenchmarkCase, out var disassemblyResult))
                 yield return new Metric(NativeCodeSizeMetricDescriptor.Instance, SumNativeCodeSize(disassemblyResult));
-            File.AppendAllText("log_temp.diag", "[  End] HandleAsync" + Environment.NewLine);
+            File.AppendAllText("log_temp.diag", "[  End] ProcessResults" + Environment.NewLine);
         }
 
         public RunMode GetRunMode(BenchmarkCase benchmarkCase)
