@@ -58,5 +58,5 @@ jobs:
         with:
           name: test-macos(${{ matrix.os.arch }})-trx-${{ github.run_id }}
           path: |
-            "**/log_*.diag"
-            "**/*.trx"
+            **/log_*.diag"
+            **/*.trx
