@@ -266,7 +266,7 @@ namespace BenchmarkDotNet.Diagnosers
 
         void IInProcessDiagnoserHandler.Initialize(string? serializedConfig)
         {
-            _clrMdArgs = new ClrMdArgs();
+            //_clrMdArgs = new ClrMdArgs();
             //_clrMdArgs = BdnJsonSerializer.Deserialize<ClrMdArgs>(serializedConfig!);
         }
 
