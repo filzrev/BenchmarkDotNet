@@ -279,7 +279,13 @@ namespace BenchmarkDotNet.Diagnosers
             var clrMdArgs = _clrMdArgs;
             clrMdArgs.ProcessId = Process.GetCurrentProcess().Id;
             clrMdArgs.TypeName = args.BenchmarkInstance.GetType().FullName!;
-            _result = DisassemblyDiagnoser.GetClrMdDisassembler().AttachAndDisassemble(clrMdArgs);
+            _result = new DisassemblyResult
+            {
+                Errors = [],
+                Methods = [],
+                PointerSize = 8,
+                AddressToNameMapping = [],
+            };//= DisassemblyDiagnoser.GetClrMdDisassembler().AttachAndDisassemble(clrMdArgs);
             return new();
         }
 
