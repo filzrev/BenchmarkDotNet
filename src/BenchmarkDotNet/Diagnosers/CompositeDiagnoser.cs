@@ -71,7 +71,9 @@ namespace BenchmarkDotNet.Diagnosers
     [AggressivelyOptimizeMethods]
     [UsedImplicitly]
     [EditorBrowsable(EditorBrowsableState.Never)]
+#pragma warning disable CS9113 // Parameter is unread.
     public sealed class CompositeInProcessDiagnoserHandler(IReadOnlyList<InProcessDiagnoserRouter> routers, IHost host, RunMode runMode, InProcessDiagnoserActionArgs parameters)
+#pragma warning restore CS9113 // Parameter is unread.
     {
         public async ValueTask HandleAsync(BenchmarkSignal signal, CancellationToken cancellationToken)
         {

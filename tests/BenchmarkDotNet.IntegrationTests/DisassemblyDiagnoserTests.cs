@@ -180,7 +180,7 @@ namespace BenchmarkDotNet.IntegrationTests
                 .AddLogger(DefaultConfig.Instance.GetLoggers().ToArray())
                 .AddColumnProvider(DefaultColumnProviders.Instance)
                 .AddDiagnoser(disassemblyDiagnoser)
-                ;//.AddLogger(new OutputLogger(Output));
+                .AddLogger(new OutputLogger(Output));
 
         private void AssertDisassemblyResult(DisassemblyResult result, string methodSignature)
         {
