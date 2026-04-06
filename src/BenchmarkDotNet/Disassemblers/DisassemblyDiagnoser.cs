@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Analysers;
+using BenchmarkDotNet.Analysers;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Detectors;
 using BenchmarkDotNet.Disassemblers;
@@ -285,7 +285,8 @@ namespace BenchmarkDotNet.Diagnosers
 
         string IInProcessDiagnoserHandler.SerializeResults()
         {
-            return BdnJsonSerializer.Serialize(_result);
+            return "{}";
+            // return BdnJsonSerializer.Serialize(_result);
         }
     }
 }
