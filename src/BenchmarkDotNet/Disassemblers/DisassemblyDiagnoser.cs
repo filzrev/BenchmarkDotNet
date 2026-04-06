@@ -91,7 +91,7 @@ namespace BenchmarkDotNet.Diagnosers
 
         public async ValueTask HandleAsync(HostSignal signal, DiagnoserActionParameters parameters, CancellationToken cancellationToken)
         {
-            File.AppendAllText("log_temp.diag", "[START] HandleAsync" + Environment.NewLine);
+            File.AppendAllText("log_temp.diag", $"[START] HandleAsync({signal})" + Environment.NewLine);
             var benchmark = parameters.BenchmarkCase;
             bool isInProcess = parameters.BenchmarkCase.Job.Infrastructure.TryGetToolchain(out var toolchain) && toolchain.IsInProcess;
 
@@ -103,7 +103,7 @@ namespace BenchmarkDotNet.Diagnosers
                     );
                     break;
                 case HostSignal.SeparateLogic when ShouldUseMonoDisassembler(benchmark):
-                    var result = await monoDisassembler.Disassemble(benchmark, (MonoRuntime) benchmark.Job.Environment.Runtime!, cancellationToken).ConfigureAwait(false);
+                    var result = await monoDisassembler.Disassemble(benchmark, (MonoRuntime)benchmark.Job.Environment.Runtime!, cancellationToken).ConfigureAwait(false);
                     results.Add(benchmark, result);
                     break;
             }

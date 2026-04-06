@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Detectors;
+using BenchmarkDotNet.Detectors;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Filters;
@@ -64,13 +64,23 @@ namespace BenchmarkDotNet.Disassemblers
                 {
                     try
                     {
+                        File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
                         new DiagnosticsClient(processId).WriteDump(DumpType.Full, dumpPath, logDumpGeneration: false);
+                        File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
                     }
                     catch (ServerErrorException sxe)
                     {
                         throw new ArgumentException($"Unable to create a snapshot of process {processId:x}.", sxe);
                     }
-                    return DataTarget.LoadDump(dumpPath);
+                    File.AppendAllText("log_temp.diag", $"[START] LoadDump" + Environment.NewLine);
+                    try
+                    {
+                        return DataTarget.LoadDump(dumpPath);
+                    }
+                    finally
+                    {
+                        File.AppendAllText("log_temp.diag", $"[  End] LoadDump" + Environment.NewLine);
+                    }
                 }
                 finally
                 {
