@@ -266,27 +266,29 @@ namespace BenchmarkDotNet.Diagnosers
 
         void IInProcessDiagnoserHandler.Initialize(string? serializedConfig)
         {
-            _clrMdArgs = BdnJsonSerializer.Deserialize<ClrMdArgs>(serializedConfig!);
+            _clrMdArgs = new ClrMdArgs();
+            //_clrMdArgs = BdnJsonSerializer.Deserialize<ClrMdArgs>(serializedConfig!);
         }
 
         ValueTask IInProcessDiagnoserHandler.HandleAsync(BenchmarkSignal signal, InProcessDiagnoserActionArgs args, CancellationToken cancellationToken)
         {
-            if (signal != BenchmarkSignal.AfterEngine)
-            {
-                return new();
-            }
-
-            var clrMdArgs = _clrMdArgs;
-            clrMdArgs.ProcessId = Process.GetCurrentProcess().Id;
-            clrMdArgs.TypeName = args.BenchmarkInstance.GetType().FullName!;
-            _result = new DisassemblyResult
-            {
-                Errors = [],
-                Methods = [],
-                PointerSize = 8,
-                AddressToNameMapping = [],
-            };//= DisassemblyDiagnoser.GetClrMdDisassembler().AttachAndDisassemble(clrMdArgs);
             return new();
+            ////if (signal != BenchmarkSignal.AfterEngine)
+            ////{
+            ////    return new();
+            ////}
+
+            ////var clrMdArgs = _clrMdArgs;
+            ////clrMdArgs.ProcessId = Process.GetCurrentProcess().Id;
+            ////clrMdArgs.TypeName = args.BenchmarkInstance.GetType().FullName!;
+            ////_result = new DisassemblyResult
+            ////{
+            ////    Errors = [],
+            ////    Methods = [],
+            ////    PointerSize = 8,
+            ////    AddressToNameMapping = [],
+            ////};//= DisassemblyDiagnoser.GetClrMdDisassembler().AttachAndDisassemble(clrMdArgs);
+            ////return new();
         }
 
         string IInProcessDiagnoserHandler.SerializeResults()
