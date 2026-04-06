@@ -278,6 +278,8 @@ namespace BenchmarkDotNet.Diagnosers
 
             var clrMdArgs = _clrMdArgs;
             clrMdArgs.ProcessId = Process.GetCurrentProcess().Id;
+
+            File.AppendAllText("log_temp.diag", $"ProcessName1: " + Process.GetCurrentProcess().ProcessName);
             clrMdArgs.TypeName = args.BenchmarkInstance.GetType().FullName!;
             _result = DisassemblyDiagnoser.GetClrMdDisassembler().AttachAndDisassemble(clrMdArgs);
             return new();

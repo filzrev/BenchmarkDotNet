@@ -5,6 +5,7 @@ using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Portability;
 using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Runtime;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace BenchmarkDotNet.Disassemblers
@@ -58,6 +59,7 @@ namespace BenchmarkDotNet.Disassemblers
             }
             if (OsDetector.IsMacOS())
             {
+                File.AppendAllText("log_temp.diag", $"ProcessName2: " + Process.GetProcessById(processId).ProcessName);
                 // ClrMD does not support CreateSnapshotAndAttach on MacOS, and AttachToProcess is unreliable, so we have to create a dump file and load it.
                 string dumpPath = Path.GetTempFileName();
                 try
