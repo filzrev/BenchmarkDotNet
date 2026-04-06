@@ -84,7 +84,7 @@ namespace BenchmarkDotNet.Diagnosers
             {
                 if (router.ShouldHandle(runMode))
                 {
-                    await router.handler.HandleAsync(signal, parameters, cancellationToken).ConfigureAwait(false);
+                    //await router.handler.HandleAsync(signal, parameters, cancellationToken).ConfigureAwait(false);
                 }
             }
 
