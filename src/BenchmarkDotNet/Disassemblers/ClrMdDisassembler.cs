@@ -68,31 +68,34 @@ namespace BenchmarkDotNet.Disassemblers
                 string dumpPath = Path.GetTempFileName();
                 try
                 {
-                    try
+                    _ = Task.Run(() =>
                     {
-                        File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
+                        try
+                        {
+                            File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
 
-                        var client = new DiagnosticsClient(processId);
-                        Thread.Sleep(1000);
+                            var client = new DiagnosticsClient(processId);
+                            Thread.Sleep(1000);
 
-                        var cts = new CancellationTokenSource();
-                        cts.CancelAfter(1000 * 60*15);
-                        client.WriteDumpAsync(DumpType.Normal, dumpPath, logDumpGeneration: true, cts.Token).ConfigureAwait(false).GetAwaiter().GetResult();
-                        File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
-                    }
-                    catch (ServerErrorException sxe)
-                    {
-                        throw new ArgumentException($"Unable to create a snapshot of process {processId:x}.", sxe);
-                    }
-                    File.AppendAllText("log_temp.diag", $"[START] LoadDump" + Environment.NewLine);
-                    try
-                    {
-                        return DataTarget.LoadDump(dumpPath);
-                    }
-                    finally
-                    {
-                        File.AppendAllText("log_temp.diag", $"[  End] LoadDump" + Environment.NewLine);
-                    }
+                            var cts = new CancellationTokenSource();
+                            cts.CancelAfter(1000 * 60 * 15);
+                            client.WriteDumpAsync(DumpType.Normal, dumpPath, logDumpGeneration: true, cts.Token).ConfigureAwait(false).GetAwaiter().GetResult();
+                            File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
+                        }
+                        catch (ServerErrorException sxe)
+                        {
+                            throw new ArgumentException($"Unable to create a snapshot of process {processId:x}.", sxe);
+                        }
+                        File.AppendAllText("log_temp.diag", $"[START] LoadDump" + Environment.NewLine);
+                        try
+                        {
+                            return DataTarget.LoadDump(dumpPath);
+                        }
+                        finally
+                        {
+                            File.AppendAllText("log_temp.diag", $"[  End] LoadDump" + Environment.NewLine);
+                        }
+                    });
                 }
                 finally
                 {
