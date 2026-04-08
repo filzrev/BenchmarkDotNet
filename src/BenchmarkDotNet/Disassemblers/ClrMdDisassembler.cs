@@ -68,7 +68,7 @@ namespace BenchmarkDotNet.Disassemblers
                 string dumpPath = Path.GetTempFileName();
                 try
                 {
-                    _ = Task.Run(() =>
+                    var task = Task.Run(() =>
                     {
                         try
                         {
@@ -96,6 +96,8 @@ namespace BenchmarkDotNet.Disassemblers
                             File.AppendAllText("log_temp.diag", $"[  End] LoadDump" + Environment.NewLine);
                         }
                     });
+
+                    return task.GetAwaiter().GetResult();
                 }
                 finally
                 {
