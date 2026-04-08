@@ -42,7 +42,7 @@ namespace BenchmarkDotNet.Helpers
                     return null;
                 }
                 string output = process.StandardOutput.ReadToEnd();
-                process.WaitForExit();
+                process.WaitForExitAsync().GetAwaiter().GetResult();
                 return output;
             }
         }
