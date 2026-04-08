@@ -41,7 +41,7 @@ namespace BenchmarkDotNet.Helpers
                     Console.WriteLine(ex.ToString());
                     return null;
                 }
-                string output = process.StandardOutput.ReadToEnd();
+                string output = "";//process.StandardOutput.ReadToEnd();
                 process.WaitForExitAsync().GetAwaiter().GetResult();
                 return output;
             }
