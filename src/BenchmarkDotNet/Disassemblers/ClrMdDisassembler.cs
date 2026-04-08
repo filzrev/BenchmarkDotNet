@@ -86,20 +86,27 @@ namespace BenchmarkDotNet.Disassemblers
                         ProcessHelper.RunAndReadOutput("dotnet", "tool install dotnet-dump --local --create-manifest-if-needed");
 
                         // Gets full dump of specified process by using dotnet-dump tool.
-                        File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
-                        var stdout = ProcessHelper.RunAndReadOutput("dotnet", $"tool run dotnet-dump collect --process-id {processId} --type Full --output {dumpPath} --diag", logger: ConsoleLogger.Default);
-                        File.AppendAllText("log_temp.diag", stdout + Environment.NewLine);
 
-                        File.AppendAllText("log_temp.diag", "Length:" + new FileInfo(dumpPath).Length + Environment.NewLine);
-                        Thread.Sleep(1000 * 5);
-                        File.AppendAllText("log_temp.diag", "Length:" + new FileInfo(dumpPath).Length + Environment.NewLine);
+                        var task = Task.Run(() =>
+                        {
+                            File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
+                            var stdout = ProcessHelper.RunAndReadOutput("dotnet", $"tool run dotnet-dump collect --process-id {processId} --type Full --output {dumpPath} --diag", logger: ConsoleLogger.Default);
+                            File.AppendAllText("log_temp.diag", stdout + Environment.NewLine);
 
-                        //ProcessHelper.RunAndReadOutput($"dotnet tool install dotnet-dump --local --create-manifest-if-needed");
-                        //var log = ProcessHelper.RunAndReadOutput($"dotnet-dump colllect --process-id {processId} --type Full --output {dumpPath}");
-                        //File.AppendAllText("log_temp.diag", log + Environment.NewLine);
+                            //File.AppendAllText("log_temp.diag", "Length:" + new FileInfo(dumpPath).Length + Environment.NewLine);
+                            //Thread.Sleep(1000 * 5);
+                            //File.AppendAllText("log_temp.diag", "Length:" + new FileInfo(dumpPath).Length + Environment.NewLine);
 
-                        // client.WriteDumpAsync(DumpType.Normal, dumpPath, logDumpGeneration: true, cts.Token).ConfigureAwait(false).GetAwaiter().GetResult();
-                        File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
+                            //ProcessHelper.RunAndReadOutput($"dotnet tool install dotnet-dump --local --create-manifest-if-needed");
+                            //var log = ProcessHelper.RunAndReadOutput($"dotnet-dump colllect --process-id {processId} --type Full --output {dumpPath}");
+                            //File.AppendAllText("log_temp.diag", log + Environment.NewLine);
+
+                            // client.WriteDumpAsync(DumpType.Normal, dumpPath, logDumpGeneration: true, cts.Token).ConfigureAwait(false).GetAwaiter().GetResult();
+                            File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
+                        });
+
+                        Thread.Sleep(1000 * 300);
+
                     }
                     catch (ServerErrorException sxe)
                     {
