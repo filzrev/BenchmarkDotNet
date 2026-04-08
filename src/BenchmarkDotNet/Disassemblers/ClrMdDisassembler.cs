@@ -89,6 +89,11 @@ namespace BenchmarkDotNet.Disassemblers
                         File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
                         var stdout = ProcessHelper.RunAndReadOutput("dotnet", $"tool run dotnet-dump collect --process-id {processId} --type Full --output {dumpPath} --diag", logger: ConsoleLogger.Default);
                         File.AppendAllText("log_temp.diag", stdout + Environment.NewLine);
+
+                        File.AppendAllText("log_temp.diag", "Length:" + new FileInfo(dumpPath).Length + Environment.NewLine);
+                        Thread.Sleep(1000 * 5);
+                        File.AppendAllText("log_temp.diag", "Length:" + new FileInfo(dumpPath).Length + Environment.NewLine);
+
                         //ProcessHelper.RunAndReadOutput($"dotnet tool install dotnet-dump --local --create-manifest-if-needed");
                         //var log = ProcessHelper.RunAndReadOutput($"dotnet-dump colllect --process-id {processId} --type Full --output {dumpPath}");
                         //File.AppendAllText("log_temp.diag", log + Environment.NewLine);
