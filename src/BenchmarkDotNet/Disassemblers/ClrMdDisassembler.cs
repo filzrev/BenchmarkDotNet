@@ -103,7 +103,7 @@ namespace BenchmarkDotNet.Disassemblers
                     File.AppendAllText("log_temp.diag", $"[START] LoadDump" + Environment.NewLine);
                     try
                     {
-                        return DataTarget.LoadDump(dumpPath);
+                        return DataTarget.LoadDump(dumpPath, new CacheOptions { });
                     }
                     finally
                     {
@@ -112,7 +112,7 @@ namespace BenchmarkDotNet.Disassemblers
                 }
                 finally
                 {
-                    File.Delete(dumpPath);
+                    //File.Delete(dumpPath);
                 }
             }
             throw new NotSupportedException($"{System.Runtime.InteropServices.RuntimeInformation.OSDescription} is not supported");
