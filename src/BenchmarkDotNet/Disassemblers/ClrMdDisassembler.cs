@@ -73,7 +73,11 @@ namespace BenchmarkDotNet.Disassemblers
                         File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
 
                         var client = new DiagnosticsClient(processId);
-                        client.WriteDumpAsync(DumpType.Normal, dumpPath, logDumpGeneration: true, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+                        Thread.Sleep(1000);
+
+                        var cts = new CancellationTokenSource();
+                        cts.CancelAfter(1000 * 60);
+                        client.WriteDumpAsync(DumpType.Normal, dumpPath, logDumpGeneration: true, cts.Token).ConfigureAwait(false).GetAwaiter().GetResult();
                         File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
                     }
                     catch (ServerErrorException sxe)
