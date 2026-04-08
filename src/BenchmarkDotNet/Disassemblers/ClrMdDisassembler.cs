@@ -45,6 +45,7 @@ namespace BenchmarkDotNet.Disassemblers
             bool isSelf = processId == System.Diagnostics.Process.GetCurrentProcess().Id;
             if (OsDetector.IsWindows())
             {
+                var r = Process.GetProcessById(processId).ProcessName;
                 // Windows CoreCLR fails to disassemble generic types when using CreateSnapshotAndAttach, and succeeds with AttachToProcess. https://github.com/microsoft/clrmd/issues/1334
                 return isSelf && !RuntimeInformation.IsNetCore
                     ? DataTarget.CreateSnapshotAndAttach(processId)
@@ -70,7 +71,7 @@ namespace BenchmarkDotNet.Disassemblers
                     try
                     {
                         File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
-                        new DiagnosticsClient(processId).WriteDump(DumpType.Full, dumpPath, logDumpGeneration: false);
+                        new DiagnosticsClient(processId).WriteDump(DumpType.Normal, dumpPath, logDumpGeneration: true);
                         File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
                     }
                     catch (ServerErrorException sxe)
