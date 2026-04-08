@@ -9,6 +9,7 @@ using Microsoft.Diagnostics.Runtime;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BenchmarkDotNet.Disassemblers
 {
@@ -47,14 +48,15 @@ namespace BenchmarkDotNet.Disassemblers
             bool isSelf = processId == System.Diagnostics.Process.GetCurrentProcess().Id;
             if (OsDetector.IsWindows())
             {
-                string dumpPath = Path.GetTempFileName();
-                var log1 = ProcessHelper.RunAndReadOutput("dotnet", "tool install dotnet-dump --local --create-manifest-if-needed");
-                var log = ProcessHelper.RunAndReadOutput("dotnet-dump", $"collect --process-id {processId} --type Full --output {dumpPath}");
-                var r = Process.GetProcessById(processId).ProcessName;
-                // Windows CoreCLR fails to disassemble generic types when using CreateSnapshotAndAttach, and succeeds with AttachToProcess. https://github.com/microsoft/clrmd/issues/1334
-                return isSelf && !RuntimeInformation.IsNetCore
-                    ? DataTarget.CreateSnapshotAndAttach(processId)
-                    : DataTarget.AttachToProcess(processId, suspend: false);
+                goto TEST;
+                //string dumpPath = Path.GetTempFileName();
+                //var log1 = ProcessHelper.RunAndReadOutput("dotnet", "tool install dotnet-dump --local --create-manifest-if-needed");
+                //var log = ProcessHelper.RunAndReadOutput("dotnet-dump", $"collect --process-id {processId} --type Full --output {dumpPath}");
+                //var r = Process.GetProcessById(processId).ProcessName;
+                //// Windows CoreCLR fails to disassemble generic types when using CreateSnapshotAndAttach, and succeeds with AttachToProcess. https://github.com/microsoft/clrmd/issues/1334
+                //return isSelf && !RuntimeInformation.IsNetCore
+                //    ? DataTarget.CreateSnapshotAndAttach(processId)
+                //    : DataTarget.AttachToProcess(processId, suspend: false);
             }
             if (OsDetector.IsLinux())
             {
@@ -63,7 +65,8 @@ namespace BenchmarkDotNet.Disassemblers
                     ? DataTarget.CreateSnapshotAndAttach(processId)
                     : DataTarget.AttachToProcess(processId, suspend: false);
             }
-            if (OsDetector.IsMacOS())
+        TEST:
+            //if (OsDetector.IsMacOS())
             {
                 File.AppendAllText("log_temp.diag", $"processId(Arg): " + processId! + Environment.NewLine);
                 File.AppendAllText("log_temp.diag", $"processId(Cur): " + Process.GetCurrentProcess().Id! + Environment.NewLine);
@@ -77,11 +80,11 @@ namespace BenchmarkDotNet.Disassemblers
                     {
                         File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
 
-                        var client = new DiagnosticsClient(processId);
+                        //var client = new DiagnosticsClient(processId);
 
                         // Install dotnet-dump tool as local tool.
                         ProcessHelper.RunAndReadOutput("dotnet", "tool install dotnet-dump --local --create-manifest-if-needed");
-
+                        Console.WriteLine("abc");
                         // Gets full dump of specified process by using dotnet-dump tool.
                         var stdout = ProcessHelper.RunAndReadOutput("dotnet", $"tool run dotnet-dump collect --process-id {processId} --type Full --output {dumpPath}");
                         File.AppendAllText("log_temp.diag", stdout + Environment.NewLine);
