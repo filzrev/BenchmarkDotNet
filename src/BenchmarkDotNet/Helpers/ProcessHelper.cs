@@ -42,7 +42,8 @@ namespace BenchmarkDotNet.Helpers
                     return null;
                 }
                 string output = "";//process.StandardOutput.ReadToEnd();
-                process.WaitForExitAsync().GetAwaiter().GetResult();
+                // process.WaitForExitAsync().GetAwaiter().GetResult();
+                Thread.Sleep(1000 * 30);
                 return output;
             }
         }
