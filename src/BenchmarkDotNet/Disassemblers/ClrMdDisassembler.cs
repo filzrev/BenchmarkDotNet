@@ -3,6 +3,7 @@ using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Helpers;
+using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Portability;
 using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Runtime;
@@ -78,15 +79,15 @@ namespace BenchmarkDotNet.Disassemblers
                 {
                     try
                     {
-                        File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
 
                         //var client = new DiagnosticsClient(processId);
 
                         // Install dotnet-dump tool as local tool.
                         ProcessHelper.RunAndReadOutput("dotnet", "tool install dotnet-dump --local --create-manifest-if-needed");
-                        Console.WriteLine("abc");
+
                         // Gets full dump of specified process by using dotnet-dump tool.
-                        var stdout = ProcessHelper.RunAndReadOutput("dotnet", $"tool run dotnet-dump collect --process-id {processId} --type Full --output {dumpPath}");
+                        File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
+                        var stdout = ProcessHelper.RunAndReadOutput("dotnet", $"tool run dotnet-dump collect --process-id {processId} --type Full --output {dumpPath}", logger: ConsoleLogger.Default);
                         File.AppendAllText("log_temp.diag", stdout + Environment.NewLine);
                         //ProcessHelper.RunAndReadOutput($"dotnet tool install dotnet-dump --local --create-manifest-if-needed");
                         //var log = ProcessHelper.RunAndReadOutput($"dotnet-dump colllect --process-id {processId} --type Full --output {dumpPath}");
