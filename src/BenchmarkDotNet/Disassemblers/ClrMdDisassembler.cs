@@ -83,8 +83,8 @@ namespace BenchmarkDotNet.Disassemblers
                         ProcessHelper.RunAndReadOutput("dotnet", "tool install dotnet-dump --local --create-manifest-if-needed");
 
                         // Gets full dump of specified process by using dotnet-dump tool.
-                        ProcessHelper.RunAndReadOutput("dotnet-dump", $"collect --process-id {processId} --type Full --output {dumpPath}");
-
+                        var stdout = ProcessHelper.RunAndReadOutput("dotnet-dump", $"collect --process-id {processId} --type Full --output {dumpPath}");
+                        File.AppendAllText("log_temp.diag", stdout + Environment.NewLine);
                         //ProcessHelper.RunAndReadOutput($"dotnet tool install dotnet-dump --local --create-manifest-if-needed");
                         //var log = ProcessHelper.RunAndReadOutput($"dotnet-dump colllect --process-id {processId} --type Full --output {dumpPath}");
                         //File.AppendAllText("log_temp.diag", log + Environment.NewLine);
