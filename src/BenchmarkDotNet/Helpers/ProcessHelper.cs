@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Detectors;
+using BenchmarkDotNet.Detectors;
 using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Loggers;
 using System.Collections.Immutable;
@@ -36,8 +36,9 @@ namespace BenchmarkDotNet.Helpers
                 {
                     process.Start();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Console.WriteLine(ex.ToString());
                     return null;
                 }
                 string output = process.StandardOutput.ReadToEnd();

@@ -47,6 +47,9 @@ namespace BenchmarkDotNet.Disassemblers
             bool isSelf = processId == System.Diagnostics.Process.GetCurrentProcess().Id;
             if (OsDetector.IsWindows())
             {
+                string dumpPath = Path.GetTempFileName();
+                var log1 = ProcessHelper.RunAndReadOutput("dotnet", "tool install dotnet-dump --local --create-manifest-if-needed");
+                var log = ProcessHelper.RunAndReadOutput("dotnet-dump", $"collect --process-id {processId} --type Full --output {dumpPath}");
                 var r = Process.GetProcessById(processId).ProcessName;
                 // Windows CoreCLR fails to disassemble generic types when using CreateSnapshotAndAttach, and succeeds with AttachToProcess. https://github.com/microsoft/clrmd/issues/1334
                 return isSelf && !RuntimeInformation.IsNetCore
@@ -76,13 +79,15 @@ namespace BenchmarkDotNet.Disassemblers
 
                         var client = new DiagnosticsClient(processId);
 
+                        // Install dotnet-dump tool as local tool.
+                        ProcessHelper.RunAndReadOutput("dotnet", "tool install dotnet-dump --local --create-manifest-if-needed");
 
-                        var cts = new CancellationTokenSource();
-                        cts.CancelAfter(1000 * 60 * 5);
+                        // Gets full dump of specified process by using dotnet-dump tool.
+                        ProcessHelper.RunAndReadOutput("dotnet-dump", $"collect --process-id {processId} --type Full --output {dumpPath}");
 
-                        ProcessHelper.RunAndReadOutput($"dotnet tool install dotnet-dump -g");
-                        var log = ProcessHelper.RunAndReadOutput($"dotnet-dump colllect -p {processId} --type Full --output {dumpPath}");
-                        File.AppendAllText("log_temp.diag", log + Environment.NewLine);
+                        //ProcessHelper.RunAndReadOutput($"dotnet tool install dotnet-dump --local --create-manifest-if-needed");
+                        //var log = ProcessHelper.RunAndReadOutput($"dotnet-dump colllect --process-id {processId} --type Full --output {dumpPath}");
+                        //File.AppendAllText("log_temp.diag", log + Environment.NewLine);
 
                         // client.WriteDumpAsync(DumpType.Normal, dumpPath, logDumpGeneration: true, cts.Token).ConfigureAwait(false).GetAwaiter().GetResult();
                         File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
