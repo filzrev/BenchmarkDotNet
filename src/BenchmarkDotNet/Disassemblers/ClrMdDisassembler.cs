@@ -76,7 +76,7 @@ namespace BenchmarkDotNet.Disassemblers
                         Thread.Sleep(1000);
 
                         var cts = new CancellationTokenSource();
-                        cts.CancelAfter(1000 * 60);
+                        cts.CancelAfter(1000 * 60*15);
                         client.WriteDumpAsync(DumpType.Normal, dumpPath, logDumpGeneration: true, cts.Token).ConfigureAwait(false).GetAwaiter().GetResult();
                         File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
                     }
