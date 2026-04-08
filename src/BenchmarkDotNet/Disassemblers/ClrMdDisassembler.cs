@@ -2,10 +2,12 @@ using BenchmarkDotNet.Detectors;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Filters;
+using BenchmarkDotNet.Helpers;
 using BenchmarkDotNet.Portability;
 using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Runtime;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace BenchmarkDotNet.Disassemblers
@@ -68,36 +70,36 @@ namespace BenchmarkDotNet.Disassemblers
                 string dumpPath = Path.GetTempFileName();
                 try
                 {
-                    var task = Task.Run(() =>
+                    try
                     {
-                        try
-                        {
-                            File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
+                        File.AppendAllText("log_temp.diag", $"[START] WriteDump" + Environment.NewLine);
 
-                            var client = new DiagnosticsClient(processId);
-                            Thread.Sleep(1000);
+                        var client = new DiagnosticsClient(processId);
 
-                            var cts = new CancellationTokenSource();
-                            cts.CancelAfter(1000 * 60 * 15);
-                            client.WriteDumpAsync(DumpType.Normal, dumpPath, logDumpGeneration: true, cts.Token).ConfigureAwait(false).GetAwaiter().GetResult();
-                            File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
-                        }
-                        catch (ServerErrorException sxe)
-                        {
-                            throw new ArgumentException($"Unable to create a snapshot of process {processId:x}.", sxe);
-                        }
-                        File.AppendAllText("log_temp.diag", $"[START] LoadDump" + Environment.NewLine);
-                        try
-                        {
-                            return DataTarget.LoadDump(dumpPath);
-                        }
-                        finally
-                        {
-                            File.AppendAllText("log_temp.diag", $"[  End] LoadDump" + Environment.NewLine);
-                        }
-                    });
 
-                    return task.GetAwaiter().GetResult();
+                        var cts = new CancellationTokenSource();
+                        cts.CancelAfter(1000 * 60 * 5);
+
+                        ProcessHelper.RunAndReadOutput($"dotnet tool install dotnet-dump -g");
+                        var log = ProcessHelper.RunAndReadOutput($"dotnet-dump colllect -p {processId} --type Full --output {dumpPath}");
+                        File.AppendAllText("log_temp.diag", log + Environment.NewLine);
+
+                        // client.WriteDumpAsync(DumpType.Normal, dumpPath, logDumpGeneration: true, cts.Token).ConfigureAwait(false).GetAwaiter().GetResult();
+                        File.AppendAllText("log_temp.diag", $"[  End] WriteDump" + Environment.NewLine);
+                    }
+                    catch (ServerErrorException sxe)
+                    {
+                        throw new ArgumentException($"Unable to create a snapshot of process {processId:x}.", sxe);
+                    }
+                    File.AppendAllText("log_temp.diag", $"[START] LoadDump" + Environment.NewLine);
+                    try
+                    {
+                        return DataTarget.LoadDump(dumpPath);
+                    }
+                    finally
+                    {
+                        File.AppendAllText("log_temp.diag", $"[  End] LoadDump" + Environment.NewLine);
+                    }
                 }
                 finally
                 {
