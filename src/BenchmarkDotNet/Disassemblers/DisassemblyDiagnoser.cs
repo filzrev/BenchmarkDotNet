@@ -100,7 +100,7 @@ namespace BenchmarkDotNet.Diagnosers
                     );
                     break;
                 case HostSignal.SeparateLogic when ShouldUseMonoDisassembler(benchmark):
-                    var result = await monoDisassembler.Disassemble(benchmark, (MonoRuntime) benchmark.Job.Environment.Runtime!, cancellationToken).ConfigureAwait(false);
+                    var result = await monoDisassembler.Disassemble(benchmark, (MonoRuntime)benchmark.Job.Environment.Runtime!, cancellationToken).ConfigureAwait(false);
                     results.Add(benchmark, result);
                     break;
             }
@@ -279,7 +279,7 @@ namespace BenchmarkDotNet.Diagnosers
             var clrMdArgs = _clrMdArgs;
             clrMdArgs.ProcessId = Process.GetCurrentProcess().Id;
 
-            File.AppendAllText("log_temp.diag", $"ProcessName1: " + Process.GetCurrentProcess().ProcessName);
+            File.AppendAllText("log_temp.diag", $"ProcessName1: " + Process.GetCurrentProcess().ProcessName + Environment.NewLine);
             clrMdArgs.TypeName = args.BenchmarkInstance.GetType().FullName!;
             _result = DisassemblyDiagnoser.GetClrMdDisassembler().AttachAndDisassemble(clrMdArgs);
             return new();
