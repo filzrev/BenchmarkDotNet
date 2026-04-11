@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Analysers;
+using BenchmarkDotNet.Analysers;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Detectors;
 using BenchmarkDotNet.Disassemblers;
@@ -118,12 +118,6 @@ namespace BenchmarkDotNet.Diagnosers
             if (!(currentPlatform is Platform.X64 or Platform.X86 or Platform.Arm64))
             {
                 yield return new ValidationError(true, $"DisassemblyDiagnoser does not support {currentPlatform}");
-                yield break;
-            }
-
-            if (currentPlatform == Platform.Arm64 && OsDetector.IsWindows())
-            {
-                yield return new ValidationError(true, $"DisassemblyDiagnoser does not support Arm on Windows");
                 yield break;
             }
 
