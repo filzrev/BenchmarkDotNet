@@ -109,3 +109,4 @@ jobs:
           if-no-files-found: ignore
           path: |
             artifacts/**/*
+            **/BenchmarkDotNet.Artifacts/*.log
