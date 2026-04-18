@@ -17,8 +17,6 @@ using System.Threading;
 using BenchmarkDotNet.Detectors;
 using BenchmarkDotNet.IntegrationTests.Xunit;
 using BenchmarkDotNet.Portability;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
