@@ -37,8 +37,10 @@ jobs:
       - name: Install wasm-tools workload
         run: ./build.cmd install-wasm-tools
         
-      - run: dotnet --info
-      - run: dotnet workload list
+      - name: 111
+        run: dotnet --info
+      - name: 222
+        run: dotnet workload list
 
       # Build and Test
       - name: Run task 'build'
