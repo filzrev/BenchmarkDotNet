@@ -82,13 +82,14 @@ public class BuildRunner
         context.DotNetRestore(context.SolutionFile.FullPath, restoreSettings);
     }
 
-    public void InstallWorkload(string workloadId)
+    public void InstallWorkload(string[] workloadIds)
     {
-        context.DotNetWorkloadInstall(workloadId,
+        context.DotNetWorkloadInstall(workloadIds,
             new DotNetWorkloadInstallSettings
             {
                 IncludePreviews = true,
-                NoCache = true
+                NoCache = true,
+
             });
     }
 
