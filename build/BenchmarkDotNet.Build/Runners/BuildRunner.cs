@@ -89,7 +89,7 @@ public class BuildRunner
             {
                 IncludePreviews = true,
                 NoCache = true,
-
+                Verbosity = DotNetVerbosity.Detailed,
             });
     }
 
