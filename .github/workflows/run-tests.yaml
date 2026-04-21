@@ -36,6 +36,10 @@ jobs:
           Add-Content -Path $env:GITHUB_PATH -Value "$env:USERPROFILE\.jsvu\bin"
       - name: Install wasm-tools workload
         run: ./build.cmd install-wasm-tools
+        
+      - run: dotnet --info
+      - run: dotnet workload list
+
       # Build and Test
       - name: Run task 'build'
         shell: cmd
