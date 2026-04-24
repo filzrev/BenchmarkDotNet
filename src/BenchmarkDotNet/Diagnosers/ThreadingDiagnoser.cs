@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Analysers;
+using BenchmarkDotNet.Analysers;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Environments;
@@ -41,6 +41,12 @@ namespace BenchmarkDotNet.Diagnosers
             if (results.TryGetValue(diagnoserResults.BenchmarkCase, out var counts))
             {
                 double totalOperations = diagnoserResults.Measurements.First(m => m.IterationStage == IterationStage.Extra).Operations;
+
+                Console.WriteLine("==============");
+                Console.WriteLine($"completedWorkItemCount: {counts.completedWorkItemCount}");
+                Console.WriteLine($"totalOperations: {totalOperations}");
+                Console.WriteLine($"div: {totalOperations / counts.completedWorkItemCount}");
+                Console.WriteLine("==============");
                 yield return new Metric(new CompletedWorkItemCountMetricDescriptor(Config), counts.completedWorkItemCount / totalOperations);
                 yield return new Metric(new LockContentionCountMetricDescriptor(Config), counts.lockContentionCount / totalOperations);
             }
