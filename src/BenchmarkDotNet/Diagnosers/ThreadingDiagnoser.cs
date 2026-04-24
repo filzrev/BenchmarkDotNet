@@ -45,7 +45,7 @@ namespace BenchmarkDotNet.Diagnosers
                 Console.WriteLine("==============");
                 Console.WriteLine($"completedWorkItemCount: {counts.completedWorkItemCount}");
                 Console.WriteLine($"totalOperations: {totalOperations}");
-                Console.WriteLine($"div: {totalOperations / counts.completedWorkItemCount}");
+                Console.WriteLine($"div: {counts.completedWorkItemCount/ totalOperations }");
                 Console.WriteLine("==============");
                 yield return new Metric(new CompletedWorkItemCountMetricDescriptor(Config), counts.completedWorkItemCount / totalOperations);
                 yield return new Metric(new LockContentionCountMetricDescriptor(Config), counts.lockContentionCount / totalOperations);
