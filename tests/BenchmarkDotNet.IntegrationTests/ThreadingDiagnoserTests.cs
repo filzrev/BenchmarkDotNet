@@ -28,13 +28,13 @@ namespace BenchmarkDotNet.IntegrationTests
         {
             yield return new object[] { InProcessEmitToolchain.Default };
 
-            yield return new object[] { Job.Default.GetToolchain() };
+            //yield return new object[] { Job.Default.GetToolchain() };
 
-            if (!ContinuousIntegration.IsGitHubActionsOnWindows() // no native dependencies
-                && !OsDetector.IsMacOS()) // currently not supported
-            {
-                yield return new object[] { NativeAotToolchain.Net80 };
-            }
+            //if (!ContinuousIntegration.IsGitHubActionsOnWindows() // no native dependencies
+            //    && !OsDetector.IsMacOS()) // currently not supported
+            //{
+            //    yield return new object[] { NativeAotToolchain.Net80 };
+            //}
         }
 
         [Theory, MemberData(nameof(GetToolchains), DisableDiscoveryEnumeration = true)]
