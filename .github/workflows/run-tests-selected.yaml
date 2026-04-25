@@ -65,9 +65,12 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "24"
+          
       - name: Set up v8
         shell: pwsh
         run: |
+          $PSNativeCommandUseErrorActionPreference = $false
+          
           npm install jsvu -g
           jsvu --os=default --engines=v8
 
