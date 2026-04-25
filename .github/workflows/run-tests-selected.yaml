@@ -68,7 +68,11 @@ jobs:
       - name: Set up v8
         shell: pwsh
         run: |
+          $PSNativeCommandUseErrorActionPreference=$true        
           npm install jsvu -g
+          
+          Write-Host $LASTEXITCODE
+          
           jsvu --os=default --engines=v8
 
           $homeDir = $env:HOME
