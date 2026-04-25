@@ -74,6 +74,8 @@ jobs:
           Write-Host $LASTEXITCODE
           
           jsvu --os=default --engines=v8
+          
+          Write-Host $LASTEXITCODE
 
           $homeDir = $env:HOME
           if (-not $homeDir) {
