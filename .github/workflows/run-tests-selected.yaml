@@ -69,7 +69,7 @@ jobs:
       - name: Set up v8
         shell: pwsh
         run: |
-          $PSNativeCommandUseErrorActionPreference = $false
+          $PSNativeCommandUseErrorActionPreference = $true
           
           npm install jsvu -g
           jsvu --os=default --engines=v8
