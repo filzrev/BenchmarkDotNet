@@ -72,10 +72,12 @@ jobs:
           npm install jsvu -g
           
           Write-Host $LASTEXITCODE
+          Write-Host '--------------'
           
           jsvu --os=default --engines=v8
           
           Write-Host $LASTEXITCODE
+          Write-Host '--------------'
 
           $homeDir = $env:HOME
           if (-not $homeDir) {
