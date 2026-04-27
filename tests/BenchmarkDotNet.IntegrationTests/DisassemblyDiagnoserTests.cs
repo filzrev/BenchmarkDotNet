@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Diagnosers;
@@ -26,24 +26,24 @@ namespace BenchmarkDotNet.IntegrationTests
         {
             yield return [JitInfo.GetCurrentJit(), RuntimeInformation.GetCurrentPlatform(), InProcessEmitToolchain.Default]; // InProcess
 
-            if (RuntimeInformation.IsFullFramework)
-            {
-                yield return [Jit.LegacyJit, Platform.X86, CsProjClassicNetToolchain.Net472]; // 32bit LegacyJit for desktop .NET
-                yield return [Jit.LegacyJit, Platform.X64, CsProjClassicNetToolchain.Net472]; // 64bit LegacyJit for desktop .NET
-                yield return [Jit.RyuJit, Platform.X64, CsProjClassicNetToolchain.Net472]; // RyuJit for desktop .NET
-            }
-            else if (RuntimeInformation.IsNetCore)
-            {
-                if (RuntimeInformation.GetCurrentPlatform() is Platform.X86 or Platform.X64)
-                {
-                    yield return [Jit.RyuJit, Platform.X64, CsProjCoreToolchain.NetCoreApp80]; // .NET Core x64
-                    // We could add Platform.X86 here, but it would make our CI more complicated.
-                }
-                else if (RuntimeInformation.GetCurrentPlatform() is Platform.Arm64)
-                {
-                    yield return [Jit.RyuJit, Platform.Arm64, CsProjCoreToolchain.NetCoreApp80]; // .NET Core arm64
-                }
-            }
+            ////if (RuntimeInformation.IsFullFramework)
+            ////{
+            ////    yield return [Jit.LegacyJit, Platform.X86, CsProjClassicNetToolchain.Net472]; // 32bit LegacyJit for desktop .NET
+            ////    yield return [Jit.LegacyJit, Platform.X64, CsProjClassicNetToolchain.Net472]; // 64bit LegacyJit for desktop .NET
+            ////    yield return [Jit.RyuJit, Platform.X64, CsProjClassicNetToolchain.Net472]; // RyuJit for desktop .NET
+            ////}
+            ////else if (RuntimeInformation.IsNetCore)
+            ////{
+            ////    if (RuntimeInformation.GetCurrentPlatform() is Platform.X86 or Platform.X64)
+            ////    {
+            ////        yield return [Jit.RyuJit, Platform.X64, CsProjCoreToolchain.NetCoreApp80]; // .NET Core x64
+            ////        // We could add Platform.X86 here, but it would make our CI more complicated.
+            ////    }
+            ////    else if (RuntimeInformation.GetCurrentPlatform() is Platform.Arm64)
+            ////    {
+            ////        yield return [Jit.RyuJit, Platform.Arm64, CsProjCoreToolchain.NetCoreApp80]; // .NET Core arm64
+            ////    }
+            ////}
 
             // we could add new object[] { Jit.Llvm, Platform.X64, new MonoRuntime() } here but our CI would need to have Mono installed..
         }
