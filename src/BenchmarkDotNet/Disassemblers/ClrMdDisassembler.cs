@@ -47,9 +47,6 @@ namespace BenchmarkDotNet.Disassemblers
                 // TODO: Configure DataTargetLimits default values
             };
 
-            // Ensure symbol cache directory exists https://github.com/microsoft/clrmd/issues/1417
-            Directory.CreateDirectory(dataTargetOptions.SymbolCachePath);
-
             bool isSelf = processId == System.Diagnostics.Process.GetCurrentProcess().Id;
             if (OsDetector.IsWindows())
             {
