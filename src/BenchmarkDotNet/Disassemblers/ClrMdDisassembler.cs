@@ -41,19 +41,13 @@ namespace BenchmarkDotNet.Disassemblers
 
         private DataTarget Attach(int processId)
         {
-            var dataTargetOptions = new DataTargetOptions
-            {
-                SymbolPaths = ["https://msdl.microsoft.com/download/symbols"],
-                // TODO: Configure DataTargetLimits default values
-            };
-
             bool isSelf = processId == System.Diagnostics.Process.GetCurrentProcess().Id;
             if (OsDetector.IsWindows())
             {
                 // Windows CoreCLR fails to disassemble generic types when using CreateSnapshotAndAttach, and succeeds with AttachToProcess. https://github.com/microsoft/clrmd/issues/1334
                 return isSelf && !RuntimeInformation.IsNetCore
-                    ? DataTarget.CreateSnapshotAndAttach(processId, dataTargetOptions)
-                    : DataTarget.AttachToProcess(processId, suspend: false, dataTargetOptions);
+                    ? DataTarget.CreateSnapshotAndAttach(processId)
+                    : DataTarget.AttachToProcess(processId, suspend: false);
             }
             if (OsDetector.IsLinux())
             {
@@ -67,7 +61,7 @@ namespace BenchmarkDotNet.Disassemblers
             {
                 // On macOS it need to use CreateSnapshotAndAttach API instead of AttachToProcess.
                 // https://github.com/microsoft/clrmd/issues/1034
-                return DataTarget.CreateSnapshotAndAttach(processId, dataTargetOptions);
+                return DataTarget.CreateSnapshotAndAttach(processId);
             }
             throw new NotSupportedException($"{System.Runtime.InteropServices.RuntimeInformation.OSDescription} is not supported");
         }
