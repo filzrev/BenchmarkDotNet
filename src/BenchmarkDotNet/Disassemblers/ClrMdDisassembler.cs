@@ -3,7 +3,6 @@ using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Portability;
-using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Runtime;
 using System.Text.RegularExpressions;
 
@@ -52,7 +51,6 @@ namespace BenchmarkDotNet.Disassemblers
             if (OsDetector.IsLinux())
             {
                 // Linux crashes when using AttachToProcess in the same process.
-                // It seems not fixed by https://github.com/microsoft/clrmd/issues/1282
                 return isSelf
                     ? DataTarget.CreateSnapshotAndAttach(processId)
                     : DataTarget.AttachToProcess(processId, suspend: false);

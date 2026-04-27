@@ -1,6 +1,7 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Detectors;
 using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Disassemblers;
 using BenchmarkDotNet.Engines;
@@ -9,7 +10,6 @@ using BenchmarkDotNet.IntegrationTests.Xunit;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Portability;
 using BenchmarkDotNet.Tests.Loggers;
-using BenchmarkDotNet.Tests.XUnit;
 using BenchmarkDotNet.Toolchains;
 using BenchmarkDotNet.Toolchains.CsProj;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
@@ -86,6 +86,9 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void CanDisassembleAllMethodCalls(Jit jit, Platform platform, IToolchain toolchain)
         {
+            if (IsWindowsArm64() && RuntimeInformation.IsFullFramework && toolchain.IsInProcess)
+                return; // TODO: Use Assert.Skip after migrated to xUnit.v3
+
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
                 new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
 
@@ -106,6 +109,9 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void CanDisassembleAllMethodCallsUsingFilters(Jit jit, Platform platform, IToolchain toolchain)
         {
+            if (IsWindowsArm64() && RuntimeInformation.IsFullFramework && toolchain.IsInProcess)
+                return; // TODO: Use Assert.Skip after migrated to xUnit.v3
+
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
                 new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 1, filters: ["*WithCalls*"]));
 
@@ -132,6 +138,9 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void CanDisassembleGenericTypes(Jit jit, Platform platform, IToolchain toolchain)
         {
+            if (IsWindowsArm64() && RuntimeInformation.IsFullFramework && toolchain.IsInProcess)
+                return; // TODO: Use Assert.Skip after migrated to xUnit.v3
+
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
                 new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
 
@@ -153,6 +162,9 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void CanDisassembleInlinableBenchmarks(Jit jit, Platform platform, IToolchain toolchain)
         {
+            if (IsWindowsArm64() && RuntimeInformation.IsFullFramework && toolchain.IsInProcess)
+                return; // TODO: Use Assert.Skip after migrated to xUnit.v3
+
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
                 new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
 
@@ -187,5 +199,9 @@ namespace BenchmarkDotNet.IntegrationTests
             Assert.Contains(methodSignature, result.Methods.Select(m => m.Name.Split('.').Last()).ToArray());
             Assert.Contains(result.Methods.Single(m => m.Name.EndsWith(methodSignature)).Maps, map => map.SourceCodes.Any());
         }
+
+        private static bool IsWindowsArm64()
+            => OsDetector.IsWindows()
+            && System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture == System.Runtime.InteropServices.Architecture.Arm64;
     }
 }
