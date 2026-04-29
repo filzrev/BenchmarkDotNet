@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\build\common.props" />
   <PropertyGroup>
     <AssemblyTitle>BenchmarkDotNet.IntegrationTests</AssemblyTitle>
@@ -122,8 +122,10 @@
       <LastGenOutput>RunnableVoidCaseBenchmark.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <None Include="$(NuGetPackageRoot)gee.external.capstone\2.3.0\runtimes\win-arm64\native\capstone.dll">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </None>
+  <ItemGroup>
+    <None Include="$(NuGetPackageRoot)gee.external.capstone\2.3.0\runtimes\win-arm64\native\capstone.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="..\..\build\common.targets" />
 </Project>
