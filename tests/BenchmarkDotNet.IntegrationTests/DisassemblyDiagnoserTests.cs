@@ -58,11 +58,11 @@ namespace BenchmarkDotNet.IntegrationTests
                 sb.AppendLine($"========================================");
                 sb.AppendLine($"ProcessArchitecture: " + System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture);
                 sb.AppendLine($"OSArchitecture : " + System.Runtime.InteropServices.RuntimeInformation.OSArchitecture);
-                sb.AppendLine("GetCurrentProcessKind: "+ ProcessArchitectureHelper.GetCurrentProcessKind());
+                sb.AppendLine($"GetCurrentProcessKind: "+ ProcessArchitectureHelper.GetCurrentProcessKind());
                 sb.AppendLine($"========================================");
                 Console.WriteLine(sb.ToString());
 
-                File.AppendAllText(@"C:\a\BenchmarkDotNet\BenchmarkDotNet\artifacts\temp\log.txt", sb.ToString());
+                File.AppendAllText(@"C:/a/_temp/a.log", sb.ToString());
             }
 
             [Benchmark]

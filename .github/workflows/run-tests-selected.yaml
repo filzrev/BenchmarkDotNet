@@ -86,4 +86,4 @@ jobs:
           name: results
           if-no-files-found: ignore
           path: |
-            artifacts/**/*
+            C:/a/_temp/*.log
