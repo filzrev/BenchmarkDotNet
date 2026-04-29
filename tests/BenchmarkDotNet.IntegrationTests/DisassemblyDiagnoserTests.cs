@@ -103,6 +103,14 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void Test123()
         {
+            Console.WriteLine("IsDietModeEnabled: " + CapstoneDisassembler.IsDietModeEnabled);
+            Console.WriteLine("IsArm64Supported: " + CapstoneDisassembler.IsArm64Supported);
+
+            var dir = Environment.CurrentDirectory;
+            var path = new DirectoryInfo(dir).GetFiles("capstone.dll", SearchOption.AllDirectories)
+                .Where(x => x.DirectoryName == "native" && x.Directory!.Parent!.Name == "win-arm64")
+                .FirstOrDefault();
+            Console.WriteLine("DLLPath: " + path);
             //var path = Path.Combine(AppContext.BaseDirectory, @"runtimes/win-arm64/native/capstone.dll");
             //Assembly.LoadFrom(path);
 
