@@ -14,6 +14,7 @@ using BenchmarkDotNet.Toolchains;
 using BenchmarkDotNet.Toolchains.CsProj;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
@@ -91,6 +92,7 @@ namespace BenchmarkDotNet.IntegrationTests
             Console.WriteLine($"IsInProcess: " + toolchain.IsInProcess);
             Console.WriteLine($"ProcessArchitecture: " + System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture);
             Console.WriteLine($"OSArchitecture : " + System.Runtime.InteropServices.RuntimeInformation.OSArchitecture);
+            Console.WriteLine(ProcessArchitectureHelper.GetCurrentProcessKind());
             Console.WriteLine($"--------------------------------");
 
             ////if (IsWindowsArm64() && RuntimeInformation.IsFullFramework && toolchain.IsInProcess)
@@ -210,5 +212,76 @@ namespace BenchmarkDotNet.IntegrationTests
         private static bool IsWindowsArm64()
             => OsDetector.IsWindows()
             && System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture == System.Runtime.InteropServices.Architecture.Arm64;
+    }
+
+    public static class ProcessArchitectureHelper
+    {
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool IsWow64Process2(
+            IntPtr hProcess,
+            out ushort processMachine,
+            out ushort nativeMachine);
+
+        private const ushort IMAGE_FILE_MACHINE_UNKNOWN = 0x0000;
+        private const ushort IMAGE_FILE_MACHINE_I386 = 0x014c;
+        private const ushort IMAGE_FILE_MACHINE_AMD64 = 0x8664;
+        private const ushort IMAGE_FILE_MACHINE_ARM64 = 0xAA64;
+
+        public enum ProcessKind
+        {
+            Unknown,
+            NativeX64,
+            NativeArm64,
+            NativeX86,
+            X64EmulatedOnArm64,
+            X86EmulatedOnArm64
+        }
+
+        public static ProcessKind GetCurrentProcessKind()
+        {
+            return GetProcessKind(Process.GetCurrentProcess().Handle);
+        }
+
+        public static ProcessKind GetProcessKind(IntPtr processHandle)
+        {
+            if (!IsWow64Process2(processHandle, out ushort processMachine, out ushort nativeMachine))
+                return ProcessKind.Unknown;
+
+            return Classify(processMachine, nativeMachine);
+        }
+
+        public static bool IsArm64Native()
+            => GetCurrentProcessKind() == ProcessKind.NativeArm64;
+
+        public static bool IsX64EmulatedOnArm64()
+            => GetCurrentProcessKind() == ProcessKind.X64EmulatedOnArm64;
+
+        public static bool IsX86EmulatedOnArm64()
+            => GetCurrentProcessKind() == ProcessKind.X86EmulatedOnArm64;
+
+        private static ProcessKind Classify(ushort processMachine, ushort nativeMachine)
+        {
+            return nativeMachine switch
+            {
+                IMAGE_FILE_MACHINE_ARM64 => processMachine switch
+                {
+                    IMAGE_FILE_MACHINE_UNKNOWN => ProcessKind.NativeArm64,
+                    IMAGE_FILE_MACHINE_AMD64 => ProcessKind.X64EmulatedOnArm64,
+                    IMAGE_FILE_MACHINE_I386 => ProcessKind.X86EmulatedOnArm64,
+                    _ => ProcessKind.Unknown
+                },
+
+                IMAGE_FILE_MACHINE_AMD64 => processMachine switch
+                {
+                    IMAGE_FILE_MACHINE_UNKNOWN => ProcessKind.NativeX64,
+                    IMAGE_FILE_MACHINE_I386 => ProcessKind.NativeX86,
+                    _ => ProcessKind.Unknown
+                },
+
+                IMAGE_FILE_MACHINE_I386 => ProcessKind.NativeX86,
+
+                _ => ProcessKind.Unknown
+            };
+        }
     }
 }
