@@ -13,6 +13,7 @@
     <DebugSymbols>true</DebugSymbols>
     <NoWarn>$(NoWarn);CA2007;CA1825</NoWarn>
     <ServerGarbageCollection>true</ServerGarbageCollection>
+    <GenerateDependencyFile>true</GenerateDependencyFile>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="xunit.runner.json">

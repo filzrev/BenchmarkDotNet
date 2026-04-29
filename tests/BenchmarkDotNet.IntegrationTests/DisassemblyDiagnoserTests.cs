@@ -103,8 +103,8 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void Test123()
         {
-            var path = Path.Combine(AppContext.BaseDirectory, @"runtimes/win-arm64/native/capstone.dll");
-            Assembly.LoadFrom(path);
+            //var path = Path.Combine(AppContext.BaseDirectory, @"runtimes/win-arm64/native/capstone.dll");
+            //Assembly.LoadFrom(path);
 
             AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
             {
