@@ -14,6 +14,7 @@ using BenchmarkDotNet.Toolchains;
 using BenchmarkDotNet.Toolchains.CsProj;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
@@ -52,11 +53,16 @@ namespace BenchmarkDotNet.IntegrationTests
         {
             public WithCalls()
             {
-                Console.WriteLine($"========================================");
-                Console.WriteLine($"ProcessArchitecture: " + System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture);
-                Console.WriteLine($"OSArchitecture : " + System.Runtime.InteropServices.RuntimeInformation.OSArchitecture);
-                Console.WriteLine("GetCurrentProcessKind: " + ProcessArchitectureHelper.GetCurrentProcessKind());
-                Console.WriteLine($"========================================");
+                StringBuilder sb = new StringBuilder();
+
+                sb.AppendLine($"========================================");
+                sb.AppendLine($"ProcessArchitecture: " + System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture);
+                sb.AppendLine($"OSArchitecture : " + System.Runtime.InteropServices.RuntimeInformation.OSArchitecture);
+                sb.AppendLine("GetCurrentProcessKind: "+ ProcessArchitectureHelper.GetCurrentProcessKind());
+                sb.AppendLine($"========================================");
+                Console.WriteLine(sb.ToString());
+
+                File.AppendAllText(@"C:\a\BenchmarkDotNet\BenchmarkDotNet\artifacts\log.txt", sb.ToString());
             }
 
             [Benchmark]
