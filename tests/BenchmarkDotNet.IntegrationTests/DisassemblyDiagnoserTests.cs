@@ -15,7 +15,9 @@ using BenchmarkDotNet.Toolchains.CsProj;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using Gee.External.Capstone;
 using Gee.External.Capstone.Arm64;
+using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Loader;
 using System.Text;
 using Xunit.Abstractions;
 
@@ -102,9 +104,15 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void Test123()
         {
-            AppDomain.CurrentDomain.AssemblyLoad += (sender, e) =>
+
+
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
             {
-                Console.WriteLine($"{e.LoadedAssembly.FullName}::::{e.LoadedAssembly.Location}");
+                if (e.Name.Contains("capstone"))
+                {
+                    Console.WriteLine($"{e.Name}:::{e.RequestingAssembly!.FullName}:::::{e.RequestingAssembly!.Location}");
+                }
+                return Assembly.Load(e.Name);
             };
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
             // when it is no longer needed.
