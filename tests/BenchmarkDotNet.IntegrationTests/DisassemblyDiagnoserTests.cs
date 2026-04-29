@@ -15,6 +15,7 @@ using BenchmarkDotNet.Toolchains.CsProj;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using Gee.External.Capstone;
 using Gee.External.Capstone.Arm64;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -107,7 +108,10 @@ namespace BenchmarkDotNet.IntegrationTests
             var dir = Environment.CurrentDirectory;
 
             Console.WriteLine("CurrentDir: " + dir);
-            var path = new DirectoryInfo(Path.Combine("../../", dir)).GetFiles("capstone.dll", SearchOption.AllDirectories)
+
+            var o = Process.Start("tree", "/A /F");
+            o.WaitForExit();
+            var path = new DirectoryInfo(Path.Combine("../../", dir)).GetFiles("*capstone*", SearchOption.AllDirectories)
                 .Where(x => x.DirectoryName == "native" && x.Directory!.Parent!.Name == "win-x64")
                 .First()
                 .FullName;
