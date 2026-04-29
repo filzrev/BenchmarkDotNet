@@ -60,7 +60,7 @@ namespace BenchmarkDotNet.IntegrationTests
                 sb.AppendLine($"========================================");
                 sb.AppendLine($"ProcessArchitecture: " + System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture);
                 sb.AppendLine($"OSArchitecture : " + System.Runtime.InteropServices.RuntimeInformation.OSArchitecture);
-                sb.AppendLine($"GetCurrentProcessKind: "+ ProcessArchitectureHelper.GetCurrentProcessKind());
+                sb.AppendLine($"GetCurrentProcessKind: " + ProcessArchitectureHelper.GetCurrentProcessKind());
                 sb.AppendLine($"========================================");
                 Console.WriteLine(sb.ToString());
 
@@ -102,6 +102,10 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void Test123()
         {
+            AppDomain.CurrentDomain.AssemblyLoad += (sender, e) =>
+            {
+                Console.WriteLine($"{e.LoadedAssembly.FullName}::::{e.LoadedAssembly.Location}");
+            };
             // Creating the disassembler in a "using" statement ensures that resources get cleaned up automatically
             // when it is no longer needed.
             const Arm64DisassembleMode disassembleMode = Arm64DisassembleMode.Arm;
@@ -125,6 +129,7 @@ namespace BenchmarkDotNet.IntegrationTests
                 Arm64Instruction[] instructions = disassembler.Disassemble(binaryCode);
                 foreach (Arm64Instruction instruction in instructions)
                 {
+                    Console.WriteLine(instruction.ToString());
                     // ...
                     //
                     // Do your magic!
@@ -137,6 +142,11 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void CanDisassembleAllMethodCalls(Jit jit, Platform platform, IToolchain toolchain)
         {
+            AppDomain.CurrentDomain.AssemblyLoad += (sender, e) =>
+            {
+                Console.WriteLine($"{e.LoadedAssembly.FullName}::::{e.LoadedAssembly.Location}");
+            };
+
             Console.WriteLine($"--------------------------------");
             Console.WriteLine($"Toolchain: " + toolchain.Name);
             Console.WriteLine($"IsInProcess: " + toolchain.IsInProcess);
