@@ -82,7 +82,7 @@ jobs:
         if: always()
         run: |
           sudo apt install tree
-          tree tests/BenchmarkDotNet.IntegrationTests/bin/Release -f
+          tree -f ./tests/BenchmarkDotNet.IntegrationTests/bin/Release
 
       # Upload artifact files that are located at `$(GITHUB_WORKSPACE)/artifacts` directory
       - name: Upload test results
