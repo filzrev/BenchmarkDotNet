@@ -107,7 +107,7 @@ namespace BenchmarkDotNet.IntegrationTests
             var dir = Environment.CurrentDirectory;
 
             Console.WriteLine("CurrentDir: " + dir);
-            var path = new DirectoryInfo(dir).GetFiles("capstone.dll", SearchOption.AllDirectories)
+            var path = new DirectoryInfo(dir).GetFiles("capstone*", SearchOption.AllDirectories)
                 .Where(x => x.DirectoryName == "native" && x.Directory!.Parent!.Name == "win-x64").First().FullName;
 
             Console.WriteLine("DLLPath: " + path);
