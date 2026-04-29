@@ -77,6 +77,12 @@ jobs:
 
             Write-Output '##[endgroup]'
           }
+          
+      - name: Tree
+        if: always()
+        run: |
+          sudo apt install tree
+          tree .  
 
       # Upload artifact files that are located at `$(GITHUB_WORKSPACE)/artifacts` directory
       - name: Upload test results
