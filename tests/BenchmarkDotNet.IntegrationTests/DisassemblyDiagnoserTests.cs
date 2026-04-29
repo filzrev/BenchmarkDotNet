@@ -62,7 +62,7 @@ namespace BenchmarkDotNet.IntegrationTests
                 sb.AppendLine($"========================================");
                 Console.WriteLine(sb.ToString());
 
-                File.AppendAllText(@"C:\a\BenchmarkDotNet\BenchmarkDotNet\artifacts\log.txt", sb.ToString());
+                File.AppendAllText(@"C:\a\BenchmarkDotNet\BenchmarkDotNet\artifacts\temp\log.txt", sb.ToString());
             }
 
             [Benchmark]
