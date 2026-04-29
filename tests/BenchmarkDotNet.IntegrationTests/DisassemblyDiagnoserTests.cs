@@ -50,6 +50,15 @@ namespace BenchmarkDotNet.IntegrationTests
 
         public class WithCalls
         {
+            public WithCalls()
+            {
+                Console.WriteLine($"========================================");
+                Console.WriteLine($"ProcessArchitecture: " + System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture);
+                Console.WriteLine($"OSArchitecture : " + System.Runtime.InteropServices.RuntimeInformation.OSArchitecture);
+                Console.WriteLine("GetCurrentProcessKind: " + ProcessArchitectureHelper.GetCurrentProcessKind());
+                Console.WriteLine($"========================================");
+            }
+
             [Benchmark]
             [Arguments(int.MaxValue)]
             public void Benchmark(int someArgument)
@@ -98,7 +107,7 @@ namespace BenchmarkDotNet.IntegrationTests
             ////    return; // TODO: Use Assert.Skip after migrated to xUnit.v3
 
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
-                new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
+                new DisassemblyDiagnoserConfig(printSource: false, maxDepth: 3));
 
             CanExecute<WithCalls>(CreateConfig(jit, platform, toolchain, disassemblyDiagnoser, RunStrategy.ColdStart));
 
