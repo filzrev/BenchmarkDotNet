@@ -105,6 +105,8 @@ namespace BenchmarkDotNet.IntegrationTests
         {
 
             var dir = Environment.CurrentDirectory;
+
+            Console.WriteLine("CurrentDir: " + dir);
             var path = new DirectoryInfo(dir).GetFiles("capstone.dll", SearchOption.AllDirectories)
                 .Where(x => x.DirectoryName == "native" && x.Directory!.Parent!.Name == "win-x64").First().FullName;
 
@@ -113,7 +115,7 @@ namespace BenchmarkDotNet.IntegrationTests
 
             Console.WriteLine("IsDietModeEnabled: " + CapstoneDisassembler.IsDietModeEnabled);
             Console.WriteLine("IsArm64Supported: " + CapstoneDisassembler.IsArm64Supported);
-           
+
             //var path = Path.Combine(AppContext.BaseDirectory, @"runtimes/win-arm64/native/capstone.dll");
             //Assembly.LoadFrom(path);
 
