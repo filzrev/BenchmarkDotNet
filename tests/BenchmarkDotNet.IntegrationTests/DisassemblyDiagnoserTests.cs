@@ -86,8 +86,15 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void CanDisassembleAllMethodCalls(Jit jit, Platform platform, IToolchain toolchain)
         {
-            if (IsWindowsArm64() && RuntimeInformation.IsFullFramework && toolchain.IsInProcess)
-                return; // TODO: Use Assert.Skip after migrated to xUnit.v3
+            Console.WriteLine($"--------------------------------");
+            Console.WriteLine($"Toolchain: " + toolchain.Name);
+            Console.WriteLine($"IsInProcess: " + toolchain.IsInProcess);
+            Console.WriteLine($"ProcessArchitecture: " + System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture);
+            Console.WriteLine($"OSArchitecture : " + System.Runtime.InteropServices.RuntimeInformation.OSArchitecture);
+            Console.WriteLine($"--------------------------------");
+
+            ////if (IsWindowsArm64() && RuntimeInformation.IsFullFramework && toolchain.IsInProcess)
+            ////    return; // TODO: Use Assert.Skip after migrated to xUnit.v3
 
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
                 new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
