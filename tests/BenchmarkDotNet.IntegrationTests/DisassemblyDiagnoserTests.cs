@@ -17,7 +17,6 @@ using Gee.External.Capstone;
 using Gee.External.Capstone.Arm64;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.Loader;
 using System.Text;
 using Xunit.Abstractions;
 
