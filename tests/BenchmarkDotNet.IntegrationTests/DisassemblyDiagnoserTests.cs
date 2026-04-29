@@ -109,6 +109,8 @@ namespace BenchmarkDotNet.IntegrationTests
 
             Console.WriteLine("CurrentDir: " + dir);
 
+            File.Delete("capstone.dll");
+
             var o = Process.Start("tree", "/A /F");
             o.WaitForExit();
             var path = new DirectoryInfo(Path.Combine("../../", dir)).GetFiles("*capstone*", SearchOption.AllDirectories)
