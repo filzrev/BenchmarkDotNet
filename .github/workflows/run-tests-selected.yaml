@@ -81,8 +81,7 @@ jobs:
       - name: Tree
         if: always()
         run: |
-          sudo apt install tree
-          tree -a -L 20
+          tree /A /F
 
       # Upload artifact files that are located at `$(GITHUB_WORKSPACE)/artifacts` directory
       - name: Upload test results
