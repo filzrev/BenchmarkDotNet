@@ -113,13 +113,13 @@ namespace BenchmarkDotNet.IntegrationTests
 
             var o = Process.Start("tree", "/A /F");
             o.WaitForExit();
-            var path = new DirectoryInfo(Path.Combine("../../", dir)).GetFiles("*capstone*", SearchOption.AllDirectories)
-                .Where(x => x.DirectoryName == "native" && x.Directory!.Parent!.Name == "win-x64")
-                .First()
-                .FullName;
+            ////var path = new DirectoryInfo(Path.Combine("../../", dir)).GetFiles("*capstone*", SearchOption.AllDirectories)
+            ////    .Where(x => x.DirectoryName == "native" && x.Directory!.Parent!.Name == "win-x64")
+            ////    .First()
+            ////    .FullName;
 
-            Console.WriteLine("DLLPath: " + path);
-            Assembly.LoadFrom(path);
+            ////Console.WriteLine("DLLPath: " + path);
+            ////Assembly.LoadFrom(path);
 
             Console.WriteLine("IsDietModeEnabled: " + CapstoneDisassembler.IsDietModeEnabled);
             Console.WriteLine("IsArm64Supported: " + CapstoneDisassembler.IsArm64Supported);
