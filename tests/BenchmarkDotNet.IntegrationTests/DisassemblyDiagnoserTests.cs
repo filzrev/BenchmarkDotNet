@@ -109,7 +109,7 @@ namespace BenchmarkDotNet.IntegrationTests
 
             Console.WriteLine("CurrentDir: " + dir);
 
-            File.Delete("capstone.dll");
+            //File.Delete("capstone.dll");
 
             var o = Process.Start("tree", "/A /F");
             o.WaitForExit();
@@ -119,7 +119,8 @@ namespace BenchmarkDotNet.IntegrationTests
             ////    .FullName;
 
             ////Console.WriteLine("DLLPath: " + path);
-            ////Assembly.LoadFrom(path);
+            if (File.Exists("capstone.dll"))
+                Assembly.LoadFrom("capstone.dll");
 
             Console.WriteLine("IsDietModeEnabled: " + CapstoneDisassembler.IsDietModeEnabled);
             Console.WriteLine("IsArm64Supported: " + CapstoneDisassembler.IsArm64Supported);
