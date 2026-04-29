@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETFramework' ">
+    <!-- Settings to run .NET Framework tests without x64 emulation when using `dotnet test` command -->
+    <PreferNativeArm64>true</PreferNativeArm64>
+  </PropertyGroup>
+</Project>
