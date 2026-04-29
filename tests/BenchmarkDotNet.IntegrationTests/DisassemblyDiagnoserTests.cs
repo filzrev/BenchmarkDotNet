@@ -14,7 +14,6 @@ using BenchmarkDotNet.Toolchains;
 using BenchmarkDotNet.Toolchains.CsProj;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Xunit.Abstractions;
 
 namespace BenchmarkDotNet.IntegrationTests
@@ -216,7 +215,7 @@ namespace BenchmarkDotNet.IntegrationTests
 
     public static class ProcessArchitectureHelper
     {
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool IsWow64Process2(
             IntPtr hProcess,
             out ushort processMachine,
@@ -239,7 +238,7 @@ namespace BenchmarkDotNet.IntegrationTests
 
         public static ProcessKind GetCurrentProcessKind()
         {
-            return GetProcessKind(Process.GetCurrentProcess().Handle);
+            return GetProcessKind(System.Diagnostics.Process.GetCurrentProcess().Handle);
         }
 
         public static ProcessKind GetProcessKind(IntPtr processHandle)
