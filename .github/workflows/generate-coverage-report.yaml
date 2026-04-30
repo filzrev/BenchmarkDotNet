@@ -23,11 +23,10 @@ jobs:
       matrix:
         # Note: ARM64 on linux/macos are not supported.
         # https://github.com/microsoft/codecoverage/blob/main/docs/supported-os.md
-        os: [windows-latest, ubuntu-latest, macos-15-intel, windows-11-arm]
+        os: [windows-latest, ubuntu-latest, macos-26-intel, windows-11-arm]
     steps:
       - uses: actions/checkout@v6
 
-      # Ensure DOTNET_ROOT environment variable set on macos-15-intel 
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
