@@ -62,8 +62,10 @@ jobs:
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: test-windows-core-trx-${{ github.run_id }}-${{ matrix.os }}
-          path: "**/*.trx"
+          name: test-windows-core-${{ github.run_id }}-${{ matrix.os }}
+          path: |
+            **/*.trx
+            **/BenchmarkDotNet.Artifacts/**/*
 
   test-windows-full:
     strategy:
@@ -115,8 +117,10 @@ jobs:
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: test-windows-full-trx-${{ github.run_id }}-${{ matrix.os }}
-          path: "**/*.trx"
+          name: test-windows-full-${{ github.run_id }}-${{ matrix.os }}
+          path: |
+            **/*.trx
+            **/BenchmarkDotNet.Artifacts/**/*
 
   test-linux:
     strategy:
@@ -156,8 +160,10 @@ jobs:
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: test-linux-trx-${{ github.run_id }}-${{ matrix.os }}
-          path: "**/*.trx"
+          name: test-linux-${{ github.run_id }}-${{ matrix.os }}
+          path: |
+            **/*.trx
+            **/BenchmarkDotNet.Artifacts/**/*
 
   test-macos:
     name: test-macos (${{ matrix.os.arch }})
@@ -201,8 +207,10 @@ jobs:
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: test-macos(${{ matrix.os.arch }})-trx-${{ github.run_id }}
-          path: "**/*.trx"
+          name: test-macos(${{ matrix.os.arch }})-${{ github.run_id }}
+          path: |
+            **/*.trx
+            **/BenchmarkDotNet.Artifacts/**/*
 
   test-pack:
     runs-on: ubuntu-latest
