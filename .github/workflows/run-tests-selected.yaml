@@ -55,7 +55,7 @@ jobs:
       - name: Run build
         working-directory: ${{ github.event.inputs.project }}
         run: |
-          dotnet build -c Release --framework ${{ inputs.framework }} -tl:off
+          dotnet build -c Release --framework ${{ inputs.framework }} -tl:off -bl
 
       # Test
       - name: Run tests
@@ -89,3 +89,4 @@ jobs:
           if-no-files-found: ignore
           path: |
             artifacts/**/*
+            **/*.binlog
