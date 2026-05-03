@@ -17,9 +17,6 @@
     <EmbeddedResource Include="Templates\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BenchmarkDotNet.targets" Pack="true" PackagePath="buildTransitive" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="/" />
   </ItemGroup>
   <ItemGroup>
