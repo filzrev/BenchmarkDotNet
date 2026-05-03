@@ -86,9 +86,6 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void CanDisassembleAllMethodCalls(Jit jit, Platform platform, IToolchain toolchain)
         {
-            if (OsDetector.IsMacOS() && toolchain.IsInProcess)
-                Assert.Skip("https://github.com/dotnet/BenchmarkDotNet/issues/3076");
-
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
                 new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
 
@@ -109,9 +106,6 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void CanDisassembleAllMethodCallsUsingFilters(Jit jit, Platform platform, IToolchain toolchain)
         {
-            if (OsDetector.IsMacOS())
-                Assert.Skip("https://github.com/dotnet/BenchmarkDotNet/issues/3076");
-
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
                 new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 1, filters: ["*WithCalls*"]));
 
@@ -138,9 +132,6 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void CanDisassembleGenericTypes(Jit jit, Platform platform, IToolchain toolchain)
         {
-            if (OsDetector.IsMacOS())
-                Assert.Skip("https://github.com/dotnet/BenchmarkDotNet/issues/3076");
-
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
                 new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
 
@@ -162,9 +153,6 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void CanDisassembleInlinableBenchmarks(Jit jit, Platform platform, IToolchain toolchain)
         {
-            if (OsDetector.IsMacOS())
-                Assert.Skip("https://github.com/dotnet/BenchmarkDotNet/issues/3076");
-
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
                 new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
 
