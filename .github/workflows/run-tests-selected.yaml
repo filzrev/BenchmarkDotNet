@@ -73,6 +73,13 @@ jobs:
             Write-Output '##[endgroup]'
           }
 
+      - name: List files
+        if: always()
+        shell: pwsh
+        run: |
+          cd C:\a\BenchmarkDotNet\BenchmarkDotNet\tests\BenchmarkDotNet.IntegrationTests\bin\Release\net472
+          tree /F /A
+
       # Upload artifact files that are located at `$(GITHUB_WORKSPACE)/artifacts` directory
       - name: Upload test results
         uses: actions/upload-artifact@v7
