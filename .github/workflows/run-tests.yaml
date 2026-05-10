@@ -20,7 +20,6 @@ jobs:
     steps:
       - shell: pwsh
         run: |
-          wmic.exe /?
           systeminfo
           $win32_Processor = Get-CimInstance -ClassName Win32_Processor
           Write-Host $win32_Processor.CurrentClockSpeed
