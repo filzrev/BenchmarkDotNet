@@ -35,7 +35,7 @@ internal class WmicCpuDetector : ICpuDetector
             return null;
 
         Console.WriteLine("==================================");
-        Console.WriteLine("wmicOutput);
+        Console.WriteLine(wmicOutput);
         Console.WriteLine("==================================");
         return WmiCpuInfoParser.Parse(wmicOutput);
     }
