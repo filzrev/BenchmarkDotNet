@@ -32,7 +32,7 @@ jobs:
         run: ./build.cmd build
       - name: Run task 'in-tests-core'
         shell: cmd
-        run: dotnet test -c Release -filter SpecifiedProcessorArchitectureMustBeRespected
+        run: dotnet test -c Release --filter SpecifiedProcessorArchitectureMustBeRespected
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
