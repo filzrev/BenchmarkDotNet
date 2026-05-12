@@ -32,7 +32,6 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)strongNameKey.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
-    <RestoreUseStaticGraphEvaluation>true</RestoreUseStaticGraphEvaluation>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GenerateDocumentationFile)' == '' AND '$(Configuration)' == 'Release' ">
@@ -41,10 +40,6 @@
 
   <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj' ">
     <LangVersion>preview</LangVersion>
-    <EnablePreviewFeatures>true</EnablePreviewFeatures>
-    <Features>$(Features);runtime-async=on</Features>
-    <NoWarn>$(NoWarn);SYSLIB5007</NoWarn>
-    <NoWarn>$(NoWarn);CA2252</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(VersionPrefix)' == '' ">
