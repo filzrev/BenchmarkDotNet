@@ -38,7 +38,7 @@ namespace BenchmarkDotNet.Helpers
                 }
                 catch (Exception)
                 {
-                    return null;
+                    throw;
                 }
                 string output = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
