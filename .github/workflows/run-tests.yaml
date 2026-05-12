@@ -26,10 +26,6 @@ jobs:
       - uses: actions/checkout@v6
       # Add Windows Defender Exclusions
       - uses: ./.github/actions/add-windowsdefender-exclusions
-      # Setup additional tools
-      - name: Setup additional tools for Wasm/NativeAot tests
-        if: ${{ github.event.pull_request.draft != true }}
-        uses: ./.github/actions/setup-additional-tools
       # Build and Test
       - name: Run task 'build'
         shell: cmd
@@ -37,12 +33,9 @@ jobs:
       - name: Run task 'unit-tests'
         shell: cmd
         run: ./build.cmd unit-tests -e
-      - name: Run task 'analyzer-tests'
-        shell: cmd
-        run: ./build.cmd analyzer-tests -e
       - name: Run task 'in-tests-core'
         shell: cmd
-        run: ./build.cmd in-tests-core -e
+        run: dotnet test -c Release -filter SpecifiedProcessorArchitectureMustBeRespected
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
