@@ -1,11 +1,14 @@
-using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Helpers;
 using Microsoft.Win32;
 using Perfolizer.Models;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+
+#if NETSTANDARD
+using BenchmarkDotNet.Extensions;
 using static System.Runtime.InteropServices.RuntimeInformation;
 using RuntimeEnvironment = Microsoft.DotNet.PlatformAbstractions.RuntimeEnvironment;
+#endif
 
 namespace BenchmarkDotNet.Detectors;
 
@@ -53,8 +56,13 @@ public class OsDetector
             }
         }
 
+#if NETSTANDARD
         string operatingSystem = RuntimeEnvironment.OperatingSystem;
         string operatingSystemVersion = RuntimeEnvironment.OperatingSystemVersion;
+#else
+        string operatingSystem = RuntimeInformation.OSDescription;
+        string operatingSystemVersion = Environment.OSVersion.VersionString;
+#endif
         if (IsWindows())
         {
             int? ubr = GetWindowsUbr();
