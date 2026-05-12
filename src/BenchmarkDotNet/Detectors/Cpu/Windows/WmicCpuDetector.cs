@@ -34,6 +34,9 @@ internal class WmicCpuDetector : ICpuDetector
         if (wmicOutput.IsBlank())
             return null;
 
+        Console.WriteLine("==================================");
+        Console.WriteLine("wmicOutput);
+        Console.WriteLine("==================================");
         return WmiCpuInfoParser.Parse(wmicOutput);
     }
 }

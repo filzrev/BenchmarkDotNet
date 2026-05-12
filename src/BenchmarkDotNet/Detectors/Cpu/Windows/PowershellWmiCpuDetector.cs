@@ -29,6 +29,10 @@ internal class PowershellWmiCpuDetector : ICpuDetector
         if (output.IsBlank())
             return null;
 
+        Console.WriteLine("==================================");
+        Console.WriteLine(output);
+        Console.WriteLine("==================================");
+
         return WmiCpuInfoParser.Parse(output);
     }
 }
