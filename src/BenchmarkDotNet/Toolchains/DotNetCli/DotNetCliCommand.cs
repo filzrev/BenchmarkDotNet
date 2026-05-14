@@ -165,6 +165,7 @@ namespace BenchmarkDotNet.Toolchains.DotNetCli
                 .AppendArgument("build")
                 .AppendArgument($"\"{filePath}\"")
                 .AppendArgument($"-f {tfm}")
+                .AppendArgument($"--multithreaded") // Experimental
                 .AppendArgument($"-c {buildPartition.BuildConfiguration}")
                 .AppendArgument(GetCustomMsBuildArguments(buildPartition.RepresentativeBenchmarkCase, buildPartition.Resolver))
                 .AppendArgument(extraArguments)
