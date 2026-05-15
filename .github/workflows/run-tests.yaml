@@ -22,5 +22,17 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - run : |
-       cat /proc/cpuinfo
-       lscpu
+          {
+            echo '## lscpu'
+            echo
+            echo '```txt'
+            cat /proc/cpuinfo
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo '## lscpu'
+            echo
+            echo '```txt'
+            lscpu
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
