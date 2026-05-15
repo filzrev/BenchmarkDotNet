@@ -14,7 +14,6 @@ env:
   LANGUAGE: C
 
 jobs:
-
   test-linux:
     strategy:
       matrix:
