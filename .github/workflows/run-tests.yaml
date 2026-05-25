@@ -50,6 +50,9 @@ jobs:
         with:
           name: test-windows-core-${{ matrix.os }}
           path: "**/*.trx"
+          list-suites: 'failed'
+          list-tests: 'failed'
+          list-files: 'failed'
           reporter: dotnet-trx
       # Upload Artifacts with Unique Name
       - name: Upload test results
@@ -93,6 +96,9 @@ jobs:
         with:
           name: test-windows-full-${{ matrix.os }}
           path: "**/*.trx"
+          list-suites: 'failed'
+          list-tests: 'failed'
+          list-files: 'failed'
           reporter: dotnet-trx
       # Upload Artifacts with Unique Name
       - name: Upload test results
@@ -129,6 +135,9 @@ jobs:
         with:
           name: test-linux-${{ matrix.os }}
           path: "**/*.trx"
+          list-suites: 'failed'
+          list-tests: 'failed'
+          list-files: 'failed'
           reporter: dotnet-trx
       # Upload Artifacts with Unique Name
       - name: Upload test results
@@ -170,6 +179,9 @@ jobs:
         with:
           name: test-macos(${{ matrix.os.arch }})
           path: "**/*.trx"
+          list-suites: 'failed'
+          list-tests: 'failed'
+          list-files: 'failed'
           reporter: dotnet-trx
       # Upload Artifacts with Unique Name
       - name: Upload test results
