@@ -1,0 +1,100 @@
+name: Report failed tests
+description: Parse trx files and report failed tests to JobSummary
+
+runs:
+  using: composite
+  steps:
+    - name: Report Failed Tests
+      shell: pwsh
+      run: |
+        $maxReportCount = 10
+
+        $trxFiles = Get-ChildItem -Recurse -File -Filter *.trx
+
+        if ($trxFiles.Count -eq 0) {
+          exit 0
+        }
+
+        $allFailures = @()
+
+        foreach ($trxFile in $trxFiles) {
+          try {
+            [xml]$trx = Get-Content $trxFile.FullName -Raw
+
+            $testDefMap = @{}
+
+            foreach ($test in $trx.TestRun.TestDefinitions.UnitTest) {
+              $testDefMap[$test.id] = $test
+            }
+
+            $failedResults = @(
+              $trx.TestRun.Results.UnitTestResult |
+              Where-Object outcome -eq Failed
+            )
+
+            foreach ($result in $failedResults) {
+              $testDef = $testDefMap[$result.testId]
+
+              $allFailures += [pscustomobject]@{
+                File         = $trxFile.Name
+                ClassName    = $testDef.TestMethod.className
+                Id           = $result.testId
+                TestName     = $result.testName
+                ErrorMessage = (($result.Output.ErrorInfo.Message ?? "") -replace "`r?`n", "`n").Trim()
+                StackTrace   = (($result.Output.ErrorInfo.StackTrace ?? "") -replace "`r?`n", "`n").Trim()
+                StdOut       = (($result.Output.StdOut ?? "") -replace "`r?`n", "`n").Trim()
+              }
+            }
+          }
+          catch {
+            throw "Failed to parse TRX file: $($trxFile.FullName)"
+          }
+        }
+
+        $failedTestCount = $allFailures.Count
+        if ($failedTestCount -eq 0) {
+          exit 0
+        }
+
+        $sb = [System.Text.StringBuilder]::new()
+
+        $sb.AppendLine("## Failed $failedTestCount tests")       > $null
+        $sb.AppendLine()                                         > $null
+
+        $sb.AppendLine("### Failed Tests (Top $maxReportCount)") > $null
+        $sb.AppendLine()                                         > $null
+
+        $allFailures | select -First $maxReportCount | foreach {
+          $sb.AppendLine("#### $($_.ClassName).$($_.TestName)") > $null
+          $sb.AppendLine()                     > $null
+
+          $sb.AppendLine("- File: $($_.File)") > $null
+          $sb.AppendLine("- TestId: $($_.Id)") > $null
+          $sb.AppendLine()                     > $null
+
+          if ($_.ErrorMessage) {
+            $sb.AppendLine('ErrorMessage:') > $null
+            $sb.AppendLine('```')           > $null
+            $sb.AppendLine($_.ErrorMessage) > $null
+            $sb.AppendLine('```')           > $null
+            $sb.AppendLine()                > $null
+          }
+
+          if ($_.StackTrace) {
+            $sb.AppendLine('StackTrace:') > $null
+            $sb.AppendLine('```')         > $null
+            $sb.AppendLine($_.StackTrace) > $null
+            $sb.AppendLine('```')         > $null
+            $sb.AppendLine()              > $null
+          }
+
+          if ($_.StdOut) {
+            $sb.AppendLine('StdOut:') > $null
+            $sb.AppendLine('```')     > $null
+            $sb.AppendLine($_.StdOut) > $null
+            $sb.AppendLine('```')     > $null
+            $sb.AppendLine()          > $null
+          }
+        }
+
+        $sb.ToString() >> $env:GITHUB_STEP_SUMMARY

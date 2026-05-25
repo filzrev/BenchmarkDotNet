@@ -43,6 +43,10 @@ jobs:
       - name: Run task 'in-tests-core'
         shell: cmd
         run: ./build.cmd in-tests-core -e
+      # Report failed tests
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failed-tests 
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
@@ -86,6 +90,10 @@ jobs:
       - name: Run task 'in-tests-full'
         shell: cmd
         run: ./build.cmd in-tests-full -e
+      # Report failed tests
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failed-tests        
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
@@ -122,6 +130,10 @@ jobs:
         run: ./build.cmd unit-tests -e
       - name: Run task 'in-tests-core'
         run: ./build.cmd in-tests-core -e
+      # Report failed tests
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failed-tests 
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
@@ -163,6 +175,10 @@ jobs:
         run: ./build.cmd unit-tests -e
       - name: Run task 'in-tests-core'
         run: ./build.cmd in-tests-core -e
+      # Report failed tests
+      - name: Report failed tests
+        if: failure()
+        uses: ./.github/actions/report-failed-tests 
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
