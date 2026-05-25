@@ -19,6 +19,7 @@ namespace BenchmarkDotNet.Tests
         public void ToFolderNameTest(object value, string expectedName)
         {
             Assert.Equal(expectedName, FolderNameHelper.ToFolderName(value));
+            throw new Exception("test");
         }
 
         // Value types can't be used as attribute arguments
