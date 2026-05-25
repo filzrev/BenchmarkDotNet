@@ -9,6 +9,7 @@ on:
 
 env:
   IS_DRAFT_PR: ${{ github.event.pull_request.draft }}
+  TESTINGPLATFORM_DEFAULT_HANG_TIMEOUT: '00:05:00' # TODO: Remove this setting after updated Microsoft.Testing.Platform package.
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref || github.run_id }}
