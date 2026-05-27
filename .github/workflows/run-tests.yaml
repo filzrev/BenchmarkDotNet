@@ -45,19 +45,22 @@ jobs:
         run: ./build.cmd in-tests-core -e
       # Report test results with unique name
       - name: Report tests results
-        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
-        if: always()
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/report-test-results
         with:
-          name: test-windows-core-${{ matrix.os }}
-          path: "**/*.trx"
-          reporter: dotnet-trx
+          name: test-windows-core(${{ matrix.os }})
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: test-windows-core-trx-${{ github.run_id }}-${{ matrix.os }}
-          path: "**/*.trx"
+          name: test-windows-core-${{ github.run_id }}-${{ matrix.os }}
+          overwrite: true
+          path: |
+            **/BenchmarkDotNet.Artifacts/*.log
+            **/TestResults/*.trx
+            **/TestResults/*.html
+            **/Log/log_*.diag
 
   test-windows-full:
     strategy:
@@ -88,19 +91,22 @@ jobs:
         run: ./build.cmd in-tests-full -e
       # Report test results with unique name
       - name: Report tests results
-        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
-        if: always()
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/report-test-results
         with:
-          name: test-windows-full-${{ matrix.os }}
-          path: "**/*.trx"
-          reporter: dotnet-trx
+          name: test-windows-full(${{ matrix.os }})
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: test-windows-full-trx-${{ github.run_id }}-${{ matrix.os }}
-          path: "**/*.trx"
+          name: test-windows-full-${{ github.run_id }}-${{ matrix.os }}
+          overwrite: true
+          path: |
+            **/BenchmarkDotNet.Artifacts/*.log
+            **/TestResults/*.trx
+            **/TestResults/*.html
+            **/Log/log_*.diag
 
   test-linux:
     strategy:
@@ -124,19 +130,22 @@ jobs:
         run: ./build.cmd in-tests-core -e
       # Report test results with unique name
       - name: Report tests results
-        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
-        if: always()
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/report-test-results
         with:
-          name: test-linux-${{ matrix.os }}
-          path: "**/*.trx"
-          reporter: dotnet-trx
+          name: test-linux(${{ matrix.os }})
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: test-linux-trx-${{ github.run_id }}-${{ matrix.os }}
-          path: "**/*.trx"
+          name: test-linux-${{ github.run_id }}-${{ matrix.os }}
+          overwrite: true
+          path: |
+            **/BenchmarkDotNet.Artifacts/*.log
+            **/TestResults/*.trx
+            **/TestResults/*.html
+            **/Log/log_*.diag
 
   test-macos:
     name: test-macos (${{ matrix.os.arch }})
@@ -165,19 +174,22 @@ jobs:
         run: ./build.cmd in-tests-core -e
       # Report test results with unique name
       - name: Report tests results
-        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
-        if: always()
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/report-test-results
         with:
           name: test-macos(${{ matrix.os.arch }})
-          path: "**/*.trx"
-          reporter: dotnet-trx
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: test-macos(${{ matrix.os.arch }})-trx-${{ github.run_id }}
-          path: "**/*.trx"
+          name: test-macos(${{ matrix.os.arch }})-${{ github.run_id }}
+          overwrite: true
+          path: |
+            **/BenchmarkDotNet.Artifacts/*.log
+            **/TestResults/*.trx
+            **/TestResults/*.html
+            **/Log/log_*.diag
 
   test-pack:
     runs-on: ubuntu-latest

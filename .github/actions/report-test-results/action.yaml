@@ -1,0 +1,23 @@
+name: Report Test Results
+description: Parse trx files and report to GitHub Actions JobSummaries
+inputs:
+  name:
+    type: string
+    description: Unique name of test reports
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Report tests results
+      uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
+      with:
+        name: ${{ inputs.name }}
+        path: "**/TestResults/*.trx"
+        reporter: dotnet-trx
+
+    - name: Upload test report HTML file
+      uses: actions/upload-artifact@v7
+      with:
+        path: "**/TestResults/*.html" # `{os}({arch})-{alias}-{tfm}.html
+        archive: true
+        if-no-files-found: ignore
