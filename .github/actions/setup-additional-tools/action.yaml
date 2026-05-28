@@ -20,10 +20,9 @@ runs:
       shell: pwsh
       run: |
         $PSNativeCommandArgumentPassing = 'legacy'
-        npx jsvu --os=default --engines=v8
-
+        npx jsvu --os=default --engines=v8-debug
 
         Get-ChildItem "$HOME/.jsvu" -Recurse
-
-
+        
+        Get-Command v8
 
