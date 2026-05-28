@@ -14,14 +14,12 @@ runs:
         node-version: "26"
 
     - name: Set up v8
-      shell: pwsh
+      shell: bash
       run: |
         npm install jsvu -g
         jsvu --os=default --engines=v8
 
-        $jsvuDir = Join-Path $HOME '.jsvu/bin'
-        Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
-        
+
         # Verify d8 command available
         v8 --version
 
