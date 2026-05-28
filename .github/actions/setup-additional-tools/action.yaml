@@ -24,6 +24,9 @@ runs:
     - name: Verify
       shell: pwsh
       run: |
+        $jsvuDir = Join-Path $HOME '.jsvu/bin'
+        Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
+
         Get-ChildItem "$HOME/.jsvu" -Recurse
 
         Get-Command v8
