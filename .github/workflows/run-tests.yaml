@@ -51,11 +51,11 @@ jobs:
           name: test-windows-core-${{ matrix.os }}
           path: "**/*.trx"
           reporter: dotnet-trx
-      -name: Test
-       shell: pwsh
-       if: always()
-       run: |
-         Get-MpSupportFiles
+      - name: Test
+        shell: pwsh
+        if: always()
+        run: |
+          Get-MpSupportFiles
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v7
@@ -95,11 +95,11 @@ jobs:
           name: test-windows-full-${{ matrix.os }}
           path: "**/*.trx"
           reporter: dotnet-trx
-      -name: Test
-       shell: pwsh
-       if: always()
-       run: |
-         Get-MpSupportFiles
+      - name: Test
+        shell: pwsh
+        if: always()
+        run: |
+          Get-MpSupportFiles
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v7
