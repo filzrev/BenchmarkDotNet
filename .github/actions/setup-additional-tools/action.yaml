@@ -15,16 +15,23 @@ runs:
       uses: actions/setup-node@v6
       with:
         node-version: "24"
-
+        
+    - name: Verify
+      shell: pwsh
+      run: |
+        & "$Env:ProgramFiles\Google\Chrome\Application\*\Installer\setup.exe" `
+        --uninstall `
+        --multi-install `
+        --chrome `
+        --system-level `
+        --force-uninstall `
+        --silent
     - name: Set up v8
       shell: bash
       run: |
         npx jsvu --os=default --engines=v8-debug
 
-    - name: Verify
-      shell: pwsh
-      run: |
-      
+
         Get-ChildItem $env:Temp/v8-compile-cache -Recurse
          
         # Set PATH for jsvu
