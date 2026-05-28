@@ -18,10 +18,9 @@ runs:
       run: |
         npm install jsvu -g
         jsvu --os=default --engines=v8
-        
+        jsvu v8@15.8
+        jsvu --version
+
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
 
-    - name: Install wasm-tools workload
-      shell: bash
-      run: ./build.cmd install-wasm-tools
