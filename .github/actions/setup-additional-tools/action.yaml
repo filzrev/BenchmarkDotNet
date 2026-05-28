@@ -25,7 +25,7 @@ runs:
       shell: pwsh
       run: |
       
-        Get-ChildItem -Recurse
+        Get-ChildItem $env:Temp
          
         # Set PATH for jsvu
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
