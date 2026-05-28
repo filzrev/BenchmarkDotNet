@@ -19,10 +19,9 @@ runs:
     - name: Set up v8
       shell: pwsh
       run: |
+        $PSNativeCommandArgumentPassing = 'legacy'
         npx jsvu --os=default --engines=v8
-        
-        Write-Host $Home
-        Write-Host $env:UserProfile
+
 
         Get-ChildItem "$HOME/.jsvu" -Recurse
 
