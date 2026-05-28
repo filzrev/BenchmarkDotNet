@@ -30,19 +30,7 @@ jobs:
       - name: Setup additional tools for Wasm/NativeAot tests
         if: ${{ github.event.pull_request.draft != true }}
         uses: ./.github/actions/setup-additional-tools
-      - name: Test
-        shell: pwsh
-        if: always()
-        run: |
-          Get-MpSupportFiles
-      # Upload Artifacts with Unique Name
-      - name: Upload test results
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: test-windows-core-trx-${{ github.run_id }}-${{ matrix.os }}
-          path: |
-            C:\ProgramData\Microsoft\Windows Defender\Support\**
+
 
   test-windows-full:
     strategy:
@@ -58,15 +46,3 @@ jobs:
       - name: Setup additional tools for Wasm/NativeAot tests
         if: ${{ github.event.pull_request.draft != true }}
         uses: ./.github/actions/setup-additional-tools
-      - name: Test
-        shell: pwsh
-        if: always()
-        run: |
-          Get-MpSupportFiles
-      - name: Upload test results
-        uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: test-windows-full-trx-${{ github.run_id }}-${{ matrix.os }}
-          path: |
-            C:\ProgramData\Microsoft\Windows Defender\Support\**

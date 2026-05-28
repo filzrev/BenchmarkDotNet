@@ -17,7 +17,7 @@ runs:
       shell: pwsh
       run: |
         npm install jsvu -g
-        jsvu --os=default --engines=v8 v8@15.8
+        jsvu --os=default --engines=v8 v8@14.8
 
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
