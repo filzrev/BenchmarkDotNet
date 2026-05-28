@@ -14,14 +14,15 @@ runs:
     - name: Set up node
       uses: actions/setup-node@v6
       with:
-        node-version: "26"
+        node-version: "24"
 
     - name: Set up v8
-      shell: bash
+      shell: pwsh
       run: |
         npm install jsvu -g
-        jsvu --os=default --engines=v8
+        npx jsvu --os=default --engines=v8
 
+        Get-ChildItem "$HOME\.jsvu"
 
         # Verify d8 command available
         v8 --version
