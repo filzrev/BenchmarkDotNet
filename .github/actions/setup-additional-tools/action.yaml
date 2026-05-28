@@ -21,10 +21,9 @@ runs:
       run: |
         npx jsvu --os=default --engines=v8
         
-        sleep 5
+        sleep 30
 
         Get-ChildItem "$HOME/.jsvu" -Recurse
-        
-        v8 -v
+
 
 
