@@ -19,13 +19,34 @@ runs:
     - name: Verify
       shell: pwsh
       run: |
-        & "$Env:ProgramFiles\Google\Chrome\Application\*\Installer\setup.exe" `
-        --uninstall `
-        --multi-install `
-        --chrome `
-        --system-level `
-        --force-uninstall `
-        --silent
+        $keys = @(
+          'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome',
+          'HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome',
+          'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Google Chrome'
+        )
+
+        $uninstallString = $null
+
+        foreach ($key in $keys) {
+          if (Test-Path $key) {
+            $uninstallString = (Get-ItemProperty $key).UninstallString
+            if ($uninstallString) {
+              break
+            }
+          }
+        }
+
+        if (-not $uninstallString) {
+          throw "Chrome uninstall command not found"
+        }
+
+        Write-Host "UninstallString: $uninstallString"
+
+        # silent uninstall に変換
+        $cmd = $uninstallString `
+          -replace '--uninstall', '--uninstall --force-uninstall --silent'
+
+        Start-Process cmd.exe -ArgumentList "/c $cmd" -Wait -NoNewWindow
     - name: Set up v8
       shell: bash
       run: |
