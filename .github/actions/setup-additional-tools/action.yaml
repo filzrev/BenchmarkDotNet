@@ -22,7 +22,7 @@ runs:
         npm install jsvu -g
         npx jsvu --os=default --engines=v8
 
-        Get-ChildItem "$HOME\.jsvu"
+        Get-ChildItem "$HOME\.jsvu" -Recurse
 
         # Verify d8 command available
         v8 --version
