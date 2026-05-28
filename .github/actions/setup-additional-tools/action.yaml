@@ -24,6 +24,9 @@ runs:
     - name: Verify
       shell: pwsh
       run: |
+      
+        Get-ChildItem -Recurse
+         
         # Set PATH for jsvu
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
@@ -35,4 +38,6 @@ runs:
         Get-ChildItem "$HOME/.jsvu" -Recurse
 
         # Verify path
-        Get-Command v8
+        if (-not (Get-Command v8 -CommandType Application -ErrorAction SilentlyContinue)) {
+            throw "v8 executable not found."
+        }
