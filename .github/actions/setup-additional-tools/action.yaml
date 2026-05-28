@@ -4,7 +4,10 @@ description: |
   - Node.js
   - V8 with jsvu
   - .NET wasm-tools workload
-
+env:
+  NODE_DEBUG: "*"
+  npm_config_loglevel: silly
+  ACTIONS_STEP_DEBUG: true
 runs:
   using: composite
   steps:
