@@ -20,8 +20,10 @@ runs:
       shell: pwsh
       run: |
         npm install jsvu -g
-        npx jsvu --os=default --engines=v8
+        jsvu --os=default --engines=v8
 
         Get-ChildItem "$HOME/.jsvu" -Recurse
+        
+        v8 -v
 
 
