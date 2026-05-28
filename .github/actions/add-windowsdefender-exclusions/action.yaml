@@ -13,7 +13,6 @@ runs:
 
         for ($i = 1; $i -le $maxRetries; $i++) {
           try {
-            Set-MpPreference -DisableRealtimeMonitoring $true
             Add-MpPreference -ExclusionPath  $env:GITHUB_WORKSPACE
             Add-MpPreference -ExclusionPath  $env:TEMP
             Add-MpPreference -ExclusionPath  $env:HOME
