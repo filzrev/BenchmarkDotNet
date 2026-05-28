@@ -26,6 +26,8 @@ runs:
       run: |
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
+        
+        Write-Host $env:GITHUB_PATH
 
         Get-ChildItem "$HOME/.jsvu" -Recurse
 
