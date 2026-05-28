@@ -15,7 +15,7 @@ runs:
           try {
             Add-MpPreference -ExclusionPath  $env:GITHUB_WORKSPACE
             Add-MpPreference -ExclusionPath  $env:TEMP
-            Add-MpPreference -ExclusionPath  $env:HOME
+            Add-MpPreference -ExclusionPath  $env:UserProfile
             break
           }
           catch {
