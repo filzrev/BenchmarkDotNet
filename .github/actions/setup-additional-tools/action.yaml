@@ -29,7 +29,7 @@ runs:
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
         
         # Print paths
-        Write-Host Get-Content $env:GITHUB_PATH -Raw
+        Get-Content $env:GITHUB_PATH -Raw | Write-Host
 
         # Show extracted results
         Get-ChildItem "$HOME/.jsvu" -Recurse
