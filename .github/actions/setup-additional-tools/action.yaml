@@ -22,5 +22,6 @@ runs:
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
         
-        v8 --version
+        # Verify d8 command available
+        d8 --version
 
