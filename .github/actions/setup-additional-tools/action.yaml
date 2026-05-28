@@ -23,5 +23,5 @@ runs:
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
         
         # Verify d8 command available
-        d8 --version
+        v8 --version
 
