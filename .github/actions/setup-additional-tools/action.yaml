@@ -24,11 +24,15 @@ runs:
     - name: Verify
       shell: pwsh
       run: |
+        # Set PATH for jsvu
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
         
-        Write-Host $env:GITHUB_PATH
+        # Print paths
+        Write-Host Get-Content $env:GITHUB_PATH -Raw
 
+        # Show extracted results
         Get-ChildItem "$HOME/.jsvu" -Recurse
 
+        # Verify path
         Get-Command v8
