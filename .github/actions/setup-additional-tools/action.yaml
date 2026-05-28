@@ -18,8 +18,9 @@ runs:
       run: |
         npm install jsvu -g
         jsvu --os=default --engines=v8 v8@15.8
-        jsvu --version
 
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
+        
+        v8 --version
 
