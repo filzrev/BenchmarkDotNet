@@ -16,8 +16,10 @@ runs:
     - name: Set up v8
       shell: pwsh
       run: |
+        $PSNativeCommandUseErrorActionPreference = $true
+
         npm install jsvu -g
-        jsvu --os=default --engines=v8
+        jsvu --os=default --engines=v8@14.8
         
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
