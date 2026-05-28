@@ -17,12 +17,13 @@ runs:
         node-version: "24"
 
     - name: Set up v8
-      shell: pwsh
+      shell: bash
       run: |
-        $PSNativeCommandArgumentPassing = 'legacy'
         npx jsvu --os=default --engines=v8-debug
 
+    - name: Verify
+      shell: pwsh
+      run: |
         Get-ChildItem "$HOME/.jsvu" -Recurse
-        
-        Get-Command v8
 
+        Get-Command v8
