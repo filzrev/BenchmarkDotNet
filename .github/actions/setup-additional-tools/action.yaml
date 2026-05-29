@@ -11,6 +11,10 @@ env:
 runs:
   using: composite
   steps:
+    - name: Set up v8
+      shell: bash
+      run: |
+        node -v
     - name: Set up node
       uses: actions/setup-node@v6
       with:
@@ -22,9 +26,6 @@ runs:
         node -v
         npx jsvu --os=default --engines=v8-debug
 
-
-        Get-ChildItem $env:Temp/v8-compile-cache -Recurse
-         
         # Set PATH for jsvu
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
         Add-Content -Path $env:GITHUB_PATH -Value $jsvuDir
