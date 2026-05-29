@@ -25,7 +25,7 @@ runs:
       shell: bash
       run: |
         node -v
-        npx jsvu --os=default --engines=v8-debug
+        npx jsvu --os=default --engines=javascriptcore
 
         # Set PATH for jsvu
         $jsvuDir = Join-Path $HOME '.jsvu/bin'
