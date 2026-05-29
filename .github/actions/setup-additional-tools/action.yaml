@@ -12,9 +12,10 @@ runs:
   using: composite
   steps:
     - name: Set up v8
-      shell: bash
+      shell: pwsh
       run: |
         node -v
+        Get-ChildItem C:\hostedtoolcache\windows\node
     - name: Set up node
       uses: actions/setup-node@v6
       with:
