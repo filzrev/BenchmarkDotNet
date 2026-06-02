@@ -49,6 +49,7 @@ public class BuildRunner
         var restoreSettings = new DotNetRestoreSettings
         {
             MSBuildSettings = context.MsBuildSettingsRestore,
+            ArgumentCustomization = args => args.Append("-p:RestoreUseStaticGraphEvaluation=true")
         };
         context.DotNetRestore(weaverPath.GetDirectory().FullPath, restoreSettings);
 
