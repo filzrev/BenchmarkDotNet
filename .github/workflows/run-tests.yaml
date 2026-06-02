@@ -11,21 +11,84 @@ env:
   IS_DRAFT_PR: ${{ github.event.pull_request.draft }}
   TESTINGPLATFORM_DEFAULT_HANG_TIMEOUT: '00:05:00' # TODO: Remove this setting after updated Microsoft.Testing.Platform package.
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.ref || github.run_id }}
-  cancel-in-progress: true
+#concurrency:
+#  group: ${{ github.workflow }}-${{ github.head_ref || github.ref || github.run_id }}
+#  cancel-in-progress: true
 
 jobs:
 
-  test-linux:
+  test-windows-core:
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-24.04-arm]
+        os: [windows-latest, windows-11-arm]
     runs-on: ${{ matrix.os }}
     steps:
+      # Checkout
       - uses: actions/checkout@v6
+      # Add Windows Defender Exclusions
+      - uses: ./.github/actions/add-windowsdefender-exclusions
       # Build and Test
       - name: Run task 'build'
+        shell: cmd
         run: ./build.cmd build
       - name: Run task 'unit-tests'
+        shell: cmd
         run: ./build.cmd unit-tests -e
+      - name: Run task 'analyzer-tests'
+        shell: cmd
+        run: ./build.cmd analyzer-tests -e
+      # Report test results with unique name
+      - name: Report tests results
+        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
+        if: always()
+        with:
+          name: test-windows-core-${{ matrix.os }}
+          path: "**/*.trx"
+          reporter: dotnet-trx
+      # Upload Artifacts with Unique Name
+      - name: Upload test results
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: test-windows-core-trx-${{ github.run_id }}-${{ matrix.os }}
+          path: "**/*.trx"
+
+  test-windows-full:
+    strategy:
+      matrix:
+        os: [windows-latest, windows-11-arm]
+    runs-on: ${{ matrix.os }}
+    steps:
+      # Checkout
+      - uses: actions/checkout@v6
+      # Add Windows Defender Exclusions
+      - uses: ./.github/actions/add-windowsdefender-exclusions
+      # Setup additional tools
+      - name: Setup additional tools for Wasm/NativeAot tests
+        if: ${{ github.event.pull_request.draft != true }}
+        uses: ./.github/actions/setup-additional-tools
+      # Build and Test
+      - name: Run task 'build'
+        shell: cmd
+        run: ./build.cmd build
+      - name: Run task 'unit-tests'
+        shell: cmd
+        run: ./build.cmd unit-tests -e
+      - name: Run task 'analyzer-tests'
+        shell: cmd
+        run: ./build.cmd analyzer-tests -e
+      # Report test results with unique name
+      - name: Report tests results
+        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
+        if: always()
+        with:
+          name: test-windows-full-${{ matrix.os }}
+          path: "**/*.trx"
+          reporter: dotnet-trx
+      # Upload Artifacts with Unique Name
+      - name: Upload test results
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: test-windows-full-trx-${{ github.run_id }}-${{ matrix.os }}
+          path: "**/*.trx"
