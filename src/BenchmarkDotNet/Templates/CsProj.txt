@@ -61,4 +61,12 @@
     </ItemGroup>
   </Target>
   -->
+
+  <ItemGroup>
+  <RuntimeTargetsCopyLocalItems Include="/home/runner/work/BenchmarkDotNet/BenchmarkDotNet/tests/BenchmarkDotNet.IntegrationTests/bin/Release/net8.0/runtimes/linux-arm64/native/libcapstone.so">
+    <DestinationSubDirectory>runtimes/linux-arm64/native/</DestinationSubDirectory>
+    <AssetType>native</AssetType>
+    <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
+  </RuntimeTargetsCopyLocalItems>
+</ItemGroup>
 </Project>
