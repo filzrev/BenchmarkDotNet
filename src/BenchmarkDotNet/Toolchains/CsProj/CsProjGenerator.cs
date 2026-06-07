@@ -211,7 +211,7 @@ namespace BenchmarkDotNet.Toolchains.CsProj
             //}
 
             // Remove ProjectReference node of benchmark project after gathered dll references are added.
-            doc.Root.Descendants("ProjectReference").Single().Remove();
+            doc.Root!.Descendants("ProjectReference").Single().Remove();
 
             using var projectStream = File.Create(artifactsPaths.ProjectFilePath);
 #if NETSTANDARD2_0

@@ -61,18 +61,4 @@
       </ReferenceCopyLocalPaths>
     </ItemGroup>
   </Target>
-  <!--
-  <ItemGroup>
-   <RuntimeTargetsCopyLocalItems
-     Include="/home/runner/work/BenchmarkDotNet/BenchmarkDotNet/tests/BenchmarDotNet/bin/Release/net8.0/runtimes/linux-arm64/native/libcapstone.so"
-     AssetType="native"
-     CopyLocal="true"
-     DestinationSubDirectory="runtimes/linux-arm64/native/"
-     DestinationSubPath="runtimes/linux-arm64/native/"
-     PathInPackage="runtimes/linux-arm64/native/libcapstone.so"
-     RuntimeIdentifier="linux-arm64"
-     NuGetPackageId="Gee.External.Capstone"
-     NuGetPackageVersion="2.3.0" />
-  </ItemGroup>
-  -->
 </Project>
