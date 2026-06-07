@@ -46,18 +46,18 @@
 
   $RUNTIMESETTINGS$
 
-  <Target Name="AddNativeDependencies" AfterTargets="ResolveReferences">
+  <Target Name="BdnAddDependencies" AfterTargets="ResolveReferences">
     <ItemGroup>
       <ReferenceCopyLocalPaths
-        Include=%(ReferenceCopyLocalPaths.Identity)
-        AssetType=%(ReferenceCopyLocalPaths.AssetType)
-        DestinationSubDirectory=%(ReferenceCopyLocalPaths.DestinationSubDirectory)
-        DestinationSubPath=%(ReferenceCopyLocalPaths.DestinationSubPath)
-        PathInPackage=%(ReferenceCopyLocalPaths.PathInPackage)
-        RuntimeIdentifier=%(ReferenceCopyLocalPaths.RuntimeIdentifier)
-        NuGetPackageId=%(ReferenceCopyLocalPaths.NuGetPackageId)
-        NuGetPackageVersion=%(ReferenceCopyLocalPaths.NuGetPackageVersion)
-        CopyLocal=%(ReferenceCopyLocalPaths.CopyLocal)
+        Include="%(ReferenceCopyLocalPaths.Identity)"
+        AssetType="%(ReferenceCopyLocalPaths.AssetType)"
+        DestinationSubDirectory="%(ReferenceCopyLocalPaths.DestinationSubDirectory)"
+        DestinationSubPath="%(ReferenceCopyLocalPaths.DestinationSubPath)"
+        PathInPackage="%(ReferenceCopyLocalPaths.PathInPackage)"
+        RuntimeIdentifier="%(ReferenceCopyLocalPaths.RuntimeIdentifier)"
+        NuGetPackageId="%(ReferenceCopyLocalPaths.NuGetPackageId)"
+        NuGetPackageVersion="%(ReferenceCopyLocalPaths.NuGetPackageVersion)"
+        CopyLocal="%(ReferenceCopyLocalPaths.CopyLocal)">
       </ReferenceCopyLocalPaths>
     </ItemGroup>
   </Target>
