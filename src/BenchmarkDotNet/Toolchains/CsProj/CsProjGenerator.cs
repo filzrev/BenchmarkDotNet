@@ -191,6 +191,24 @@ namespace BenchmarkDotNet.Toolchains.CsProj
                 ));
             }
 
+            foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.so"))
+            {
+                itemGroup.Add(new XElement("Reference",
+                    new XAttribute("Include", Path.GetFileNameWithoutExtension(assemblyFile)),
+                    new XElement("HintPath", assemblyFile)
+                // TODO: Add Aliases here for extern alias #2289
+                ));
+            }
+
+            foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dylib"))
+            {
+                itemGroup.Add(new XElement("Reference",
+                    new XAttribute("Include", Path.GetFileNameWithoutExtension(assemblyFile)),
+                    new XElement("HintPath", assemblyFile)
+                // TODO: Add Aliases here for extern alias #2289
+                ));
+            }
+
             // Remove ProjectReference node of benchmark project after gathered dll references are added.
             doc.Root.Descendants("ProjectReference").Single().Remove();
 

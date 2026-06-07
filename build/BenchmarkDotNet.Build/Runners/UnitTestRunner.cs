@@ -40,6 +40,7 @@ public class UnitTestRunner(BuildContext context)
             Framework = tfm,
             NoBuild = true,
             NoRestore = true,
+            Filter= "CanDisassembleAllMethodCallsUsingFilters",
             Loggers = new[] { "trx", $"trx;LogFileName={logFile.FullPath}", "console;verbosity=detailed" },
             EnvironmentVariables =
             {
