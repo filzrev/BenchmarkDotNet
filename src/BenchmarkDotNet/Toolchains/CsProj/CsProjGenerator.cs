@@ -179,6 +179,8 @@ namespace BenchmarkDotNet.Toolchains.CsProj
             // Delete the dll from the gatherer project to prevent duplicate references.
             File.Delete(Path.Combine(artifactsPaths.BinariesDirectoryPath, $"{artifactsPaths.ProgramName}.dll"));
 
+            var bin = artifactsPaths.BinariesDirectoryPath;
+
             doc = XDocument.Load(artifactsPaths.ProjectFilePath);
             var itemGroup = new XElement("ItemGroup");
             doc.Root!.Add(itemGroup);
@@ -190,6 +192,24 @@ namespace BenchmarkDotNet.Toolchains.CsProj
                 // TODO: Add Aliases here for extern alias #2289
                 ));
             }
+
+            // Add MSBuild task to copy native dependenies.
+            
+            var copyTarget =
+                """
+                <Target Name="BdnCopyRuntimeDependencies">
+                  <ItemGroup>
+                    <_FilesToCopy Include="runtimes\**\*" />
+                  </ItemGroup>
+
+                  <Copy
+                    SourceFiles="@(_FilesToCopy)"
+                    DestinationFiles="@(_FilesToCopy->'%(RecursiveDir)%(Filename)%(Extension)')" />
+                </Target>
+                """;
+
+            var elem = XElement.Parse(copyTarget);
+            doc.Root!.Add(elem);
 
             //var aaa = Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dll", SearchOption.AllDirectories).ToArray();
             //foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.so", SearchOption.AllDirectories))

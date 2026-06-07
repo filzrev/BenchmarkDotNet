@@ -45,7 +45,7 @@
   </PropertyGroup>
 
   $RUNTIMESETTINGS$
-
+  <!--
   <Target Name="BdnAddRuntimeDependencies" AfterTargets="ResolveReferences">
     <ItemGroup>
       <RuntimeTargetsCopyLocalItems
@@ -60,4 +60,5 @@
         NuGetPackageVersion="2.3.0" />
     </ItemGroup>
   </Target>
+  -->
 </Project>
