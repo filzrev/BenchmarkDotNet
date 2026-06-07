@@ -101,7 +101,9 @@ jobs:
       - name: Test
         shell: pwsh
         if: always()
-        run: Get-ChildItem
+        env:
+          NO_COLOR: true
+        run: Get-ChildItem -Recurse
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
@@ -142,7 +144,9 @@ jobs:
       - name: Test
         shell: pwsh
         if: always()
-        run: Get-ChildItem
+        env:
+          NO_COLOR: true
+        run: Get-ChildItem -Recurse
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
