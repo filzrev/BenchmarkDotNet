@@ -182,7 +182,7 @@ namespace BenchmarkDotNet.Toolchains.CsProj
             doc = XDocument.Load(artifactsPaths.ProjectFilePath);
             var itemGroup = new XElement("ItemGroup");
             doc.Root!.Add(itemGroup);
-            foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dll"))
+            foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dll", SearchOption.AllDirectories))
             {
                 itemGroup.Add(new XElement("Reference",
                     new XAttribute("Include", Path.GetFileNameWithoutExtension(assemblyFile)),
@@ -191,7 +191,8 @@ namespace BenchmarkDotNet.Toolchains.CsProj
                 ));
             }
 
-            foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.so"))
+            var aaa = Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dll", SearchOption.AllDirectories).ToArray();
+            foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.so", SearchOption.AllDirectories))
             {
                 itemGroup.Add(new XElement("Reference",
                     new XAttribute("Include", Path.GetFileNameWithoutExtension(assemblyFile)),
@@ -200,7 +201,7 @@ namespace BenchmarkDotNet.Toolchains.CsProj
                 ));
             }
 
-            foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dylib"))
+            foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dnlib",SearchOption.AllDirectories))
             {
                 itemGroup.Add(new XElement("Reference",
                     new XAttribute("Include", Path.GetFileNameWithoutExtension(assemblyFile)),
