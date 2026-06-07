@@ -67,6 +67,8 @@
     <DestinationSubDirectory>runtimes/linux-arm64/native/</DestinationSubDirectory>
     <AssetType>native</AssetType>
     <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
+    <NuGetPackageId>Gee.External.Capstone</NuGetPackageId>
+    <NuGetPackageVersion>2.3.0</NuGetPackageVersion>
   </RuntimeTargetsCopyLocalItems>
 </ItemGroup>
 </Project>
