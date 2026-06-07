@@ -54,7 +54,6 @@
         DestinationSubDirectory=%(ReferenceCopyLocalPaths.DestinationSubDirectory)
         DestinationSubPath=%(ReferenceCopyLocalPaths.DestinationSubPath)
         PathInPackage=%(ReferenceCopyLocalPaths.PathInPackage)
-        PathInPackage=%(ReferenceCopyLocalPaths.PathInPackage)
         RuntimeIdentifier=%(ReferenceCopyLocalPaths.RuntimeIdentifier)
         NuGetPackageId=%(ReferenceCopyLocalPaths.NuGetPackageId)
         NuGetPackageVersion=%(ReferenceCopyLocalPaths.NuGetPackageVersion)
