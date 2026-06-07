@@ -49,13 +49,21 @@
 
   <Target Name="AddNativeDependencies" AfterTargets="ResolveReferences">
     <ItemGroup>
-      <ReferenceCopyLocalPaths Include="/home/runner/work/BenchmarkDotNet/BenchmarkDotNet/tests/BenchmarDotNet.IntegrationTests/bin/Release/net8.0/runtimes/linux-arm64/native/libcapstone.so">
-        <DestinationSubDirectory>runtimes/linux-arm64/native/</DestinationSubDirectory>
-        <CopyLocal>true</CopyLocal>
+      <ReferenceCopyLocalPaths
+        Include=%(ReferenceCopyLocalPaths.Identity)
+        AssetType=%(ReferenceCopyLocalPaths.AssetType)
+        DestinationSubDirectory=%(ReferenceCopyLocalPaths.DestinationSubDirectory)
+        DestinationSubPath=%(ReferenceCopyLocalPaths.DestinationSubPath)
+        PathInPackage=%(ReferenceCopyLocalPaths.PathInPackage)
+        PathInPackage=%(ReferenceCopyLocalPaths.PathInPackage)
+        RuntimeIdentifier=%(ReferenceCopyLocalPaths.RuntimeIdentifier)
+        NuGetPackageId=%(ReferenceCopyLocalPaths.NuGetPackageId)
+        NuGetPackageVersion=%(ReferenceCopyLocalPaths.NuGetPackageVersion)
+        CopyLocal=%(ReferenceCopyLocalPaths.CopyLocal)
       </ReferenceCopyLocalPaths>
     </ItemGroup>
   </Target>
-
+  <!--
   <ItemGroup>
    <RuntimeTargetsCopyLocalItems
      Include="/home/runner/work/BenchmarkDotNet/BenchmarkDotNet/tests/BenchmarDotNet/bin/Release/net8.0/runtimes/linux-arm64/native/libcapstone.so"
@@ -68,4 +76,5 @@
      NuGetPackageId="Gee.External.Capstone"
      NuGetPackageVersion="2.3.0" />
   </ItemGroup>
+  -->
 </Project>

@@ -180,16 +180,16 @@ namespace BenchmarkDotNet.Toolchains.CsProj
             File.Delete(Path.Combine(artifactsPaths.BinariesDirectoryPath, $"{artifactsPaths.ProgramName}.dll"));
 
             doc = XDocument.Load(artifactsPaths.ProjectFilePath);
-            var itemGroup = new XElement("ItemGroup");
-            doc.Root!.Add(itemGroup);
-            foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dll", SearchOption.AllDirectories))
-            {
-                itemGroup.Add(new XElement("Reference",
-                    new XAttribute("Include", Path.GetFileNameWithoutExtension(assemblyFile)),
-                    new XElement("HintPath", assemblyFile)
-                // TODO: Add Aliases here for extern alias #2289
-                ));
-            }
+            //var itemGroup = new XElement("ItemGroup");
+            //doc.Root!.Add(itemGroup);
+            //foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dll", SearchOption.AllDirectories))
+            //{
+            //    itemGroup.Add(new XElement("Reference",
+            //        new XAttribute("Include", Path.GetFileNameWithoutExtension(assemblyFile)),
+            //        new XElement("HintPath", assemblyFile)
+            //    // TODO: Add Aliases here for extern alias #2289
+            //    ));
+            //}
 
             //var aaa = Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dll", SearchOption.AllDirectories).ToArray();
             //foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.so", SearchOption.AllDirectories))
