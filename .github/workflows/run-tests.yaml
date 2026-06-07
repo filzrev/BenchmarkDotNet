@@ -66,6 +66,10 @@ jobs:
       - name: Run task 'in-tests-full'
         shell: cmd
         run: ./build.cmd in-tests-full -e
+      - name: Test
+        shell: pwsh
+        if: always()
+        run: Get-ChildItem
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
@@ -127,6 +131,10 @@ jobs:
         run: ./build.cmd build
       - name: Run task 'in-tests-core'
         run: ./build.cmd in-tests-core -e
+      - name: Test
+        shell: pwsh
+        if: always()
+        run: Get-ChildItem
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
