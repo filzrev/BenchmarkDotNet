@@ -48,13 +48,13 @@
 
   <ItemGroup>
    <RuntimeTargetsCopyLocalItems
-     Include="C:/Users/admin/.nuget/packages/gee.external.capstone/2.3.0/runtimes/linux-arm/native/libcapstone.so"
+     Include="/home/runner/.nuget/packages/gee.external.capstone/2.3.0/runtimes/linux-arm64/native/libcapstone.so"
      AssetType="native"
      CopyLocal="true"
-     DestinationSubDirectory="runtimes/linux-arm/native/"
-     DestinationSubPath="runtimes\linux-arm\native\"
-     PathInPackage="runtimes/linux-arm/native/libcapstone.so"
-     RuntimeIdentifier="linux-arm"
+     DestinationSubDirectory="runtimes/linux-arm64/native/"
+     DestinationSubPath="runtimes\linux-arm64\native\"
+     PathInPackage="runtimes/linux-arm64/native/libcapstone.so"
+     RuntimeIdentifier="linux-arm64"
      NuGetPackageId="Gee.External.Capstone"
      NuGetPackageVersion="2.3.0" />
   </ItemGroup>
