@@ -135,6 +135,10 @@ jobs:
         shell: pwsh
         if: always()
         run: Get-ChildItem
+      - name: Test
+        shell: pwsh
+        if: always()
+        run: Get-ChildItem
       # Report test results with unique name
       - name: Report tests results
         uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
