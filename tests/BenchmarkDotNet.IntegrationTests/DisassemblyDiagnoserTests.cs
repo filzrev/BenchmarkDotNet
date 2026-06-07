@@ -171,6 +171,7 @@ namespace BenchmarkDotNet.IntegrationTests
 
         private IConfig CreateConfig(Jit jit, Platform platform, IToolchain toolchain, IDiagnoser disassemblyDiagnoser, RunStrategy runStrategy)
             => ManualConfig.CreateEmpty()
+            .WithOptions(ConfigOptions.KeepBenchmarkFiles)
                 .AddJob(Job.Dry.WithJit(jit)
                     .WithPlatform(platform)
                     .WithToolchain(toolchain)
