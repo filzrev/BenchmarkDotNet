@@ -49,16 +49,17 @@
   <Target Name="BdnAddDependencies" AfterTargets="ResolveReferences">
     <ItemGroup>
       <ReferenceCopyLocalPaths
-        Include="%(ReferenceCopyLocalPaths.Identity)"
-        AssetType="%(ReferenceCopyLocalPaths.AssetType)"
-        DestinationSubDirectory="%(ReferenceCopyLocalPaths.DestinationSubDirectory)"
-        DestinationSubPath="%(ReferenceCopyLocalPaths.DestinationSubPath)"
-        PathInPackage="%(ReferenceCopyLocalPaths.PathInPackage)"
-        RuntimeIdentifier="%(ReferenceCopyLocalPaths.RuntimeIdentifier)"
-        NuGetPackageId="%(ReferenceCopyLocalPaths.NuGetPackageId)"
-        NuGetPackageVersion="%(ReferenceCopyLocalPaths.NuGetPackageVersion)"
-        CopyLocal="%(ReferenceCopyLocalPaths.CopyLocal)">
+        Include="%(ResolveReferences.Identity)"
+        AssetType="%(ResolveReferences.AssetType)"
+        DestinationSubDirectory="%(ResolveReferences.DestinationSubDirectory)"
+        DestinationSubPath="%(ResolveReferences.DestinationSubPath)"
+        PathInPackage="%(ResolveReferences.PathInPackage)"
+        RuntimeIdentifier="%(ResolveReferences.RuntimeIdentifier)"
+        NuGetPackageId="%(ResolveReferences.NuGetPackageId)"
+        NuGetPackageVersion="%(ResolveReferences.NuGetPackageVersion)"
+        CopyLocal="%(ResolveReferences.CopyLocal)">
       </ReferenceCopyLocalPaths>
     </ItemGroup>
   </Target>
+
 </Project>
