@@ -180,16 +180,19 @@ namespace BenchmarkDotNet.Toolchains.CsProj
             File.Delete(Path.Combine(artifactsPaths.BinariesDirectoryPath, $"{artifactsPaths.ProgramName}.dll"));
 
             doc = XDocument.Load(artifactsPaths.ProjectFilePath);
-            var itemGroup = new XElement("ItemGroup");
-            doc.Root!.Add(itemGroup);
-            foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dll"))
-            {
-                itemGroup.Add(new XElement("Reference",
-                    new XAttribute("Include", Path.GetFileNameWithoutExtension(assemblyFile)),
-                    new XElement("HintPath", assemblyFile)
-                // TODO: Add Aliases here for extern alias #2289
-                ));
-            }
+            //var itemGroup = new XElement("ItemGroup");
+            //doc.Root!.Add(itemGroup);
+            //foreach (var assemblyFile in Directory.GetFiles(artifactsPaths.BinariesDirectoryPath, "*.dll"))
+            //{
+            //    if (assemblyFile.Contains("BenchmarkDotNet"))
+            //        continue;
+
+            //    //itemGroup.Add(new XElement("Reference",
+            //    //    new XAttribute("Include", Path.GetFileNameWithoutExtension(assemblyFile)),
+            //    //    new XElement("HintPath", assemblyFile)
+            //    // TODO: Add Aliases here for extern alias #2289
+            //    //));
+            //}
 
             using var projectStream = File.Create(artifactsPaths.ProjectFilePath);
 #if NETSTANDARD2_0

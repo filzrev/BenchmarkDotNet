@@ -21,7 +21,7 @@ namespace BenchmarkDotNet.IntegrationTests
         {
             var jobWithCustomConfiguration = Job.Dry.WithCustomBuildConfiguration("CUSTOM");
 
-            var config = CreateSimpleConfig(job: jobWithCustomConfiguration);
+            var config = CreateSimpleConfig(job: jobWithCustomConfiguration).WithOptions(ConfigOptions.KeepBenchmarkFiles);
             config = ((ManualConfig)config).WithBuildTimeout(TimeSpan.FromSeconds(360));
 
             var report = CanExecute<CustomBuildConfiguration>(config);
