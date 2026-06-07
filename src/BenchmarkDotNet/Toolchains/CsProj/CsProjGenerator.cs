@@ -197,14 +197,12 @@ namespace BenchmarkDotNet.Toolchains.CsProj
             
             var copyTarget =
                 $"""
-                <Target Name="BdnCopyRuntimeDependencies">
+                <Target Name="BdnCopyRuntimeDependencies" AfterTargets="ResolveReferences">
                   <ItemGroup>
-                    <_FilesToCopy Include="$({artifactsPaths.BinariesDirectoryPath})runtimes\**\*" />
+                    <_FilesToCopy Include="{artifactsPaths.BinariesDirectoryPath}runtimes\**\*" />
                   </ItemGroup>
 
-                  <Copy
-                    SourceFiles="@(_FilesToCopy)"
-                    DestinationFiles="@(_FilesToCopy->'$(TargetDir)%(RecursiveDir)%(Filename)%(Extension)')" />
+                  <Copy SourceFiles="@(_FilesToCopy)" DestinationFolder="$(TargetDir)" />
                 </Target>
                 """;
 
