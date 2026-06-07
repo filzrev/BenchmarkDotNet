@@ -196,15 +196,15 @@ namespace BenchmarkDotNet.Toolchains.CsProj
             // Add MSBuild task to copy native dependenies.
             
             var copyTarget =
-                """
+                $"""
                 <Target Name="BdnCopyRuntimeDependencies">
                   <ItemGroup>
-                    <_FilesToCopy Include="runtimes\**\*" />
+                    <_FilesToCopy Include="$({artifactsPaths.BinariesDirectoryPath})runtimes\**\*" />
                   </ItemGroup>
 
                   <Copy
                     SourceFiles="@(_FilesToCopy)"
-                    DestinationFiles="@(_FilesToCopy->'%(RecursiveDir)%(Filename)%(Extension)')" />
+                    DestinationFiles="@(_FilesToCopy->'$(TargetDir)%(RecursiveDir)%(Filename)%(Extension)')" />
                 </Target>
                 """;
 
