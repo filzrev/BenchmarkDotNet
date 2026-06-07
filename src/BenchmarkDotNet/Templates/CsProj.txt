@@ -46,7 +46,6 @@
 
   $RUNTIMESETTINGS$
 
-
   <Target Name="AddNativeDependencies" AfterTargets="ResolveReferences">
     <ItemGroup>
       <ReferenceCopyLocalPaths
