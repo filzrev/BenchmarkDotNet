@@ -9,6 +9,7 @@
     <OutputPath>$OUTPUT_PATH$</OutputPath>
     <PublishDir>$PUBLISH_DIR$</PublishDir>
 
+    <!-- Suppress error NETSDK1085: The 'NoBuild' property was set to true but the 'Build' target was invoked. That occurred when running `dotnet publish` command. -->
     <BuildProjectReferences Condition="'$(NoBuild)' == 'true'">false</BuildProjectReferences>
   </PropertyGroup>
 

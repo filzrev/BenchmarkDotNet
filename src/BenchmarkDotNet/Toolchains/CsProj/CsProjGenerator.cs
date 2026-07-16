@@ -225,26 +225,25 @@ namespace BenchmarkDotNet.Toolchains.CsProj
                 ));
             }
 
-            // Add native assets dll references.
+            // Native assets are not copied to bin directory when ProjectReference is remove.
+            // So it need to add items as <None> element.
             foreach (var item in gatheredData.Items.GetNativeAssets())
             {
-                itemGroup.Add(new XElement("Reference",
-                    new XAttribute("Include", item.Filename),
-                    new XElement("HintPath", item.FullPath)
-                // TODO: Add Aliases here for extern alias #2289
+                itemGroup.Add(new XElement("None",
+                    new XAttribute("Include", item.FullPath),
+                    new XElement("TargetPath", item.DestinationSubPath),
+                    new XElement("CopyToOutputDirectory", "PreserveNewest") // `IfDifferent` option requires .NET 9 SDK
                 ));
             }
 
-            // TODO: Need to add resources?
+            // TODO: Satellite assembly DLLs seems automatically copied to bin directory.
             //foreach (var item in gatheredData.Items.GetResourceAssets())
             //{
             //    itemGroup.Add(new XElement("Reference",
             //        new XAttribute("Include", item.Filename),
             //        new XElement("HintPath", item.FullPath)
-            //    // TODO: Add Aliases here for extern alias #2289
             //    ));
             //}
-
 
             // Temporary workaround for `System.ValueTuple` related issue.
             // https://github.com/dotnet/maintenance-packages/issues/258
