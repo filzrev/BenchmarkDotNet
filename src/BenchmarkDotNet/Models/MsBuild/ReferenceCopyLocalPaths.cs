@@ -152,7 +152,7 @@ internal class ProjectReference : ReferenceCopyLocalPath
 
     public required string OriginalProjectReferenceItemSpec { get; init; }
 
-    public required string ImageRuntime { get; init; }
+    public string ImageRuntime { get; init; } = ""; // Not exists on non-Windows environment.
 
     public required string TargetPlatformIdentifier { get; init; }
 
