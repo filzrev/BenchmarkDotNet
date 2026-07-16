@@ -27,6 +27,7 @@ namespace BenchmarkDotNet.IntegrationTests
             var toolchain = NativeAotToolchain.CreateBuilder().UseNuGet().IlcInstructionSet(IsAvx2Supported() ? "avx2" : "").ToToolchain();
 
             return ManualConfig.CreateEmpty()
+                .WithOptions(ConfigOptions.KeepBenchmarkFiles)
                 .AddJob(Job.Dry
                     .WithRuntime(NativeAotRuntime.GetCurrentVersion()) // we test against latest version for current TFM to make sure we avoid issues like #1055
                     .WithToolchain(toolchain)
