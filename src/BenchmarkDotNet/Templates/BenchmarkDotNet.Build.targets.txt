@@ -16,7 +16,9 @@
   <!-- Custom targets for benchmark project. -->
   <Target Name="BdnDumpReferenceCopyLocalPaths"
     DependsOnTargets="ResolveReferences"
+    AfterTargets="BdnFilterPackageAssets"
     Condition="'$(MSBuildProjectFile)' == '$BENCHMARK_PROJ$'"
     Returns="@(ReferenceCopyLocalPaths)">
   </Target>
+
 </Project>

@@ -197,9 +197,6 @@ namespace BenchmarkDotNet.Toolchains.CsProj
             var itemGroup = new XElement("ItemGroup");
             doc.Root!.LastNode!.AddBeforeSelf(itemGroup);
 
-            // Remove ProjectReference node of benchmark project after gathered dll references are added.
-            doc.Root.Descendants("ProjectReference").Single().Remove();
-
             // Add original benchmark output assembly reference.
             itemGroup.Add(new XElement("Reference",
                 new XAttribute("Include", gatheredData.TargetName),
@@ -264,6 +261,10 @@ namespace BenchmarkDotNet.Toolchains.CsProj
                   new XAttribute("Version", "4.6.2")
                 ));
             }
+
+            // TODO: 
+            // Remove ProjectReference after gathered dll references are added.
+            // doc.Root.Descendants("ProjectReference").Single().Remove();
 
             doc.Save(artifactsPaths.ProjectFilePath, SaveOptions.None);
         }
