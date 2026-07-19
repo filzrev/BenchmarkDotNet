@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "Default": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    },
+    "--list full": {
+      "commandName": "Project",
+      "commandLineArgs": "--xunit-list full"
+    },
+    "--info": {
+      "commandName": "Project",
+      "commandLineArgs": "--info"
+    },
+    "--help": {
+      "commandName": "Project",
+      "commandLineArgs": "--help"
+    }
+  }
+}
