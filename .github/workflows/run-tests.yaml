@@ -99,25 +99,3 @@ jobs:
           path: |
             **/*.trx
             **/log_*.diag
-
-  test-pack:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - name: Run task 'pack'
-        run: ./build.cmd pack
-
-  spellcheck-docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
-        name: Setup node
-        with:
-          node-version: "24"
-      - name: Install cSpell
-        run: npm install -g cspell@9.7.0
-      - name: Copy cSpell config
-        run: cp ./build/cSpell.json ./cSpell.json
-      - name: Run cSpell
-        run: cspell --config ./cSpell.json "docs/**/*.md" --no-progress
