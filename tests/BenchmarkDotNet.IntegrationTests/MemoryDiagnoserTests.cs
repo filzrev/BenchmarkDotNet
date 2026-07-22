@@ -189,6 +189,8 @@ namespace BenchmarkDotNet.IntegrationTests
         [Trait(Constants.Category, Constants.BackwardCompatibilityCategory)]
         public void TieredJitShouldNotInterfereAllocationResults(IToolchain toolchain)
         {
+            VerifyTelemetryOptOut();
+
             AssertAllocations(toolchain, typeof(TimeConsumingBenchmark), new Dictionary<string, long>
             {
                 { nameof(TimeConsumingBenchmark.TimeConsuming), 0 }
@@ -285,12 +287,28 @@ namespace BenchmarkDotNet.IntegrationTests
             if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
                 return;
 
+            VerifyTelemetryOptOut();
+
             long objectAllocationOverhead = IntPtr.Size * 2; // pointer to method table + object header word
             long arraySizeOverhead = IntPtr.Size; // array length
             AssertAllocations(toolchain, typeof(TimeConsuming), new Dictionary<string, long>
             {
                 { nameof(TimeConsuming.SixtyFourBytesArray), 64 + objectAllocationOverhead + arraySizeOverhead }
             });
+        }
+
+        private static void VerifyTelemetryOptOut()
+        {
+            // When MTP telemetry feature is enabled, extra allocation (792 bytes) occurred randomly on Windows.
+            var optout = Environment.GetEnvironmentVariable("TESTINGPLATFORM_TELEMETRY_OPTOUT");
+            switch (optout)
+            {
+                case "1":
+                case "true":
+                    break;
+                default:
+                    throw new NotSupportedException("Measure memory allocation requires setting `TESTINGPLATFORM_TELEMETRY_OPTOUT=true`.");
+            }
         }
 
         public class MultiThreadedAllocation
