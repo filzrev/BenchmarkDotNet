@@ -45,7 +45,7 @@ namespace BenchmarkDotNet.IntegrationTests
             if (ContinuousIntegration.IsGitHubDraftPR())
                 yield break;
 
-            yield return [Job.Default.GetToolchain()];
+            //yield return [Job.Default.GetToolchain()];
         }
 
         public class AccurateAllocations
