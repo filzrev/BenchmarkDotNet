@@ -140,44 +140,57 @@ namespace BenchmarkDotNet.Disassemblers
     {
         protected override IEnumerable<Asm> Decode(byte[] code, ulong startAddress, State state, int depth, ClrMethod currentMethod, DisassemblySyntax syntax)
         {
-            const Arm64DisassembleMode disassembleMode = Arm64DisassembleMode.Arm;
-            using (CapstoneArm64Disassembler disassembler = CapstoneDisassembler.CreateArm64Disassembler(disassembleMode))
             {
-                // Enables disassemble details, which are disabled by default, to provide more detailed information on
-                // disassembled binary code.
-                disassembler.EnableInstructionDetails = true;
-                disassembler.DisassembleSyntax = Map(syntax);
-                RegisterValueAccumulator accumulator = new RegisterValueAccumulator();
-                accumulator.Init(state.Runtime);
-
-                Arm64Instruction[] instructions = disassembler.Disassemble(code, (long)startAddress);
-                foreach (Arm64Instruction instruction in instructions)
+                ReadOnlySpan<byte> instructionBuffer = code;
+                var disassembler = new AsmArm64.Arm64Disassembler();
+                var textWriter = new StringWriter();
+                disassembler.Disassemble(instructionBuffer, textWriter);
+                Console.WriteLine("----------");
+                Console.WriteLine(textWriter);
+                Console.WriteLine("----------");
+            }
+            {
+                const Arm64DisassembleMode disassembleMode = Arm64DisassembleMode.Arm;
+                using (CapstoneArm64Disassembler disassembler = CapstoneDisassembler.CreateArm64Disassembler(disassembleMode))
                 {
-                    bool isIndirect = false;
-                    bool isPrestubMD = false;
+                    // Enables disassemble details, which are disabled by default, to provide more detailed information on
+                    // disassembled binary code.
+                    disassembler.EnableInstructionDetails = true;
+                    disassembler.DisassembleSyntax = Map(syntax);
+                    RegisterValueAccumulator accumulator = new RegisterValueAccumulator();
+                    accumulator.Init(state.Runtime);
 
-                    ulong address = 0;
-                    if (TryGetReferencedAddress(instruction, accumulator, (uint)state.Runtime.DataTarget.DataReader.PointerSize, out address, out isIndirect))
+                    Arm64Instruction[] instructions = disassembler.Disassemble(code, (long)startAddress);
+
+                    Console.WriteLine(":::instructions:" + instructions.Length);
+                    foreach (Arm64Instruction instruction in instructions)
                     {
-                        if (isIndirect && state.RuntimeVersion.Major >= 7)
+                        bool isIndirect = false;
+                        bool isPrestubMD = false;
+
+                        ulong address = 0;
+                        if (TryGetReferencedAddress(instruction, accumulator, (uint)state.Runtime.DataTarget.DataReader.PointerSize, out address, out isIndirect))
                         {
-                            FlushCachedDataIfNeeded(state.Runtime.DataTarget.DataReader, address, new byte[1]);
-                            TryResolvePrecode(state.Runtime.DataTarget.DataReader, ref address, out isPrestubMD);
+                            if (isIndirect && state.RuntimeVersion.Major >= 7)
+                            {
+                                FlushCachedDataIfNeeded(state.Runtime.DataTarget.DataReader, address, new byte[1]);
+                                TryResolvePrecode(state.Runtime.DataTarget.DataReader, ref address, out isPrestubMD);
+                            }
+                            TryTranslateAddressToName(address, isPrestubMD, state, depth, currentMethod);
                         }
-                        TryTranslateAddressToName(address, isPrestubMD, state, depth, currentMethod);
+
+                        accumulator.Feed(instruction);
+
+                        yield return new Arm64Asm()
+                        {
+                            InstructionPointer = (ulong)instruction.Address,
+                            InstructionLength = instruction.Bytes.Length,
+                            Instruction = instruction,
+                            ReferencedAddress = (address > ushort.MaxValue) ? address : null,
+                            IsReferencedAddressIndirect = isIndirect,
+                            DisassembleSyntax = disassembler.DisassembleSyntax
+                        };
                     }
-
-                    accumulator.Feed(instruction);
-
-                    yield return new Arm64Asm()
-                    {
-                        InstructionPointer = (ulong)instruction.Address,
-                        InstructionLength = instruction.Bytes.Length,
-                        Instruction = instruction,
-                        ReferencedAddress = (address > ushort.MaxValue) ? address : null,
-                        IsReferencedAddressIndirect = isIndirect,
-                        DisassembleSyntax = disassembler.DisassembleSyntax
-                    };
                 }
             }
         }
