@@ -291,7 +291,10 @@ namespace BenchmarkDotNet.Disassemblers
         protected void TryTranslateAddressToName(ulong address, bool isAddressPrecodeMD, State state, int depth, ClrMethod currentMethod)
         {
             if (!IsValidAddress(address) || state.AddressToNameMapping.ContainsKey(address))
+            {
+                Console.WriteLine(":::!IsValidAddress:" + currentMethod.Name);
                 return;
+            }
 
             var runtime = state.Runtime;
 
