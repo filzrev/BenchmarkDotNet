@@ -73,6 +73,8 @@ namespace BenchmarkDotNet.Disassemblers
         {
             using var dataTarget = Attach(args.ProcessId);
 
+            Console.WriteLine(":::ClrVersion:" + dataTarget.ClrVersions.Single().Version);
+
             var runtime = dataTarget.ClrVersions.Single().CreateRuntime();
 
             var state = new State(runtime, args.TargetFrameworkMoniker);
