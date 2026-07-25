@@ -54,8 +54,7 @@ on:
         required: true
         default: false
 env:
-  DOTNET_JitPrintInlinedMethods: 1
-  DOTNET_JitInlineDump: "*"
+  TC_OnStackReplacement: 0
 
 jobs:
   test:

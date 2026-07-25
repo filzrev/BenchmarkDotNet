@@ -175,15 +175,7 @@ namespace BenchmarkDotNet.IntegrationTests
 
         private IConfig CreateConfig(Jit jit, Platform platform, IToolchain toolchain, IDiagnoser disassemblyDiagnoser, RunStrategy runStrategy)
         {
-            var providers = new[]
-                {
-                    new EventPipeProvider(ClrTraceEventParser.ProviderName, EventLevel.Verbose,
-                        (long) (ClrTraceEventParser.Keywords.Jit| ClrTraceEventParser.Keywords.JitTracing)),
-                };
-
-
             return ManualConfig.CreateEmpty().KeepBenchmarkFiles().WithOptions(ConfigOptions.GenerateMSBuildBinLog)
-                .AddDiagnoser(new EventPipeProfiler(providers: providers))
                         .AddJob(Job.Dry.WithJit(jit)
                             .WithPlatform(platform)
                             .WithToolchain(toolchain)
