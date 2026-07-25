@@ -145,7 +145,7 @@ namespace BenchmarkDotNet.Disassemblers
                             {
                                 if (filter.IsMatch(method.Signature!))
                                 {
-                                    Console.WriteLine(":::Enqueue:'" + method.Name + "'");
+                                    Console.WriteLine(":::Enqueue1:'" + method.Name + "'");
                                     state.Todo.Enqueue(new MethodInfo(method,
                                         depth: args.MaxDepth)); // don't allow for recursive disassembling
                                     break;
@@ -350,7 +350,10 @@ namespace BenchmarkDotNet.Disassemblers
                         // already been JITted we still want to disassemble its body — otherwise a
                         // call routed through a stable-entry precode never enqueues its target.
                         if (methodDescriptor.NativeCode > 0 && !state.HandledMethods.Contains(methodDescriptor))
+                        {
+                            Console.WriteLine(":::Enqueue2:'" + methodDescriptor.Name + "'");
                             state.Todo.Enqueue(new MethodInfo(methodDescriptor, depth + 1));
+                        }
                         else
                             Console.WriteLine(":::Failed to enqueue:" + methodDescriptor.Name);
                     }
@@ -378,7 +381,10 @@ namespace BenchmarkDotNet.Disassemblers
             }
 
             if (!state.HandledMethods.Contains(method))
+            {
+                Console.WriteLine(":::Enqueue3:'" + method.Name + "'");
                 state.Todo.Enqueue(new MethodInfo(method, depth + 1));
+            }
             else
                 Console.WriteLine(":::AlreadyHandled:" + method.Name);
 
