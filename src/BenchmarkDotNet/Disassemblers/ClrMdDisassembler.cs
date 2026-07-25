@@ -347,12 +347,16 @@ namespace BenchmarkDotNet.Disassemblers
                 if (methodTableName.IsNotBlank())
                 {
                     state.AddressToNameMapping.Add(address, $"MT_{methodTableName}");
+                    Console.WriteLine(":::AddressToNameMapping2:" + methodTableName);
                 }
                 return;
             }
 
             if (method.NativeCode == currentMethod.NativeCode && method.Signature == currentMethod.Signature)
+            {
+                Console.WriteLine(":::NativeCode1:" + method.Signature);
                 return; // in case of a call which is just a jump within the method or a recursive call
+            }
 
             if (!state.HandledMethods.Contains(method))
                 state.Todo.Enqueue(new MethodInfo(method, depth + 1));
@@ -363,6 +367,8 @@ namespace BenchmarkDotNet.Disassemblers
             if (!methodName.Any(c => c == '.')) // the method name does not contain namespace and type name
                 methodName = $"{method.Type.Name}.{method.Signature}";
             state.AddressToNameMapping.Add(address, methodName);
+
+            Console.WriteLine(":::Tail1:" + methodName);
         }
 
         protected void FlushCachedDataIfNeeded(IDataReader dataTargetDataReader, ulong address, byte[] buffer)
