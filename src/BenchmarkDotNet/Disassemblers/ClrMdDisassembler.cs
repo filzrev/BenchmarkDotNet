@@ -3,6 +3,7 @@ using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Filters;
 using BenchmarkDotNet.Portability;
+using BenchmarkDotNet.Serialization;
 using Microsoft.Diagnostics.Runtime;
 using System.Text.RegularExpressions;
 
@@ -139,6 +140,8 @@ namespace BenchmarkDotNet.Disassemblers
 
         private DisassembledMethod[] Disassemble(ClrMdArgs args, State state)
         {
+            Console.WriteLine(BdnJsonSerializer.Serialize(args), true);
+
             var result = new List<DisassembledMethod>();
             DisassemblySyntax syntax = Enum.Parse<DisassemblySyntax>(args.Syntax);
 
