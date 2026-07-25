@@ -54,8 +54,8 @@ on:
         required: true
         default: false
 env:
-  DOTNET_JitPrintInlinedMethods=1
-  DOTNET_JitInlineDump=JustReturn
+  DOTNET_JitPrintInlinedMethods: 1
+  DOTNET_JitInlineDump: JustReturn
 
 jobs:
   test:
