@@ -113,6 +113,7 @@ namespace BenchmarkDotNet.Disassemblers
 
             foreach (ClrModule module in state.Runtime.EnumerateModules())
                 foreach (ClrType type in module.EnumerateTypeDefToMethodTableMap().Select(map => state.Runtime.GetTypeByMethodTable(map.MethodTable)).WhereNotNull())
+                {
                     foreach (ClrMethod method in type.Methods)
                     {
                         if (method.Signature.IsBlank())
@@ -149,6 +150,7 @@ namespace BenchmarkDotNet.Disassemblers
                             Console.WriteLine(":::: Signature: " + method.ToString());
                         }
                     }
+                }
         }
 
         private DisassembledMethod[] Disassemble(ClrMdArgs args, State state)
@@ -330,9 +332,12 @@ namespace BenchmarkDotNet.Disassemblers
                         // call routed through a stable-entry precode never enqueues its target.
                         if (methodDescriptor.NativeCode > 0 && !state.HandledMethods.Contains(methodDescriptor))
                             state.Todo.Enqueue(new MethodInfo(methodDescriptor, depth + 1));
+                        else
+                            Console.WriteLine(":::Failed to enqueue:" + methodDescriptor.Name);
                     }
                     else
                     {
+                        Console.WriteLine(":::AddressToNameMapping:" + methodDescriptor.Name);
                         state.AddressToNameMapping.Add(address, $"MD_{methodDescriptor.Signature}");
                     }
                     return;
@@ -351,6 +356,8 @@ namespace BenchmarkDotNet.Disassemblers
 
             if (!state.HandledMethods.Contains(method))
                 state.Todo.Enqueue(new MethodInfo(method, depth + 1));
+            else
+                Console.WriteLine(":::AlreadyHandled:" + method.Name);
 
             var methodName = method.Signature!;
             if (!methodName.Any(c => c == '.')) // the method name does not contain namespace and type name
