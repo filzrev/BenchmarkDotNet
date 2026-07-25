@@ -166,10 +166,15 @@ namespace BenchmarkDotNet.Disassemblers
                 var methodInfo = state.Todo.Dequeue();
 
                 if (!state.HandledMethods.Add(methodInfo.Method)) // add it now to avoid StackOverflow for recursive methods
+                {
+                    Console.WriteLine(":::Skipped:" + methodInfo.Method.Name);
                     continue; // already handled
+                }
 
                 if (args.MaxDepth >= methodInfo.Depth)
                     result.Add(DisassembleMethod(methodInfo, state, args, syntax, sourceCodeProvider));
+                else
+                    Console.WriteLine(":::Skipped by Depth:" + methodInfo.Method.Name);
             }
 
             return result.ToArray();
