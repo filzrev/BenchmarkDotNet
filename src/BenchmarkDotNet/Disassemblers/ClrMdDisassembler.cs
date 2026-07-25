@@ -345,6 +345,9 @@ namespace BenchmarkDotNet.Disassemblers
 
             if (method is null)
             {
+                Console.WriteLine(":::State:" + state.RuntimeVersion);
+
+                Console.WriteLine(":::ClrInfo:" + state.Runtime.ClrInfo.Version);
                 Console.WriteLine(":::Address:" + address);
                 var methodDescriptor = runtime.GetMethodByHandle(address);
                 if (methodDescriptor is not null)
