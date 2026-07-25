@@ -142,7 +142,9 @@ namespace BenchmarkDotNet.Disassemblers
         {
             {
                 ReadOnlySpan<byte> instructionBuffer = code;
-                var disassembler = new AsmArm64.Arm64Disassembler();
+                var disassembler = new AsmArm64.Arm64Disassembler(new AsmArm64.Arm64DisassemblerOptions()
+                {                    
+                });
                 var textWriter = new StringWriter();
                 disassembler.Disassemble(instructionBuffer, textWriter);
                 Console.WriteLine("----------");
