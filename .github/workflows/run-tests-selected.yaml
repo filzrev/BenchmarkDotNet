@@ -107,6 +107,6 @@ jobs:
           if-no-files-found: ignore
           path: |
             artifacts/**/*
-            **/BenchmarkDotNet.IntegrationTests-1/**
+            **/BenchmarkDotNet.IntegrationTests-Dry-1/**
             **/*.binlog
             **/BenchmarkDotNet.Artifacts/**
