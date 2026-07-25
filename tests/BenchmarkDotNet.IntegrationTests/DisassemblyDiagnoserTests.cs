@@ -47,7 +47,7 @@ namespace BenchmarkDotNet.IntegrationTests
                 }
                 else if (RuntimeInformation.GetCurrentPlatform() is Platform.Arm64)
                 {
-                    yield return [Jit.RyuJit, Platform.Arm64, CsProjCoreToolchain.NetCoreApp80]; // .NET Core arm64
+                    yield return [Jit.RyuJit, Platform.Arm64, CsProjCoreToolchain.NetCoreApp90]; // .NET Core arm64
                 }
             }
 
