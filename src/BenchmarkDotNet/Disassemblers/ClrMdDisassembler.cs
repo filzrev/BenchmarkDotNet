@@ -310,6 +310,7 @@ namespace BenchmarkDotNet.Disassemblers
                 && runtime.DataTarget.DataReader.ReadPointer(address, out ulong newAddress) && IsValidAddress(newAddress))
             {
                 method = runtime.GetMethodByInstructionPointer(newAddress);
+                Console.WriteLine(":::isResolved:" + method?.Name);
             }
 
             if (method is null)
@@ -363,6 +364,10 @@ namespace BenchmarkDotNet.Disassemblers
                         state.AddressToNameMapping.Add(address, $"MD_{methodDescriptor.Signature}");
                     }
                     return;
+                }
+                else
+                {
+                    Console.WriteLine(":::Fail;ed to get method descriptopr:");
                 }
 
                 var methodTableName = runtime.GetTypeByMethodTable(address)?.Name;
