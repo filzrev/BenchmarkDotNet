@@ -173,10 +173,15 @@ namespace BenchmarkDotNet.Disassemblers
                         {
                             if (isIndirect && state.RuntimeVersion.Major >= 7)
                             {
+                                Console.WriteLine(":::Flushed:" + address);
                                 FlushCachedDataIfNeeded(state.Runtime.DataTarget.DataReader, address, new byte[1]);
                                 TryResolvePrecode(state.Runtime.DataTarget.DataReader, ref address, out isPrestubMD);
                             }
                             TryTranslateAddressToName(address, isPrestubMD, state, depth, currentMethod);
+                        }
+                        else
+                        {
+                            Console.WriteLine(":::Failed to get reference address:" + instruction.ToString());
                         }
 
                         accumulator.Feed(instruction);
