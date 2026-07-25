@@ -113,8 +113,14 @@ namespace BenchmarkDotNet.Disassemblers
 
             foreach (ClrModule module in state.Runtime.EnumerateModules())
                 foreach (ClrType type in module.EnumerateTypeDefToMethodTableMap().Select(map => state.Runtime.GetTypeByMethodTable(map.MethodTable)).WhereNotNull())
-                    foreach (ClrMethod method in type.Methods.Where(method => method.Signature.IsNotBlank()))
+                    foreach (ClrMethod method in type.Methods)
                     {
+                        if (method.Signature.IsBlank())
+                        {
+                            Console.WriteLine(":::EmptyMethodSignature:'" + method.Name + "'");
+                            continue;
+                        }
+
                         if (method.NativeCode > 0)
                         {
                             if (!state.AddressToNameMapping.TryGetValue(method.NativeCode, out _))
