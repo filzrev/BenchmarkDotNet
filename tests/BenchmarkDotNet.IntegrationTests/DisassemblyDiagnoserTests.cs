@@ -14,6 +14,9 @@ using BenchmarkDotNet.Tests.XUnit;
 using BenchmarkDotNet.Toolchains;
 using BenchmarkDotNet.Toolchains.CsProj;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
+using Microsoft.Diagnostics.NETCore.Client;
+using Microsoft.Diagnostics.Tracing.Parsers;
+using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
 
 namespace BenchmarkDotNet.IntegrationTests
@@ -171,22 +174,32 @@ namespace BenchmarkDotNet.IntegrationTests
         }
 
         private IConfig CreateConfig(Jit jit, Platform platform, IToolchain toolchain, IDiagnoser disassemblyDiagnoser, RunStrategy runStrategy)
-            => ManualConfig.CreateEmpty().KeepBenchmarkFiles().WithOptions(ConfigOptions.GenerateMSBuildBinLog)
-                .AddJob(Job.Dry.WithJit(jit)
-                    .WithPlatform(platform)
-                    .WithToolchain(toolchain)
-                    .WithStrategy(runStrategy)
-                    // Ensure the build goes through the full process and doesn't build without dependencies like most of the integration tests do.
+        {
+            var providers = new[]
+                {
+                    new EventPipeProvider(ClrTraceEventParser.ProviderName, EventLevel.Verbose,
+                        (long) (ClrTraceEventParser.Keywords.Jit| ClrTraceEventParser.Keywords.JitTracing)),
+                };
+
+
+            return ManualConfig.CreateEmpty().KeepBenchmarkFiles().WithOptions(ConfigOptions.GenerateMSBuildBinLog)
+                .AddDiagnoser(new EventPipeProfiler(providers: providers))
+                        .AddJob(Job.Dry.WithJit(jit)
+                            .WithPlatform(platform)
+                            .WithToolchain(toolchain)
+                            .WithStrategy(runStrategy)
+                            // Ensure the build goes through the full process and doesn't build without dependencies like most of the integration tests do.
 #if RELEASE
-                    .WithCustomBuildConfiguration("Release")
+                            .WithCustomBuildConfiguration("Release")
 #else
                     .WithCustomBuildConfiguration("Debug")
 #endif
-                )
-                .AddLogger(DefaultConfig.Instance.GetLoggers().ToArray())
-                .AddColumnProvider(DefaultColumnProviders.Instance)
-                .AddDiagnoser(disassemblyDiagnoser)
-                .AddLogger(new OutputLogger(Output));
+                        )
+                        .AddLogger(DefaultConfig.Instance.GetLoggers().ToArray())
+                        .AddColumnProvider(DefaultColumnProviders.Instance)
+                        .AddDiagnoser(disassemblyDiagnoser)
+                        .AddLogger(new OutputLogger(Output));
+        }
 
         private void AssertDisassemblyResult(DisassemblyResult result, string methodSignature)
         {
