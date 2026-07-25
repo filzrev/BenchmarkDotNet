@@ -52,7 +52,11 @@ on:
         type: boolean
         description: Skip setup additional tools for Wasm/NativeAot related tests
         required: true
-        default: false      
+        default: false
+env:
+  DOTNET_JitPrintInlinedMethods=1
+  DOTNET_JitInlineDump=JustReturn
+
 jobs:
   test:
     name: test (${{ inputs.runs_on }} --framework ${{ inputs.framework}} --filter ${{ inputs.filter }})
