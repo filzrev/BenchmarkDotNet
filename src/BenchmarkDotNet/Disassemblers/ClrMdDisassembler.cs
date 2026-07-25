@@ -135,6 +135,13 @@ namespace BenchmarkDotNet.Disassemblers
                                 }
                             }
                         }
+                        else
+                        {
+                            Console.WriteLine(":::: Can't disassembled: " + method.Name);
+                            Console.WriteLine(":::: ILOffsetMap: " + method.ILOffsetMap);
+                            Console.WriteLine(":::: NativeCode: " + method.NativeCode);
+                            Console.WriteLine(":::: Signature: " + method.ToString());
+                        }
                     }
         }
 
