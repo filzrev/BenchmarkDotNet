@@ -145,6 +145,7 @@ namespace BenchmarkDotNet.Disassemblers
                             {
                                 if (filter.IsMatch(method.Signature!))
                                 {
+                                    Console.WriteLine(":::Enqueue:'" + method.Name + "'");
                                     state.Todo.Enqueue(new MethodInfo(method,
                                         depth: args.MaxDepth)); // don't allow for recursive disassembling
                                     break;
