@@ -79,12 +79,16 @@ namespace BenchmarkDotNet.Disassemblers
 
             if (args.Filters.Length > 0)
             {
+                Console.WriteLine(":::Filters:" + args.Filters.Length);
                 FilterAndEnqueue(state, args);
             }
             else
             {
                 var typeWithBenchmark = state.Runtime.EnumerateModules().Select(module => module.GetTypeByName(args.TypeName)).WhereNotNull().First();
 
+                var m = typeWithBenchmark.Methods.Single(method => method.Attributes.HasFlag(System.Reflection.MethodAttributes.Public) && method.Name == args.MethodName);
+
+                Console.WriteLine(":::Enqueue:" + m.Name);
                 state.Todo.Enqueue(
                     new MethodInfo(
                         // the Disassembler Entry Method is always parameterless, so check by name is enough
