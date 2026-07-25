@@ -140,7 +140,7 @@ namespace BenchmarkDotNet.Disassemblers
 
         private DisassembledMethod[] Disassemble(ClrMdArgs args, State state)
         {
-            Console.WriteLine(BdnJsonSerializer.Serialize(args), true);
+            Console.WriteLine(BdnJsonSerializer.Serialize(args, true));
 
             var result = new List<DisassembledMethod>();
             DisassemblySyntax syntax = Enum.Parse<DisassemblySyntax>(args.Syntax);
