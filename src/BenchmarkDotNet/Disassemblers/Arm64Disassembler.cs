@@ -159,8 +159,6 @@ namespace BenchmarkDotNet.Disassemblers
                     ulong address = 0;
                     if (TryGetReferencedAddress(instruction, accumulator, (uint)state.Runtime.DataTarget.DataReader.PointerSize, out address, out isIndirect))
                     {
-                        if (isIndirect)
-                            address = state.Runtime.DataTarget.DataReader.ReadPointer(address);
                         if (isIndirect && state.RuntimeVersion.Major >= 7)
                         {
                             FlushCachedDataIfNeeded(state.Runtime.DataTarget.DataReader, address, new byte[1]);

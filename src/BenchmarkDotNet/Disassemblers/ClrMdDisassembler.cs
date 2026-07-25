@@ -339,6 +339,9 @@ namespace BenchmarkDotNet.Disassemblers
                 }
             }
 
+            if (method != null)
+                Console.WriteLine(":::NotNullMethod:" + method.Name);
+
             if (method is null)
             {
                 var methodDescriptor = runtime.GetMethodByHandle(address);
@@ -367,7 +370,7 @@ namespace BenchmarkDotNet.Disassemblers
                 }
                 else
                 {
-                    Console.WriteLine(":::Fail;ed to get method descriptopr:");
+                    Console.WriteLine(":::Failled to get method descriptopr:");
                 }
 
                 var methodTableName = runtime.GetTypeByMethodTable(address)?.Name;
