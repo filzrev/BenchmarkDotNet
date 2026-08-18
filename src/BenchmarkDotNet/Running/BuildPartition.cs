@@ -116,6 +116,9 @@ namespace BenchmarkDotNet.Running
         {
             get
             {
+                if (RuntimeInformation.IsNetCore)
+                    return false;
+
                 if (!XUnitHelper.IsIntegrationTest.Value || !RuntimeInformation.IsNetCore)
                     return false;
 
