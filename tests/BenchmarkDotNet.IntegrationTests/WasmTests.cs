@@ -24,7 +24,7 @@ namespace BenchmarkDotNet.IntegrationTests
         private const string V8SkipReason = "JSVU does not support ARM on Windows or Linux";
 
         [TheoryEnvSpecific(EnvRequirement.NonGitHubDraftPR)]
-        [InlineDataEnvSpecific([MonoAotCompilerMode.mini, "v8"], V8SkipReason, [EnvRequirement.NonWindowsArm, EnvRequirement.NonLinuxArm])]
+        // [InlineDataEnvSpecific([MonoAotCompilerMode.mini, "v8"], V8SkipReason, [EnvRequirement.NonWindowsArm, EnvRequirement.NonLinuxArm])]
         [InlineData(MonoAotCompilerMode.mini, "node")]
         // BUG: https://github.com/dotnet/BenchmarkDotNet/issues/3036
         [InlineData(MonoAotCompilerMode.wasm, "v8", Skip = "AOT is broken")]
