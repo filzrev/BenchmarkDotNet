@@ -41,7 +41,7 @@ namespace BenchmarkDotNet.IntegrationTests
 
             try
             {
-                CanExecute<NativeAotBenchmark>(GetConfig());
+                CanExecute<NativeAotBenchmark>(GetConfig().KeepBenchmarkFiles());
             }
             catch (MisconfiguredEnvironmentException e)
             {

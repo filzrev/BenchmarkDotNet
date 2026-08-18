@@ -27,8 +27,8 @@ namespace BenchmarkDotNet.IntegrationTests
         // [InlineDataEnvSpecific([MonoAotCompilerMode.mini, "v8"], V8SkipReason, [EnvRequirement.NonWindowsArm, EnvRequirement.NonLinuxArm])]
         [InlineData(MonoAotCompilerMode.mini, "node")]
         // BUG: https://github.com/dotnet/BenchmarkDotNet/issues/3036
-        [InlineData(MonoAotCompilerMode.wasm, "v8", Skip = "AOT is broken")]
-        [InlineData(MonoAotCompilerMode.wasm, "node", Skip = "AOT is broken")]
+        //[InlineData(MonoAotCompilerMode.wasm, "v8", Skip = "AOT is broken")]
+        //[InlineData(MonoAotCompilerMode.wasm, "node", Skip = "AOT is broken")]
         public void WasmIsSupported(MonoAotCompilerMode aotCompilerMode, string javaScriptEngine)
         {
             CanExecute<WasmBenchmark>(GetConfig(aotCompilerMode, javaScriptEngine));
@@ -84,7 +84,7 @@ namespace BenchmarkDotNet.IntegrationTests
                 .WithBuildTimeout(TimeSpan.FromSeconds(480)) // Increase timeout for `WasmSupportsInProcessDiagnosers` test on macos(x64)
                 .WithOption(ConfigOptions.LogBuildOutput, true)
                 .KeepBenchmarkFiles().WithOptions(ConfigOptions.GenerateMSBuildBinLog)
-                .WithOption(ConfigOptions.GenerateMSBuildBinLog, false);
+                .WithOption(ConfigOptions.GenerateMSBuildBinLog, true);
         }
 
         public class WasmBenchmark
