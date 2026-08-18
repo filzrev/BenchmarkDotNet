@@ -83,6 +83,7 @@ namespace BenchmarkDotNet.IntegrationTests
                     .WithToolchain(WasmToolchain.From(netCoreAppSettings)))
                 .WithBuildTimeout(TimeSpan.FromSeconds(480)) // Increase timeout for `WasmSupportsInProcessDiagnosers` test on macos(x64)
                 .WithOption(ConfigOptions.LogBuildOutput, true)
+                .KeepBenchmarkFiles().WithOptions(ConfigOptions.GenerateMSBuildBinLog)
                 .WithOption(ConfigOptions.GenerateMSBuildBinLog, false);
         }
 

@@ -108,3 +108,4 @@ jobs:
           path: |
             artifacts/**/*
             **/BenchmarkDotNet.Artifacts/**
+            **/*.binlog
