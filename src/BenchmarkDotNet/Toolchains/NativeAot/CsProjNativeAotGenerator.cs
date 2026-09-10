@@ -105,12 +105,19 @@ internal sealed class CsProjNativeAotGenerator : CsProjGenerator
 
         await File.WriteAllTextAsync(artifactsPaths.ProjectFilePath, GenerateProjectForNuGetBuild(projectFile, buildPartition, artifactsPaths, logger), cancellationToken).ConfigureAwait(false);
 
-        await GatherReferencesAsync(buildPartition, artifactsPaths, logger, cancellationToken).ConfigureAwait(false);
+        // Generate `bdn_generated.rd.xml`
         await GenerateReflectionFileAsync(artifactsPaths, cancellationToken).ConfigureAwait(false);
+
+        // Integration tests are built without dependencies, so we skip gathering dlls.
+        if (buildPartition.ForcedNoDependenciesForIntegrationTests)
+            return;
+
+        await GatherReferencesAsync(buildPartition, artifactsPaths, logger, cancellationToken).ConfigureAwait(false);
     }
 
     private string GenerateProjectForNuGetBuild(string projectFilePath, BuildPartition buildPartition, ArtifactsPaths artifactsPaths, ILogger logger) => $"""
     <Project Sdk="Microsoft.NET.Sdk">
+      <Import Project="$(MSBuildThisFileDirectory)BenchmarkDotNet.Build.props" />
       <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFrameworks>{Settings.TargetFrameworkMoniker}</TargetFrameworks>
@@ -129,7 +136,6 @@ internal sealed class CsProjNativeAotGenerator : CsProjGenerator
         <IlcGenerateStackTraceData>{settings.GenerateStackTraceData}</IlcGenerateStackTraceData>
         <StackTraceSupport>{settings.GenerateStackTraceData}</StackTraceSupport>
         <EnsureNETCoreAppRuntime>false</EnsureNETCoreAppRuntime> <!-- workaround for 'This runtime may not be supported by.NET Core.' error -->
-        <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles> <!-- workaround for 'Found multiple publish output files with the same relative path.' error -->
         <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
         <!-- Shorten obj path to work around https://github.com/dotnet/runtime/issues/103625. -->
         <IntermediateOutputPath>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', 'o'))</IntermediateOutputPath>
@@ -151,6 +157,7 @@ internal sealed class CsProjNativeAotGenerator : CsProjGenerator
       <PropertyGroup>
         <LangVersion Condition="'$(LangVersion)' == '' Or ($([System.Char]::IsDigit('$(LangVersion)', 0)) And '$(LangVersion)' &lt; '9.0')">latest</LangVersion>
       </PropertyGroup>
+      <Import Project="$(MSBuildThisFileDirectory)BenchmarkDotNet.Build.targets" />
     </Project>
     """;
 
