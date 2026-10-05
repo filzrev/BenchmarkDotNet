@@ -14,6 +14,8 @@ using BenchmarkDotNet.Toolchains;
 using BenchmarkDotNet.Toolchains.Framework;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using BenchmarkDotNet.Toolchains.NetCoreApp;
+using Microsoft.Diagnostics.Runtime;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace BenchmarkDotNet.IntegrationTests
@@ -21,6 +23,15 @@ namespace BenchmarkDotNet.IntegrationTests
     public class DisassemblyDiagnoserTests : BenchmarkTestExecutor
     {
         public DisassemblyDiagnoserTests(ITestOutputHelper output) : base(output) { }
+
+        [Fact]
+        public void Test_CreateSnapshotAndAttach_Then_ClrVersions()
+        {
+            var processId = Process.GetCurrentProcess().Id;
+            using var dataTarget = DataTarget.CreateSnapshotAndAttach(processId);
+            foreach (var clrVersion in dataTarget.ClrVersions.ToArray())
+                Output.WriteLine($"CLR Version: {clrVersion.Version}");
+        }
 
         public static IEnumerable<object[]> GetAllJits()
         {
