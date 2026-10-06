@@ -286,6 +286,16 @@ namespace BenchmarkDotNet.IntegrationTests
             Assert.Empty(result.Errors);
             AssertDisassemblyResult(result, $"{nameof(WithGeneratedMemberNames.Benchmark)}()");
             AssertDisassemblyResult(result, $"{nameof(WithGeneratedMemberNames.Called)}()");
+
+            foreach (DriveInfo drive in DriveInfo.GetDrives())
+            {
+                if (!drive.IsReady)
+                    continue;
+
+                Console.WriteLine(
+                    $"{drive.Name}: Free={drive.AvailableFreeSpace / (1024.0 * 1024 * 1024):F2} GB, " +
+                    $"Total={drive.TotalSize / (1024.0 * 1024 * 1024):F2} GB");
+            }
         }
 
         private IConfig CreateInProcessConfig(IDiagnoser disassemblyDiagnoser)
