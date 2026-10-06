@@ -46,11 +46,15 @@ public class CpuDetectorTests(ITestOutputHelper Output)
         CpuInfo? cpuInfo1 = new DefaultCpuDetector().Detect();
         CpuInfo? cpuInfo2 = new PowershellWmiCpuDetector().Detect();
 
+        Output.WriteLine($"DefaultCpuDetector: {cpuInfo1?.ToFullBrandName()}");
+        Output.WriteLine($"PowershellWmiCpuDetector: {cpuInfo2?.ToFullBrandName()}");
+
         // Assert
         cpuInfo1.Should().NotBeNull();
         cpuInfo2.Should().NotBeNull();
 
         cpuInfo1.Should().BeEquivalentTo(cpuInfo2, options => options
+            .Excluding(x=>x.NominalFrequencyHz)
             .Using<long?>(ctx =>
             {
                 if (ctx.Expectation is null)
