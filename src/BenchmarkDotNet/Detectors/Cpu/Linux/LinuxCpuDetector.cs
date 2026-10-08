@@ -29,6 +29,15 @@ internal class LinuxCpuDetector : ICpuDetector
         if (cpuInfo == string.Empty && lscpu == string.Empty)
             return null;
 
-        return LinuxCpuInfoParser.Parse(cpuInfo, lscpu);
+
+
+        var a = LinuxCpuInfoParser.Parse(cpuInfo, lscpu);
+
+        Console.WriteLine("=========================================");
+        Console.WriteLine("cpuInfo:" + cpuInfo);
+        Console.WriteLine("lscpu:" + lscpu);
+        Console.WriteLine(a.ToString());
+        Console.WriteLine("=========================================");
+        return a;
     }
 }
