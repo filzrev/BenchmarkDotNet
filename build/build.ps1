@@ -69,6 +69,7 @@ $env:DOTNET_ROOT=$InstallPath
 ###########################################################################
 # RUN BUILD SCRIPT
 ###########################################################################
-& dotnet run --configuration Release --project build/BenchmarkDotNet.Build/BenchmarkDotNet.Build.csproj --disable-build-servers -- $args
+& dotnet build --configuration Release --project build/BenchmarkDotNet.Build/BenchmarkDotNet.Build.csproj --disable-build-servers
+& dotnet run   --configuration Release --project build/BenchmarkDotNet.Build/BenchmarkDotNet.Build.csproj --no-build -- $args
 
 exit $LASTEXITCODE;
