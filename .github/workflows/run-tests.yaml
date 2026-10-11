@@ -42,6 +42,13 @@ jobs:
           vm_stat
           sysctl -n hw.memsize
           top -l 1 -s 0 | head -n 15
+          
+      - name: Run task 'build'
+        run: ./build.cmd build 
+      - run: |
+          vm_stat
+          sysctl -n hw.memsize
+          top -l 1 -s 0 | head -n 15
         
       - run: dotnet build-server shutdown
       - name: Inspect memory information
