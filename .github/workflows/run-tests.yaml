@@ -27,6 +27,12 @@ jobs:
             arch: 'x64'
     steps:
       - uses: actions/checkout@v7
+      
+      - run: |
+          vm_stat
+          sysctl -n hw.memsize
+          top -l 1 -s 0 | head -n 15
+      
       # Setup additional tools
       - name: Setup additional tools for Wasm/NativeAot tests
         if: ${{ github.event.pull_request.draft != true }}
