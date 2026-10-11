@@ -92,6 +92,11 @@ public class BuildRunner
             });
     }
 
+    public void ShutdownBuildServer()
+    {
+        context.DotNetBuildServerShutdown();
+    }
+
     public void Build()
     {
         context.Information("BuildSystemProvider: " + context.BuildSystem().Provider);

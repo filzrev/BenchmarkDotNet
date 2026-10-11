@@ -86,6 +86,9 @@ public class InstallWasmToolsWorkload : FrostingTask<BuildContext>, IHelpProvide
     public override void Run(BuildContext context)
     {
         context.BuildRunner.InstallWorkload("wasm-tools"); // It need to specify `wasm-tools-net10` when using newer version of .NET SDK.
+
+        // Shutdown VBCSCompiler process that are launched when installing `wasm-tools`.
+        context.BuildRunner.ShutdownBuildServer();
     }
 
     public HelpInfo GetHelp()
