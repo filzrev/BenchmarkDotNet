@@ -36,6 +36,8 @@ jobs:
         if: ${{ github.event.pull_request.draft != true }}
         uses: ./.github/actions/setup-additional-tools
         
+      - run: dotnet build-server shutdown
+        
       - run: |
           ps -axo pid,ppid,rss,%mem,comm | sort -k3,3nr | head -n 31
           
@@ -46,6 +48,10 @@ jobs:
           ps -axo pid,ppid,rss,%mem,comm | sort -k3,3nr | head -n 31
         
       - run: dotnet build-server shutdown
+      
+      - run: |
+          ps -axo pid,ppid,rss,%mem,comm | sort -k3,3nr | head -n 31
+          
       - name: Inspect memory information
         run: |
           system_profiler SPMemoryDataType
