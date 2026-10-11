@@ -94,7 +94,7 @@ public class BuildRunner
 
     public void ShutdownBuildServer()
     {
-        context.DotNetBuildServerShutdown();
+        // context.DotNetBuildServerShutdown();
     }
 
     public void Build()
