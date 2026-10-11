@@ -38,6 +38,11 @@ jobs:
         if: ${{ github.event.pull_request.draft != true }}
         uses: ./.github/actions/setup-additional-tools
         
+      - run: |
+          vm_stat
+          sysctl -n hw.memsize
+          top -l 1 -s 0 | head -n 15
+        
       - run: dotnet build-server shutdown
       - name: Inspect memory information
         run: |
