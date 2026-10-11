@@ -29,9 +29,7 @@ jobs:
       - uses: actions/checkout@v7
       
       - run: |
-          vm_stat
-          sysctl -n hw.memsize
-          top -l 1 -s 0 | head -n 15
+          ps -axo pid,ppid,rss,%mem,comm | sort -k3,3nr | head -n 31
       
       # Setup additional tools
       - name: Setup additional tools for Wasm/NativeAot tests
@@ -39,16 +37,13 @@ jobs:
         uses: ./.github/actions/setup-additional-tools
         
       - run: |
-          vm_stat
-          sysctl -n hw.memsize
-          top -l 1 -s 0 | head -n 15
+          ps -axo pid,ppid,rss,%mem,comm | sort -k3,3nr | head -n 31
           
       - name: Run task 'build'
-        run: ./build.cmd build 
+        run: ./build.cmd build
+         
       - run: |
-          vm_stat
-          sysctl -n hw.memsize
-          top -l 1 -s 0 | head -n 15
+          ps -axo pid,ppid,rss,%mem,comm | sort -k3,3nr | head -n 31
         
       - run: dotnet build-server shutdown
       - name: Inspect memory information
