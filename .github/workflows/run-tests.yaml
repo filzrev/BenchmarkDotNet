@@ -50,7 +50,7 @@ jobs:
       - run: |
           ps -axo pid,ppid,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
         
-      - run: dotnet build-server shutdown
+      - run: dotnet build-server shutdown --vbcscompiler
       
       - run: |
           ps -axo pid,ppid,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
