@@ -37,3 +37,6 @@ runs:
     - name: Install wasm-tools workload
       shell: bash
       run: ./build.cmd install-wasm-tools
+      
+    - name: Shudown dotnet build server
+      run: .dotnet/dotnet build-server shutdown
