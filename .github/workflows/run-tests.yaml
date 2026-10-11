@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v7
       
       - run: |
-          ps -axo pid,ppid,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
+          ps -axo pid,ppid,etime,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
       
       # Setup additional tools
       - name: Setup additional tools for Wasm/NativeAot tests
@@ -37,23 +37,23 @@ jobs:
         uses: ./.github/actions/setup-additional-tools
     
       - run: |
-          ps -axo pid,ppid,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
+          ps -axo pid,ppid,etime,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
         
       - run: dotnet build-server shutdown
         
       - run: |
-          ps -axo pid,ppid,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
+          ps -axo pid,ppid,etime,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
           
       - name: Run task 'build'
         run: ./build.cmd build
          
       - run: |
-          ps -axo pid,ppid,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
+          ps -axo pid,ppid,etime,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
         
       - run: dotnet build-server shutdown --vbcscompiler
       
       - run: |
-          ps -axo pid,ppid,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
+          ps -axo pid,ppid,etime,stat,rss,%mem,comm | sort -k4,4nr | head -n 31
           
       - name: Inspect memory information
         run: |
