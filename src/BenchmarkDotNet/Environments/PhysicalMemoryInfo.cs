@@ -253,7 +253,8 @@ namespace BenchmarkDotNet.Environments
             }
             catch
             {
-                return (null, null, null);
+                throw;
+                //return (null, null, null);
             }
         }
 
