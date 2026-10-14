@@ -86,10 +86,13 @@ public class BuildContext : FrostingContext
         {
             System.Environment.SetEnvironmentVariable("BDN_CI_BUILD", "true");
 
-            MsBuildSettingsBuild.MaxCpuCount = 1;
+            // Enable parallel builds on CI to speed up the build process. (Default: 1)
+            MsBuildSettingsRestore.MaxCpuCount = System.Environment.ProcessorCount;
+            MsBuildSettingsBuild.MaxCpuCount = System.Environment.ProcessorCount;
+            MsBuildSettingsPack.MaxCpuCount = System.Environment.ProcessorCount;
+
             MsBuildSettingsBuild.WithProperty("UseSharedCompilation", "false");
         }
-
 
         if (context.Arguments.HasArgument("msbuild"))
         {
