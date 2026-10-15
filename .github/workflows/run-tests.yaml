@@ -91,6 +91,7 @@ jobs:
           reporter: dotnet-trx
           list-suites: 'failed'
           list-tests: 'failed'
+          list-files: 'failed'
       # Upload Artifacts with Unique Name
       - name: Upload test results
         uses: actions/upload-artifact@v7
