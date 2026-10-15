@@ -54,14 +54,6 @@ public partial class SmbiosParserTests(ITestOutputHelper Output)
         isSuccess.Should().BeTrue();
         data.Length.Should().BeGreaterThan(8);
         data.Length.Should().Be(length);
-
-        // Gets length of the SMBIOS table (4 byte, little-endian).
-        uint tableLength = BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(4));
-
-
-        var cpus = new List<SmbiosProcessorInfo>();
-        SmbiosParser.GetCpuInfo();
-        SmbiosParser.ParseTable(data,SmbiosType.ProcessorInformation, cpus)
     }
 
     [Theory]
