@@ -42,7 +42,7 @@ jobs:
         run: ./build.cmd unit-tests -e
       # Report test results with unique name
       - name: Report tests results
-        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
+        uses: dorny/test-reporter@d1b5dff021aa968b288b02285a8bf47471c5928a # v3.2.0
         if: always()
         with:
           name: test-windows-core-${{ matrix.os }}
@@ -83,7 +83,7 @@ jobs:
         run: ./build.cmd unit-tests -e
       # Report test results with unique name
       - name: Report tests results
-        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
+        uses: dorny/test-reporter@d1b5dff021aa968b288b02285a8bf47471c5928a # v3.2.0
         if: always()
         with:
           name: test-windows-full-${{ matrix.os }}
@@ -117,7 +117,7 @@ jobs:
         run: ./build.cmd unit-tests -e
       # Report test results with unique name
       - name: Report tests results
-        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
+        uses: dorny/test-reporter@d1b5dff021aa968b288b02285a8bf47471c5928a # v3.2.0
         if: always()
         with:
           name: test-linux-${{ matrix.os }}
@@ -157,7 +157,7 @@ jobs:
         run: ./build.cmd unit-tests -e
       # Report test results with unique name
       - name: Report tests results
-        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
+        uses: dorny/test-reporter@d1b5dff021aa968b288b02285a8bf47471c5928a # v3.2.0
         if: always()
         with:
           name: test-macos(${{ matrix.os.arch }})
