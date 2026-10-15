@@ -1,11 +1,24 @@
 using AwesomeAssertions;
 using BenchmarkDotNet.Detectors;
 using BenchmarkDotNet.Detectors.Smbios;
+using BenchmarkDotNet.Tests.XUnit;
 
 namespace BenchmarkDotNet.Tests.Detectors.Smbios;
 
-public partial class SmbiosParserTests
+public partial class SmbiosParserTests(ITestOutputHelper Output)
 {
+    [FactEnvSpecific(EnvRequirement.WindowsOnly)]
+    public void DumpRawSmbiosData()
+    {
+        if (!OsDetector.IsWindows7OrLater())
+            return;
+
+        byte[] data = SmbiosParser.GetRawSmbiosData();
+
+        Output.WriteLine(Convert.ToBase64String(data));
+    }
+
+
     [Fact]
     public void SmbiosParser_GetRawSmbiosData_ReturnsTableHeader()
     {
@@ -18,8 +31,9 @@ public partial class SmbiosParserTests
         // Assert
         data.Length.Should().BeGreaterThan(8);
 
-        // Gets length of the SMBIOS table (4 byte)
-        uint tableLength = BitConverter.ToUInt32(data, 4);
+        // Gets length of the SMBIOS table (4 byte, little-endian).
+        // Decoded manually so the test is independent of host byte order.
+        uint tableLength = (uint)(data[4] | (data[5] << 8) | (data[6] << 16) | (data[7] << 24));
 
         Console.WriteLine($"SMBIOS table: {tableLength:N0} bytes");
         Console.WriteLine($"Total data:   {data.Length:N0} bytes");

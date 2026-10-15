@@ -27,8 +27,6 @@ internal partial class SmbiosParser
 
     /// <summary>
     /// Gets the raw SMBIOS (RSMB) firmware table.
-    /// Layout: [0] Used20CallingMethod, [1] MajorVersion, [2] MinorVersion, [3] DmiRevision,
-    /// [4..7] Length of the SMBIOS structure table (LE uint32), [8..] SMBIOS structures.
     /// </summary>
     [SupportedOSPlatform("windows6.0.6000")]
     public static byte[] GetRawSmbiosData()
