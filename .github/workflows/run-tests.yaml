@@ -85,6 +85,7 @@ jobs:
           name: test-windows-full-${{ matrix.os }}
           path: "**/*.trx"
           reporter: dotnet-trx
+          list-suites: 'failed'
           list-tests: 'failed'
       # Upload Artifacts with Unique Name
       - name: Upload test results
