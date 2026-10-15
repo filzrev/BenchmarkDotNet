@@ -5,12 +5,12 @@ using BenchmarkDotNet.Detectors.Smbios;
 
 namespace BenchmarkDotNet.Tests.Detectors.Smbios;
 
-public class SmbiosProcessorTests
+public class SmbiosProcessorTests(ITestOutputHelper Output)
 {
     [Fact]
     public void SmbiosParser_GetCpuInfo_OnWindows_ReturnsPopulatedSockets()
     {
-        if (!OsDetector.IsWindows7OrLater() || !OsDetector.IsLinux())
+        if (!OsDetector.IsWindows7OrLater() && !OsDetector.IsLinux())
             return;
 
         // Act
@@ -20,7 +20,7 @@ public class SmbiosProcessorTests
         cpus.Should().NotBeNull();
         foreach (SmbiosProcessorInfo cpu in cpus)
         {
-            Console.WriteLine(cpu.ToDisplayString());
+            Output.WriteLine(cpu.ToDisplayString());
         }
     }
 
