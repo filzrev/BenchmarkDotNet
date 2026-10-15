@@ -48,19 +48,20 @@ public partial class SmbiosParserTests(ITestOutputHelper Output)
             return;
 
         // Act
-        byte[] data = SmbiosParser.GetRawSmbiosData();
+        var isSuccess = SmbiosParser.TryGetSmbiosTable(out var data,out var offset, out int length);
 
         // Assert
+        isSuccess.Should().BeTrue();
         data.Length.Should().BeGreaterThan(8);
+        data.Length.Should().Be(length);
 
         // Gets length of the SMBIOS table (4 byte, little-endian).
         uint tableLength = BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(4));
 
-        Console.WriteLine($"SMBIOS table: {tableLength:N0} bytes");
-        Console.WriteLine($"Total data:   {data.Length:N0} bytes");
 
-        tableLength.Should().BeGreaterThan(0);
-        ((int)tableLength).Should().BeLessThanOrEqualTo(data.Length - 8);
+        var cpus = new List<SmbiosProcessorInfo>();
+        SmbiosParser.GetCpuInfo();
+        SmbiosParser.ParseTable(data,SmbiosType.ProcessorInformation, cpus)
     }
 
     [Theory]

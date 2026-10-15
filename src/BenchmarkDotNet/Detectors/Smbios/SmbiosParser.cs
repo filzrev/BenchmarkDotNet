@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.IO;
 using System.Runtime.Versioning;
 using System.Text;
 using Windows.Win32;
@@ -16,6 +17,11 @@ internal partial class SmbiosParser
 
     private const int RsmbHeaderSize = 8;
     private const int TableLengthOffset = 4;
+
+    /// <summary>
+    /// sysfs path exposing the raw SMBIOS structure table (without the RSMB header) on Linux.
+    /// </summary>
+    private const string LinuxDmiTablesPath = "/sys/firmware/dmi/tables/DMI";
 
     private readonly record struct SmbiosStructure(
         SmbiosType Type,
@@ -50,10 +56,27 @@ internal partial class SmbiosParser
     }
 
     /// <summary>
-    /// Reads the SMBIOS structure table and returns its location within the raw firmware table.
+    /// Dispatches SMBIOS table acquisition by OS. The parsing itself is OS-agnostic.
+    /// </summary>
+    public static bool TryGetSmbiosTable(out byte[] buffer, out int offset, out int length)
+    {
+        if (OsDetector.IsWindows7OrLater())
+            return TryGetSmbiosTableForWindows(out buffer, out offset, out length);
+
+        if (OsDetector.IsLinux())
+            return TryGetSmbiosTableForLinux(out buffer, out offset, out length);
+
+        buffer = [];
+        offset = 0;
+        length = 0;
+        return false;
+    }
+
+    /// <summary>
+    /// Reads the SMBIOS structure table and returns its location within the raw firmware table (Windows).
     /// </summary>
     [SupportedOSPlatform("windows6.0.6000")]
-    private static bool TryGetSmbiosTable(out byte[] buffer, out int offset, out int length)
+    private static bool TryGetSmbiosTableForWindows(out byte[] buffer, out int offset, out int length)
     {
         buffer = GetRawSmbiosData();
         offset = RsmbHeaderSize;
@@ -71,12 +94,41 @@ internal partial class SmbiosParser
     }
 
     /// <summary>
+    /// Reads a headerless SMBIOS structure table (e.g. Linux sysfs DMI tables).
+    /// Unlike RSMB, the table starts at offset 0 and spans the whole content.
+    /// </summary>
+    private static bool TryGetSmbiosTableForLinux(out byte[] buffer, out int offset, out int length)
+    {
+        buffer = [];
+        offset = 0;
+        length = 0;
+
+        byte[] data;
+        try
+        {
+            data = File.ReadAllBytes(LinuxDmiTablesPath);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        if (data.Length == 0)
+            return false;
+
+        buffer = data;
+        length = data.Length;
+        return true;
+    }
+
+    /// <summary>
     /// Gets SMBIOS information entries of the specified structure <paramref name="type"/>.
     /// The type argument <typeparamref name="T"/> must correspond to <paramref name="type"/>
     /// (<see cref="SmbiosProcessorInfo"/> for <see cref="SmbiosType.ProcessorInformation"/>,
     /// <see cref="SmbiosMemoryDeviceInfo"/> for <see cref="SmbiosType.MemoryDevice"/>).
     /// </summary>
     [SupportedOSPlatform("windows6.0.6000")]
+    [SupportedOSPlatform("linux")]
     public static IReadOnlyList<T> GetInfo<T>(SmbiosType type)
     {
         if (!TryGetSmbiosTable(out byte[] buffer, out int offset, out int length))

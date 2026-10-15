@@ -11,8 +11,10 @@ internal partial class SmbiosParser
 {
     /// <summary>
     /// Gets processor information (SMBIOS Type 4) for every populated socket.
+    /// Supported on Windows (via RSMB) and Linux (via sysfs DMI tables).
     /// </summary>
     [SupportedOSPlatform("windows6.0.6000")]
+    [SupportedOSPlatform("linux")]
     public static IReadOnlyList<SmbiosProcessorInfo> GetCpuInfo()
     {
         if (!TryGetSmbiosTable(out byte[] buffer, out int offset, out int length))

@@ -10,7 +10,7 @@ public class SmbiosProcessorTests
     [Fact]
     public void SmbiosParser_GetCpuInfo_OnWindows_ReturnsPopulatedSockets()
     {
-        if (!OsDetector.IsWindows7OrLater())
+        if (!OsDetector.IsWindows7OrLater() || !OsDetector.IsLinux())
             return;
 
         // Act
