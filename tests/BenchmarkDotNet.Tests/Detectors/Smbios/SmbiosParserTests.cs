@@ -2,6 +2,7 @@ using AwesomeAssertions;
 using BenchmarkDotNet.Detectors;
 using BenchmarkDotNet.Detectors.Smbios;
 using BenchmarkDotNet.Tests.XUnit;
+using System.Buffers.Binary;
 
 namespace BenchmarkDotNet.Tests.Detectors.Smbios;
 
@@ -14,8 +15,29 @@ public partial class SmbiosParserTests(ITestOutputHelper Output)
             return;
 
         byte[] data = SmbiosParser.GetRawSmbiosData();
+        if (data.Length < 8)
+        {
+            Output.WriteLine("No SMBIOS data.");
+            return;
+        }
 
-        Output.WriteLine(Convert.ToBase64String(data));
+        /// Layout:
+        /// [0] Used20CallingMethod
+        /// [1] MajorVersion
+        /// [2] MinorVersion
+        /// [3] DmiRevision,
+        /// [4..7] Length of the SMBIOS structure table (LE uint32),
+        /// [8..] SMBIOS structures.
+
+        // Output `{MajorVersion}.{MinorVersion}` and DmiRevision information.
+        Output.WriteLine($"SMBIOS Version: {data[1]}.{data[2]} (DMI Revision: {data[3]})");
+
+        // Output length.
+        uint tableLength = BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(4));
+        Output.WriteLine($"Table Length: {tableLength:N0} bytes (Total: {data.Length:N0} bytes)");
+
+        // Output bytes as Base64 text.
+        Output.WriteLine($"Base64: {Convert.ToBase64String(data)}");
     }
 
 
@@ -32,8 +54,7 @@ public partial class SmbiosParserTests(ITestOutputHelper Output)
         data.Length.Should().BeGreaterThan(8);
 
         // Gets length of the SMBIOS table (4 byte, little-endian).
-        // Decoded manually so the test is independent of host byte order.
-        uint tableLength = (uint)(data[4] | (data[5] << 8) | (data[6] << 16) | (data[7] << 24));
+        uint tableLength = BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(4));
 
         Console.WriteLine($"SMBIOS table: {tableLength:N0} bytes");
         Console.WriteLine($"Total data:   {data.Length:N0} bytes");

@@ -36,9 +36,9 @@ internal static class SmbiosTables
         buffer.AddRange([0x17, 0x8B, 0xFB, 0xFF, 0x00, 0x87, 0x0F, 0x10]); // 0x08-0x0F: Processor ID
         buffer.Add(3);                                                     // 0x10: Processor Version
         buffer.Add(0x88);                                                  // 0x11: Voltage
-        AddU16(buffer, externalClockMHz);          // 0x12-0x13: External Clock
-        AddU16(buffer, maxSpeedMHz);               // 0x14-0x15: Max Speed
-        AddU16(buffer, currentSpeedMHz);           // 0x16-0x17: Current Speed
+        AddU16(buffer, externalClockMHz);                                  // 0x12-0x13: External Clock
+        AddU16(buffer, maxSpeedMHz);                                       // 0x14-0x15: Max Speed
+        AddU16(buffer, currentSpeedMHz);                                   // 0x16-0x17: Current Speed
         buffer.Add(status);                                                // 0x18: Status
         buffer.Add(4);                                                     // 0x19: Processor Upgrade
         buffer.AddRange([0xFF, 0xFF]);                                     // 0x1A-0x1B: L1 Cache Handle
@@ -50,12 +50,12 @@ internal static class SmbiosTables
         buffer.Add(coreCount);                                             // 0x23: Core Count
         buffer.Add(coreEnabled);                                           // 0x24: Core Enabled
         buffer.Add(threadCount);                                           // 0x25: Thread Count
-        AddU16(buffer, (ushort)0x0201);            // 0x26-0x27: Processor Characteristics
-        AddU16(buffer, (ushort)0x2B);              // 0x28-0x29: Processor Family 2
-        AddU16(buffer, coreCount2);                // 0x2A-0x2B: Core Count 2
-        AddU16(buffer, coreEnabled2);              // 0x2C-0x2D: Core Enabled 2
-        AddU16(buffer, threadCount2);              // 0x2E-0x2F: Thread Count 2
-        AddU16(buffer, threadEnabled);             // 0x30-0x31: Thread Enabled (3.6+)
+        AddU16(buffer, 0x0201);                                            // 0x26-0x27: Processor Characteristics
+        AddU16(buffer, 0x2B);                                              // 0x28-0x29: Processor Family 2
+        AddU16(buffer, coreCount2);                                        // 0x2A-0x2B: Core Count 2
+        AddU16(buffer, coreEnabled2);                                      // 0x2C-0x2D: Core Enabled 2
+        AddU16(buffer, threadCount2);                                      // 0x2E-0x2F: Thread Count 2
+        AddU16(buffer, threadEnabled);                                     // 0x30-0x31: Thread Enabled (3.6+)
         buffer.Add(socketType is null ? (byte)0 : (byte)4);                // 0x32: Socket Type (3.8+)
 
         // Write the string-set. Each string is null-terminated, and the set is double-null-terminated.
@@ -106,54 +106,54 @@ internal static class SmbiosTables
             0xFF,    // 0x06: Memory Error Information Handle (No Error)
             0xFF,    // 0x07:
         };
-        AddU16(buffer, totalWidth);          // 0x08-0x09: Total Width
-        AddU16(buffer, dataWidth);           // 0x0A-0x0B: Data Width
-        AddU16(buffer, size);                // 0x0C-0x0D: Size
-        buffer.Add(formFactor);                                      // 0x0E: Form Factor
-        buffer.Add(1);                                               // 0x0F: Device Set
-        buffer.Add(1);                                               // 0x10: Device Locator
-        buffer.Add(2);                                               // 0x11: Bank Locator
-        buffer.Add(memoryType);                                      // 0x12: Memory Type
-        AddU16(buffer, typeDetail);          // 0x13-0x14: Type Detail
-        AddU16(buffer, speed);               // 0x15-0x16: Speed
-        buffer.Add(3);                                               // 0x17: Manufacturer
-        buffer.Add(4);                                               // 0x18: Serial Number
-        buffer.Add(5);                                               // 0x19: Asset Tag
-        buffer.Add(6);                                               // 0x1A: Part Number
-        buffer.Add((byte)(rank & 0x0F));                             // 0x1B: Attributes (Rank in bits 3:0)
-        AddU32(buffer, extendedSizeMb);      // 0x1C-0x1F: Extended Size
-        AddU16(buffer, configuredSpeed);     // 0x20-0x21: Configured Memory Speed
-        AddU16(buffer, minVoltage);          // 0x22-0x23: Minimum Voltage
-        AddU16(buffer, maxVoltage);          // 0x24-0x25: Maximum Voltage
-        AddU16(buffer, configuredVoltage);   // 0x26-0x27: Configured Voltage
-        buffer.Add(technology);                                      // 0x28: Memory Technology
-        AddU16(buffer, operatingMode);       // 0x29-0x2A: Memory Operating Mode Capability
-        buffer.Add(7);                                               // 0x2B: Firmware Version
-        AddU16(buffer, (ushort)0x02CE);      // 0x2C-0x2D: Module Manufacturer ID
-        AddU16(buffer, (ushort)0x1234);      // 0x2E-0x2F: Module Product ID
-        AddU16(buffer, (ushort)0);           // 0x30-0x31: Controller Manufacturer ID
-        AddU16(buffer, (ushort)0);           // 0x32-0x33: Controller Product ID
-        AddU64(buffer, nonVolatileSize);     // 0x34-0x3B: Non-Volatile Size
-        AddU64(buffer, volatileSize);        // 0x3C-0x43: Volatile Size
-        AddU64(buffer, cacheSize);           // 0x44-0x4B: Cache Size
-        AddU64(buffer, logicalSize);         // 0x4C-0x53: Logical Size
-        AddU32(buffer, extendedSpeedMTs);    // 0x54-0x57: Extended Speed
+        AddU16(buffer, totalWidth);                 // 0x08-0x09: Total Width
+        AddU16(buffer, dataWidth);                  // 0x0A-0x0B: Data Width
+        AddU16(buffer, size);                       // 0x0C-0x0D: Size
+        buffer.Add(formFactor);                     // 0x0E: Form Factor
+        buffer.Add(1);                              // 0x0F: Device Set
+        buffer.Add(1);                              // 0x10: Device Locator
+        buffer.Add(2);                              // 0x11: Bank Locator
+        buffer.Add(memoryType);                     // 0x12: Memory Type
+        AddU16(buffer, typeDetail);                 // 0x13-0x14: Type Detail
+        AddU16(buffer, speed);                      // 0x15-0x16: Speed
+        buffer.Add(3);                              // 0x17: Manufacturer
+        buffer.Add(4);                              // 0x18: Serial Number
+        buffer.Add(5);                              // 0x19: Asset Tag
+        buffer.Add(6);                              // 0x1A: Part Number
+        buffer.Add((byte)(rank & 0x0F));            // 0x1B: Attributes (Rank in bits 3:0)
+        AddU32(buffer, extendedSizeMb);             // 0x1C-0x1F: Extended Size
+        AddU16(buffer, configuredSpeed);            // 0x20-0x21: Configured Memory Speed
+        AddU16(buffer, minVoltage);                 // 0x22-0x23: Minimum Voltage
+        AddU16(buffer, maxVoltage);                 // 0x24-0x25: Maximum Voltage
+        AddU16(buffer, configuredVoltage);          // 0x26-0x27: Configured Voltage
+        buffer.Add(technology);                     // 0x28: Memory Technology
+        AddU16(buffer, operatingMode);              // 0x29-0x2A: Memory Operating Mode Capability
+        buffer.Add(7);                              // 0x2B: Firmware Version
+        AddU16(buffer, 0x02CE);                     // 0x2C-0x2D: Module Manufacturer ID
+        AddU16(buffer, 0x1234);                     // 0x2E-0x2F: Module Product ID
+        AddU16(buffer, 0);                          // 0x30-0x31: Controller Manufacturer ID
+        AddU16(buffer, 0);                          // 0x32-0x33: Controller Product ID
+        AddU64(buffer, nonVolatileSize);            // 0x34-0x3B: Non-Volatile Size
+        AddU64(buffer, volatileSize);               // 0x3C-0x43: Volatile Size
+        AddU64(buffer, cacheSize);                  // 0x44-0x4B: Cache Size
+        AddU64(buffer, logicalSize);                // 0x4C-0x53: Logical Size
+        AddU32(buffer, extendedSpeedMTs);           // 0x54-0x57: Extended Speed
         AddU32(buffer, extendedConfiguredSpeedMTs); // 0x58-0x5B: Extended Configured Speed
-        AddU16(buffer, pmic0ManufacturerId); // 0x5C-0x5D: PMIC0 Manufacturer ID (3.7+)
-        AddU16(buffer, pmic0Revision);       // 0x5E-0x5F: PMIC0 Revision Number (3.7+)
-        AddU16(buffer, rcdManufacturerId);   // 0x60-0x61: RCD Manufacturer ID (3.7+)
-        AddU16(buffer, rcdRevision);         // 0x62-0x63: RCD Revision Number (3.7+)
+        AddU16(buffer, pmic0ManufacturerId);        // 0x5C-0x5D: PMIC0 Manufacturer ID (3.7+)
+        AddU16(buffer, pmic0Revision);              // 0x5E-0x5F: PMIC0 Revision Number (3.7+)
+        AddU16(buffer, rcdManufacturerId);          // 0x60-0x61: RCD Manufacturer ID (3.7+)
+        AddU16(buffer, rcdRevision);                // 0x62-0x63: RCD Revision Number (3.7+)
 
         // Write the string-set. Each string is null-terminated, and the set is double-null-terminated.
         WriteStringSet(buffer,
         [
-            "DIMM A1",          // 1
-            "BANK 0",           // 2
-            "Samsung",          // 3
-            "TESTSERIAL",       // 4
-            "ATAG0123",         // 5
-            "M378A1K43CB2-CRC", // 6
-            "01"
+            "DIMM A1",          // 0x10: Device Locator
+            "BANK 0",           // 0x11: Bank Locator
+            "Samsung",          // 0x17: Manufacturer
+            "TESTSERIAL",       // 0x18: Serial Number
+            "ATAG0123",         // 0x19: Asset Tag
+            "M378A1K43CB2-CRC", // 0x1A: Part Number
+            "01"                // 0x2B: Firmware Version
         ]);
 
         return buffer.ToArray();
