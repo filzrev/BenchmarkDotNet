@@ -56,7 +56,7 @@ if (!(Test-Path $InstallPath)) {
     New-Item -Path $InstallPath -ItemType Directory -Force | Out-Null;
     $ScriptPath = Join-Path $InstallPath 'dotnet-install.ps1'
     (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, $ScriptPath);
-    & $ScriptPath -JSonFile $GlobalJsonPath -InstallDir $InstallPath -Quality preview;
+    & $ScriptPath -JSonFile $GlobalJsonPath -InstallDir $InstallPath;
 }
 
 Remove-PathVariable "$InstallPath"

@@ -14,7 +14,7 @@ export DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER=0
 if [ ! -d "$PROJECT_ROOT/.dotnet" ]; then
     mkdir "$PROJECT_ROOT/.dotnet"
     curl -Lsfo "$PROJECT_ROOT/.dotnet/dotnet-install.sh" https://dot.net/v1/dotnet-install.sh
-    bash "$PROJECT_ROOT/.dotnet/dotnet-install.sh" --jsonfile ./build/sdk/global.json --install-dir .dotnet --no-path ---quality preview
+    bash "$PROJECT_ROOT/.dotnet/dotnet-install.sh" --jsonfile ./build/sdk/global.json --install-dir .dotnet --no-path
 fi
 
 export PATH="$PROJECT_ROOT/.dotnet":$PATH
