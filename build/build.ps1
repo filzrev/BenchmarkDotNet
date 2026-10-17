@@ -56,10 +56,7 @@ if (!(Test-Path $InstallPath)) {
     New-Item -Path $InstallPath -ItemType Directory -Force | Out-Null;
     $ScriptPath = Join-Path $InstallPath 'dotnet-install.ps1'
     (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, $ScriptPath);
-    & $ScriptPath -JSonFile $GlobalJsonPath -InstallDir $InstallPath;
-
-    # Install .NET 8 SDK
-    & $ScriptPath -Channel 8.0 -InstallDir $InstallPath -NoPath;
+    & $ScriptPath -JSonFile $GlobalJsonPath -InstallDir $InstallPath -Quality preview;
 }
 
 Remove-PathVariable "$InstallPath"
