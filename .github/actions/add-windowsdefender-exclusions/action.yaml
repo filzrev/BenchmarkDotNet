@@ -13,8 +13,9 @@ runs:
 
         for ($i = 1; $i -le $maxRetries; $i++) {
           try {
-            $serviceStatus = (Get-Service WinDefend).Status
-            Write-Host "Status: $serviceStatus"
+            $service = Get-Service WinDefend
+            $service.WaitForStatus('Running', [TimeSpan]::FromSeconds(30))
+            Write-Host "Status: $($service.Status)"
             if($serviceStatus -eq 'Running') {
               Get-MpComputerStatus | Format-List * | Out-String -Stream | where { $_ -notmatch ':\s*$' } | Write-Host
               Get-MpPreference     | Format-List * | Out-String -Stream | where { $_ -notmatch ':\s*$' } | Write-Host
