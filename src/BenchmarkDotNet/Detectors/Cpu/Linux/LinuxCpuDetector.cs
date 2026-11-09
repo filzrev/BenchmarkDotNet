@@ -1,11 +1,14 @@
+using BenchmarkDotNet.Detectors.Cpu.Windows;
+using BenchmarkDotNet.Detectors.Smbios;
 using BenchmarkDotNet.Helpers;
 using Perfolizer.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BenchmarkDotNet.Detectors.Cpu.Linux;
 
 /// <summary>
 /// CPU information from output of the `cat /proc/cpuinfo` and `lscpu` command.
-/// Linux only.
+/// When the process is elevated, the CPU name and frequencies are overwritten that are taken from SMBIOS information.
 /// </summary>
 internal class LinuxCpuDetector : ICpuDetector
 {
@@ -26,9 +29,38 @@ internal class LinuxCpuDetector : ICpuDetector
         string? cpuInfo = ProcessHelper.RunAndReadOutput("cat", "/proc/cpuinfo") ?? string.Empty;
         string? lscpu = ProcessHelper.RunAndReadOutput("/bin/bash", "-c \"lscpu\"", environmentVariables: languageInvariantEnvironment) ?? string.Empty;
 
-        if (cpuInfo == string.Empty && lscpu == string.Empty)
-            return null;
+        var result = LinuxCpuInfoParser.Parse(cpuInfo, lscpu);
 
-        return LinuxCpuInfoParser.Parse(cpuInfo, lscpu);
+        // Try to overwrite ProcessorName/Frequencies information by using SMBIOS data
+        if (TryGetSmbiosCpuInfo(out var smbiosCpuInfo))
+            ApplySmbiosNameAndFrequency(result, smbiosCpuInfo);
+
+        return result;
+    }
+
+    private static bool TryGetSmbiosCpuInfo([NotNullWhen(true)] out CpuInfo? cpuInfo)
+    {
+        if (!SmbiosDataAccessor.TryGetSmbiosData(out _, out var smbiosData))
+        {
+            cpuInfo = null;
+            return false;
+        }
+
+        var processors = SmbiosDataParser.ParseProcessorInfoTable(smbiosData);
+        cpuInfo = SmbiosCpuDetector.FromProcessorInfo(processors);
+
+        return cpuInfo != null;
+    }
+
+    internal static CpuInfo ApplySmbiosNameAndFrequency(CpuInfo cpuInfo, CpuInfo smbiosCpuInfo)
+    {
+        if (smbiosCpuInfo.ProcessorName is not null)
+            cpuInfo.ProcessorName = smbiosCpuInfo.ProcessorName;
+        if (smbiosCpuInfo.MaxFrequencyHz is not null)
+            cpuInfo.MaxFrequencyHz = smbiosCpuInfo.MaxFrequencyHz;
+        if (smbiosCpuInfo.NominalFrequencyHz is not null)
+            cpuInfo.NominalFrequencyHz = smbiosCpuInfo.NominalFrequencyHz;
+
+        return cpuInfo;
     }
 }
