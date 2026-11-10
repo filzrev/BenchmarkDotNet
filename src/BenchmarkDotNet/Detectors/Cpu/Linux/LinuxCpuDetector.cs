@@ -1,8 +1,5 @@
-using BenchmarkDotNet.Detectors.Cpu.Windows;
-using BenchmarkDotNet.Detectors.Smbios;
 using BenchmarkDotNet.Helpers;
 using Perfolizer.Models;
-using System.Diagnostics.CodeAnalysis;
 
 namespace BenchmarkDotNet.Detectors.Cpu.Linux;
 
@@ -10,11 +7,11 @@ namespace BenchmarkDotNet.Detectors.Cpu.Linux;
 /// CPU information from output of the `cat /proc/cpuinfo` and `lscpu` command.
 /// When the process is elevated, the CPU name and frequencies are overwritten that are taken from SMBIOS information.
 /// </summary>
-internal class LinuxCpuDetector : ICpuDetector
+internal class LinuxCpuDetector : CpuDetectorBase
 {
-    public bool IsApplicable() => OsDetector.IsLinux();
+    public override bool IsApplicable() => OsDetector.IsLinux();
 
-    public CpuInfo? Detect()
+    public override CpuInfo? Detect()
     {
         if (!IsApplicable()) return null;
 
@@ -36,31 +33,5 @@ internal class LinuxCpuDetector : ICpuDetector
             ApplySmbiosNameAndFrequency(result, smbiosCpuInfo);
 
         return result;
-    }
-
-    private static bool TryGetSmbiosCpuInfo([NotNullWhen(true)] out CpuInfo? cpuInfo)
-    {
-        if (!SmbiosDataAccessor.TryGetSmbiosData(out _, out var smbiosData))
-        {
-            cpuInfo = null;
-            return false;
-        }
-
-        var processors = SmbiosDataParser.ParseProcessorInfoTable(smbiosData);
-        cpuInfo = SmbiosCpuDetector.FromProcessorInfo(processors);
-
-        return cpuInfo != null;
-    }
-
-    internal static CpuInfo ApplySmbiosNameAndFrequency(CpuInfo cpuInfo, CpuInfo smbiosCpuInfo)
-    {
-        if (smbiosCpuInfo.ProcessorName is not null)
-            cpuInfo.ProcessorName = smbiosCpuInfo.ProcessorName;
-        if (smbiosCpuInfo.MaxFrequencyHz is not null)
-            cpuInfo.MaxFrequencyHz = smbiosCpuInfo.MaxFrequencyHz;
-        if (smbiosCpuInfo.NominalFrequencyHz is not null)
-            cpuInfo.NominalFrequencyHz = smbiosCpuInfo.NominalFrequencyHz;
-
-        return cpuInfo;
     }
 }

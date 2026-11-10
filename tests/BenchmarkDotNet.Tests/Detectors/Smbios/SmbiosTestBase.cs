@@ -1,4 +1,5 @@
 using BenchmarkDotNet.Detectors;
+using System.Runtime.InteropServices;
 
 namespace BenchmarkDotNet.Tests.Detectors.Smbios;
 
@@ -20,6 +21,9 @@ public class SmbiosTestBase
         if (OsDetector.IsLinux() && Environment.IsPrivilegedProcess)
             return true;
 #endif
+        // On macos, SMBIOS information is available on macos(x64) only.
+        if (OsDetector.IsMacOS() && RuntimeInformation.ProcessArchitecture == Architecture.X64)
+            return true;
 
         return false;
     }

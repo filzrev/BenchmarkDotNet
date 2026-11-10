@@ -26,11 +26,9 @@ public class CpuDetectorTests(ITestOutputHelper Output)
         Output.WriteLine($"MaxFrequencyHz: {cpuInfo.MaxFrequencyHz}");
         Output.WriteLine($"NominalFrequencyHz: {cpuInfo.NominalFrequencyHz}");
 
-        // On Windows, CPU frequency that are returned by CIM/registory value has slightly different.
-        // https://github.com/dotnet/BenchmarkDotNet/issues/859#issuecomment-4414842406
         // On Linux, There is issue wrong CPU frequency is returned on some CPU.
         // https://github.com/dotnet/BenchmarkDotNet/pull/3131#issuecomment-4455965694
-        if (!OsDetector.IsWindows() && !OsDetector.IsLinux())
+        if (!OsDetector.IsLinux())
         {
             cpuInfo.MaxFrequencyHz.Should().BeGreaterThanOrEqualTo(cpuInfo.NominalFrequencyHz.Value);
         }

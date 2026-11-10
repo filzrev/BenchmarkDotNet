@@ -1,10 +1,10 @@
 using AwesomeAssertions;
-using BenchmarkDotNet.Detectors.Cpu.Linux;
+using BenchmarkDotNet.Detectors.Cpu;
 using Perfolizer.Models;
 
 namespace BenchmarkDotNet.Tests.Detectors.Cpu;
 
-public class LinuxCpuDetectorTests
+public class CpuDetectorBaseTests
 {
     [Fact]
     public void ApplySmbiosNameAndFrequency_ShouldOnlyOverrideNameAndFrequencies()
@@ -31,7 +31,7 @@ public class LinuxCpuDetectorTests
         };
 
         // Act
-        var result = LinuxCpuDetector.ApplySmbiosNameAndFrequency(parsed, smbios);
+        var result = CpuDetectorBase.ApplySmbiosNameAndFrequency(parsed, smbios);
 
         // Assert
         result.ProcessorName.Should().Be("SMBIOS CPU");
@@ -57,7 +57,7 @@ public class LinuxCpuDetectorTests
         var smbios = new CpuInfo();
 
         // Act
-        var result = LinuxCpuDetector.ApplySmbiosNameAndFrequency(parsed, smbios);
+        var result = CpuDetectorBase.ApplySmbiosNameAndFrequency(parsed, smbios);
 
         // Assert
         result.ProcessorName.Should().Be("Parser CPU");

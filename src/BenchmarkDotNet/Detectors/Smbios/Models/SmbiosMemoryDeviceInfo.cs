@@ -425,7 +425,7 @@ internal sealed class SmbiosMemoryDeviceInfo : ISmbiosStructureInfo
 
         if (locator is not null || bank is not null)
         {
-            string segment = locator is not null && bank is not null
+            string segment = locator is not null && bank is not null and not "None"
                 ? $"{locator} ({bank})"
                 : locator ?? bank ?? "";
             if (sizeAndType is not null)
@@ -451,7 +451,7 @@ internal sealed class SmbiosMemoryDeviceInfo : ISmbiosStructureInfo
             values.Add($"{manufacturer}, Part {part}");
         else if (manufacturer is not null)
             values.Add(manufacturer);
-        else if (part is not null)
+        else if (part is not null and not "None")
             values.Add($"Part {part}");
 
         if (Rank > 0)

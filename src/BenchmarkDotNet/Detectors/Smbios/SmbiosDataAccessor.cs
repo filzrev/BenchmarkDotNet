@@ -33,8 +33,8 @@ internal static partial class SmbiosDataAccessor
         if (OsDetector.IsLinux())
             return LinuxDataAccessor.TryGetSmbiosData(out smbiosVersion, out smbiosData);
 
-        // SMBIOS is not available on `macos(arm64)` environment.
-        // It can support SMBIOS on macos(x64) though it's not implemented.
+        if (OsDetector.IsMacOS())
+            return MacOSDataAccessor.TryGetSmbiosData(out smbiosVersion, out smbiosData);
 
         // Return false on other OS.
         smbiosVersion = null;
