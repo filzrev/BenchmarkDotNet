@@ -90,7 +90,8 @@ internal class DefaultCpuDetector : ICpuDetector
                 nominalFrequency = Math.Max(nominalFrequency, processor.CurrentSpeedMHz);
             }
 
-            return names.Count > 0 || maxFrequency > 0 || nominalFrequency > 0;
+            // On some virtualized environment(e.g.`macos(x64`). these information is not available.
+            return names.Count > 0 && maxFrequency > 0 && nominalFrequency > 0;
         }
 
         private static bool TryGetProcessorInfoFromRegistry(HashSet<string> names, ref double maxFrequency, ref double nominalFrequency)
