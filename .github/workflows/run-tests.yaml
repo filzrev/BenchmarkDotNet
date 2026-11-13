@@ -175,6 +175,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1
+      # TODO: Remove this step after GitHub Actions images are updated.
+      - name: Install .NET 11 SDK
+        uses: actions/setup-dotnet@v6.1.0
+        with:
+          dotnet-version: '11.0.x'
       - name: Run task 'pack'
         run: ./build.cmd pack
 
