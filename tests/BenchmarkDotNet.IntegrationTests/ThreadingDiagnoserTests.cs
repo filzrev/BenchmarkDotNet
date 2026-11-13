@@ -36,7 +36,7 @@ namespace BenchmarkDotNet.IntegrationTests
             if (!ContinuousIntegration.IsGitHubActionsOnWindows() // no native dependencies
                 && !OsDetector.IsMacOS()) // currently not supported
             {
-                yield return new object[] { CsProjNativeAotToolchain.Net10_0 };
+                yield return new object[] { TestDefaults.CsProjNativeAotToolchain };
             }
         }
 

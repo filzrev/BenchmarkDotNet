@@ -110,8 +110,7 @@ namespace BenchmarkDotNet.Jobs
         public const string MonoWasmAot10_0 = "monowasmaot10.0";
         /// <summary>Mono WebAssembly AOT with net11.0</summary>
         public const string MonoWasmAot11_0 = "monowasmaot11.0";
-
-        // Still experimental
-        //public const string CoreWasm11_0 = "corewasm11.0";
+        /// <summary>Core WebAssembly with net11.0</summary>
+        public const string CoreWasm11_0 = "corewasm11.0";
     }
 }

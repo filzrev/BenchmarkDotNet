@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);CA2007</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Cake.FileHelpers" Version="9.0.0" />
-    <PackageReference Include="Cake.Frosting" Version="6.2.0" />
+    <PackageReference Include="Cake.Frosting" Version="6.3.0" />
     <PackageReference Include="Cake.Frosting.Git" Version="5.0.1" />
     <PackageReference Include="Docfx.App" Version="2.78.5" />
     <PackageReference Include="Octokit" Version="14.0.0" />
     <!-- TODO: Remove this item after `Cake.Frosting` package dependencies are updated -->
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="11.0.0" />
   </ItemGroup>
 </Project>

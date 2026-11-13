@@ -121,6 +121,8 @@ namespace BenchmarkDotNet.Tests
                 Assert.True(runtime is ClrRuntime, $"Actual runtime: {runtime}");
             else
                 Assert.True(runtime is MonoRuntime, $"Actual runtime: {runtime}");
+#elif NET11_0_OR_GREATER
+            Assert.True(runtime is CoreRuntime coreRuntime && coreRuntime.Version.Major == 11, $"Actual runtime: {runtime}");
 #elif NET10_0_OR_GREATER
             Assert.True(runtime is CoreRuntime coreRuntime && coreRuntime.Version.Major == 10, $"Actual runtime: {runtime}");
 #else
