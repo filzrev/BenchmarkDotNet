@@ -26,8 +26,9 @@ namespace BenchmarkDotNet.IntegrationTests
 
         public static IEnumerable<object[]> GetAllJits()
         {
-            // Skip InProcessEmitToolchain tests on `macos(x64)`. Because it's flaky.
-            if (!IsMacOS_X64())
+            // Skip InProcessEmitToolchain tests on `macos(x64/arm64)`. Because it's flaky.
+            // See: https://github.com/dotnet/BenchmarkDotNet/pull/3326
+            if (!OsDetector.IsMacOS())
                 yield return [JitInfo.GetCurrentJit(), RuntimeInformation.GetCurrentPlatform(), InProcessEmitToolchain.Default];
 
             if (ContinuousIntegration.IsGitHubDraftPR())
@@ -231,8 +232,8 @@ namespace BenchmarkDotNet.IntegrationTests
         [Fact]
         public void InProcessDisassemblyTargetsTheRunnableOfEachBenchmark()
         {
-            if (IsMacOS_X64())
-                return; // Skip InProcessEmitToolchain tests on `macos(x64)`. Because it's flaky.
+            if (OsDetector.IsMacOS())
+                return; // Skip InProcessEmitToolchain tests on `macos(x64/arm64)`. Because it's flaky.
 
             var disassemblyDiagnoser = new DisassemblyDiagnoser(
                 new DisassemblyDiagnoserConfig(printSource: true, maxDepth: 3));
@@ -258,8 +259,8 @@ namespace BenchmarkDotNet.IntegrationTests
         [Fact]
         public void InProcessDisassemblyIgnoresRunnablesOfEarlierRuns()
         {
-            if (IsMacOS_X64())
-                return; // Skip InProcessEmitToolchain tests on `macos(x64)`. Because it's flaky.
+            if (OsDetector.IsMacOS())
+                return; // Skip InProcessEmitToolchain tests on `macos(x64/arm64)`. Because it's flaky.
 
             CanExecute<WithCalls>(ManualConfig.CreateEmpty()
                 .AddJob(Job.Dry.WithToolchain(InProcessEmitToolchain.Default))
@@ -316,8 +317,5 @@ namespace BenchmarkDotNet.IntegrationTests
             Assert.Contains(methodSignature, result.Methods.Select(m => m.Name.Split('.').Last()).ToArray());
             Assert.Contains(result.Methods.Single(m => m.Name.EndsWith(methodSignature)).Maps, map => map.SourceCodes.Length != 0);
         }
-
-        private static bool IsMacOS_X64()
-          => OsDetector.IsMacOS() && RuntimeInformation.GetCurrentPlatform() is Platform.X64;
     }
 }
