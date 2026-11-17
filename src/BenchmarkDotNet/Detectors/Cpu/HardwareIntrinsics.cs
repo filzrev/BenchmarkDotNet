@@ -79,8 +79,8 @@ namespace BenchmarkDotNet.Detectors.Cpu
                             if (IsX86BaseSupported) yield return "X86Base+SSE+SSE2";
                             Console.WriteLine($"Start: IsX86AesSupported");
                             if (IsX86AesSupported) yield return "AES+PCLMUL";
-                            Console.WriteLine($"Start: IsX86AvxVnniSupported");
-                            if (IsX86AvxVnniSupported) yield return "AvxVnni";
+                            //Console.WriteLine($"Start: IsX86AvxVnniSupported");
+                            //if (IsX86AvxVnniSupported) yield return "AvxVnni";
                             Console.WriteLine($"Start: IsX86SerializeSupported");
                             if (IsX86SerializeSupported) yield return "SERIALIZE";
                             break;
