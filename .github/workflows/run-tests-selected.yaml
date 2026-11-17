@@ -119,6 +119,6 @@ jobs:
           name: results
           if-no-files-found: ignore
           path: |
-            artifacts/**/*
-            tests/BenchmarkDotNet.IntegrationTests/.bdn/**/*
+            "artifacts/**/*"
+            "tests/BenchmarkDotNet.IntegrationTests/.bdn/**/*"
 
