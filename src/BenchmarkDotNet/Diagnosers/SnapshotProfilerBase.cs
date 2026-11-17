@@ -53,15 +53,15 @@ public abstract class SnapshotProfilerBase(bool profileSingleIteration = false) 
         switch (signal)
         {
             case HostSignal.BeforeAnythingElse:
-                logger.WriteLine("Start: Init");
+                Console.WriteLine("Start: Init");
                 Init(logger);
-                logger.WriteLine("End: Init");
+                Console.WriteLine("End: Init");
                 break;
             case HostSignal.BeforeActualRun when !ProfileSingleIteration:
             case HostSignal.BeforeExtraIteration when ProfileSingleIteration:
-                logger.WriteLine($"Start: {signal}");
+                Console.WriteLine($"Start: {signal}");
                 string snapshotFilePath = Start(logger, parameters);
-                logger.WriteLine($"End: {signal}");
+                Console.WriteLine($"End: {signal}");
                 snapshotFilePaths.Add(snapshotFilePath);
                 break;
             case HostSignal.AfterActualRun when !ProfileSingleIteration:
