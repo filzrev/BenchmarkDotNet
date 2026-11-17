@@ -79,6 +79,16 @@ jobs:
         uses: $/.github/actions/setup-additional-tools
         if: ${{ !inputs.skip_setup_additional_tools }}
 
+      - name: Show CPU information (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: systeminfo
+
+      - name: Show CPU information (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: lscpu
+
       # Build
       - name: Run build
         working-directory: ${{ inputs.project }}
