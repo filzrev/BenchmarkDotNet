@@ -77,6 +77,9 @@ namespace BenchmarkDotNet.IntegrationTests
             if (OsDetector.IsWindows() && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
                 return;
 
+            var cpuInfo = CpuDetector.Cpu!;
+            output.WriteLine($"CPU: {cpuInfo.Display}");
+
             MemoryDiagnoserIsAccurate(TestDefaults.CsProjNativeAotToolchain);
         }
 
