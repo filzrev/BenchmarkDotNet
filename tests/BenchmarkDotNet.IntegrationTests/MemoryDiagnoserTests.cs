@@ -19,6 +19,7 @@ using BenchmarkDotNet.Toolchains.NativeAot;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Perfolizer.Helpers;
 
 namespace BenchmarkDotNet.IntegrationTests
 {
@@ -78,7 +79,7 @@ namespace BenchmarkDotNet.IntegrationTests
                 return;
 
             var cpuInfo = CpuDetector.Cpu!;
-            output.WriteLine($"CPU: {cpuInfo.Display}");
+            Console.WriteLine($"CPU: {cpuInfo.ToFullBrandName()}");
 
             MemoryDiagnoserIsAccurate(TestDefaults.CsProjNativeAotToolchain);
         }
