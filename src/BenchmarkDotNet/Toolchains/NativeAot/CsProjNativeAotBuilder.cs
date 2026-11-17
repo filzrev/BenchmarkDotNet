@@ -97,6 +97,7 @@ internal sealed class CsProjNativeAotBuilder : CsProjBuilder
 
     private XElement? GetInstructionSetSettings(BuildPartition buildPartition)
     {
+        Console.WriteLine($"settings.InstructionSet: {settings.InstructionSet}");
         string instructionSet = settings.InstructionSet.IsBlank()
             ? GetCurrentInstructionSet(buildPartition.Platform)
             : settings.InstructionSet;
@@ -164,6 +165,9 @@ internal sealed class CsProjNativeAotBuilder : CsProjBuilder
 
         // The instruction sets recognized by ILC depend on the .NET version being compiled; gate on the version directly.
         Version version = runtime.Version!;
+
+        Console.WriteLine($"platform: {platform}");
+        Console.WriteLine($"GetCurrentPlatform: {RuntimeInformation.GetCurrentPlatform()}");
 
         if (platform == RuntimeInformation.GetCurrentPlatform() // "native" does not support cross-compilation (so does BDN for now)
             && version.Major >= 8)

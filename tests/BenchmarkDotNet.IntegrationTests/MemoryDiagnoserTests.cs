@@ -75,8 +75,8 @@ namespace BenchmarkDotNet.IntegrationTests
         public void MemoryDiagnoserSupportsNativeAOT()
         {
             // TODO: Remove temporary workaround for https://github.com/dotnet/BenchmarkDotNet/issues/3329
-            if (OsDetector.IsWindows() && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
-                return;
+            //if (OsDetector.IsWindows() && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+            //    return;
 
             var cpuInfo = CpuDetector.Cpu!;
             Console.WriteLine($"CPU: {cpuInfo.ToFullBrandName()}");
