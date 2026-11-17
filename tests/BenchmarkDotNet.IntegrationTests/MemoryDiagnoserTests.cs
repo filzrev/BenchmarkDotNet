@@ -410,7 +410,9 @@ namespace BenchmarkDotNet.IntegrationTests
                 .AddColumnProvider(DefaultColumnProviders.Instance)
                 .AddDiagnoser(MemoryDiagnoser.Default)
                 .AddDiagnoser(new SharedDiagnosers.FinalizerBlockerDiagnoser())
-                .AddLogger(new OutputLogger(output));
+                .AddLogger(new OutputLogger(output))
+                .WithOptions(ConfigOptions.LogBuildOutput)
+                .AddLogger(BenchmarkDotNet.Loggers.ConsoleLogger.Default);
         }
 
         // note: don't copy, never use in production systems (it should work but I am not 100% sure)
