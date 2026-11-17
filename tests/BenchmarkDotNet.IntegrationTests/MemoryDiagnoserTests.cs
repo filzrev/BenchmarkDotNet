@@ -416,6 +416,7 @@ namespace BenchmarkDotNet.IntegrationTests
                 .AddDiagnoser(new SharedDiagnosers.FinalizerBlockerDiagnoser())
                 .AddLogger(new OutputLogger(output))
                 .WithOptions(ConfigOptions.LogBuildOutput)
+                .KeepBenchmarkFiles()
                 .AddLogger(BenchmarkDotNet.Loggers.ConsoleLogger.Default);
         }
 
