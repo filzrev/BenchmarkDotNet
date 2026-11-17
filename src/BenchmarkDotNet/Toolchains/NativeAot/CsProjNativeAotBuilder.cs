@@ -149,7 +149,10 @@ internal sealed class CsProjNativeAotBuilder : CsProjBuilder
     }
 
     private string GetCurrentInstructionSet(Platform platform)
-        => string.Join(",", GetCurrentProcessInstructionSets(platform));
+    {
+        Console.WriteLine($"InstructionSet: {string.Join(",", GetCurrentProcessInstructionSets(platform))}");
+        return string.Join(",", GetCurrentProcessInstructionSets(platform));
+    }
 
     // based on https://github.com/dotnet/runtime/tree/v10.0.0-rc.1.25451.107/src/coreclr/tools/Common/JitInterface/ThunkGenerator/InstructionSetDesc.txt
     private IEnumerable<string> GetCurrentProcessInstructionSets(Platform platform)

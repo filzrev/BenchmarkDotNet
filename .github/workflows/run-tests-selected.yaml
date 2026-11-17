@@ -12,6 +12,7 @@ on:
         options:
           - windows-latest
           - ubuntu-latest
+          - ubuntu-26.04
           - macos-latest
           - windows-11-arm
           - ubuntu-24.04-arm
