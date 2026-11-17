@@ -118,7 +118,9 @@ jobs:
         with:
           name: results
           if-no-files-found: ignore
+          include-hidden-files: true
           path: |
-            "artifacts/**/*"
-            "tests/BenchmarkDotNet.IntegrationTests/.bdn/**/*"
+            artifacts/**/*
+            **/BenchmarkDotNet.Artifacts/**
+            tests/BenchmarkDotNet.IntegrationTests/.bdn/**
 
