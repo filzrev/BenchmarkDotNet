@@ -55,21 +55,33 @@ namespace BenchmarkDotNet.Detectors.Cpu
                     case Platform.X86:
                     case Platform.X64:
                         {
+                            Console.WriteLine($"Start: IsX86Avx10v2Supported");
                             if (IsX86Avx10v2Supported) yield return "AVX10v2";
+                            Console.WriteLine($"Start: IsX86Avx10v1Supported");
                             if (IsX86Avx10v1Supported)
                             {
                                 yield return "AVX10v1";
                                 yield return "AVX512 BF16+FP16";
                             }
+                            Console.WriteLine($"Start: IsX86Avx512v3Supported");
                             if (IsX86Avx512v3Supported) yield return "AVX512 BITALG+VBMI2+VNNI+VPOPCNTDQ";
+                            Console.WriteLine($"Start: IsX86Avx512v2Supported");
                             if (IsX86Avx512v2Supported) yield return "AVX512 IFMA+VBMI";
+                            Console.WriteLine($"Start: IsX86Avx512Supported");
                             if (IsX86Avx512Supported) yield return "AVX512 F+BW+CD+DQ+VL";
+                            Console.WriteLine($"Start: IsX86Avx2Supported");
                             if (IsX86Avx2Supported) yield return "AVX2+BMI1+BMI2+F16C+FMA+LZCNT+MOVBE";
+                            Console.WriteLine($"Start: IsX86AvxSupported");
                             if (IsX86AvxSupported) yield return "AVX";
+                            Console.WriteLine($"Start: IsX86Sse42Supported");
                             if (IsX86Sse42Supported) yield return "SSE3+SSSE3+SSE4.1+SSE4.2+POPCNT";
+                            Console.WriteLine($"Start: IsX86BaseSupported");
                             if (IsX86BaseSupported) yield return "X86Base+SSE+SSE2";
+                            Console.WriteLine($"Start: IsX86AesSupported");
                             if (IsX86AesSupported) yield return "AES+PCLMUL";
+                            Console.WriteLine($"Start: IsX86AvxVnniSupported");
                             if (IsX86AvxVnniSupported) yield return "AvxVnni";
+                            Console.WriteLine($"Start: IsX86SerializeSupported");
                             if (IsX86SerializeSupported) yield return "SERIALIZE";
                             break;
                         }
