@@ -121,5 +121,5 @@ jobs:
           path: |
             artifacts/**/*
             **/BenchmarkDotNet.Artifacts/**
-            C:\a\BenchmarkDotNet\BenchmarkDotNet\tests\BenchmarkDotNet.IntegrationTests\.bdn\1
+            **/tests/BenchmarkDotNet.IntegrationTests/.bdn/**
 
