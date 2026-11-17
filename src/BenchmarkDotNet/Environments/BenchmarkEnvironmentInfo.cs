@@ -52,7 +52,9 @@ namespace BenchmarkDotNet.Environments
             yield return $"{BenchmarkDotNetInfo.Instance.BrandTitle}";
             yield return $"{RuntimeInfoPrefix}{GetRuntimeInfo()}";
             yield return $"{GcInfoPrefix}{GetGcConcurrentFlag()} {GetGcServerFlag()}";
+            Console.WriteLine($"Before: HardwareIntrinsics");
             yield return $"{HardwareIntrinsicsPrefix}{HardwareIntrinsics.GetFullInfo(RuntimeInformation.GetCurrentPlatform())} {HardwareIntrinsics.GetVectorSize()}";
+            Console.WriteLine($"After: HardwareIntrinsics");
         }
 
         [PublicAPI]
